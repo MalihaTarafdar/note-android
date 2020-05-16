@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.material.navigation.NavigationView;
+
 public class MainActivity extends AppCompatActivity {
 
 	private DrawerLayout drawer;
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		drawer = findViewById(R.id.drawer_layout);
+		NavigationView navView = findViewById(R.id.nav_view);
 
 		//set toolbar
 		setSupportActionBar(toolbar);
@@ -36,6 +39,32 @@ public class MainActivity extends AppCompatActivity {
 				R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 		drawer.addDrawerListener(toggle);
 		toggle.syncState();
+
+		//navigation view
+		navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+			@Override
+			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+				switch (item.getItemId()) {
+					case R.id.nav_notes:
+						getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+								new NotesFragment()).commit();
+						break;
+					case R.id.nav_settings:
+						getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+								new SettingsFragment()).commit();
+						break;
+				}
+				drawer.closeDrawer(GravityCompat.START);
+				return true;
+			}
+		});
+
+		//open notes fragment when app starts
+		if (savedInstanceState == null) {
+			getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+					new NotesFragment()).commit();
+			navView.setCheckedItem(R.id.nav_notes);
+		}
 	}
 
 	@Override
