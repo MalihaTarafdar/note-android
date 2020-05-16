@@ -30,12 +30,6 @@ public class MainActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 		//set toolbar background
 		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.appbar_bg));
-		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(MainActivity.this, "Navigation drawer opened", Toast.LENGTH_SHORT).show();
-			}
-		});
 
 		//action bar navigation drawer
 		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
@@ -46,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	public void onBackPressed() {
+		//close navigation drawer
 		if (drawer.isDrawerOpen(GravityCompat.START)) {
 			drawer.closeDrawer(GravityCompat.START);
 		} else {
