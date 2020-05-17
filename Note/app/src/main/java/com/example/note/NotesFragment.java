@@ -1,11 +1,14 @@
 package com.example.note;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +48,7 @@ public class NotesFragment extends Fragment {
 	public static class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
 		private ArrayList<NoteItem> noteList;
+		private Context context;
 
 		NoteAdapter(ArrayList<NoteItem> noteList) {
 			this.noteList = noteList;
@@ -53,16 +57,42 @@ public class NotesFragment extends Fragment {
 		@NonNull
 		@Override
 		public NoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-			View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_note, parent, false);
+			context = parent.getContext();
+			View v = LayoutInflater.from(context).inflate(R.layout.item_note, parent, false);
 			return new NoteViewHolder(v);
 		}
 
 		@Override
-		public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
+		public void onBindViewHolder(@NonNull final NoteViewHolder holder, int position) {
 			NoteItem curItem = noteList.get(position);
 
 			holder.titleView.setText(curItem.getTitle());
 			holder.previewView.setText(curItem.getPreview());
+
+			holder.overflowButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					holder.itemOverlay.setVisibility(View.VISIBLE);
+				}
+			});
+			holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(context, "Delete button pressed", Toast.LENGTH_SHORT).show();
+				}
+			});
+			holder.exportButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(context, "Export button pressed", Toast.LENGTH_SHORT).show();
+				}
+			});
+			holder.cancelButton.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					holder.itemOverlay.setVisibility(View.INVISIBLE);
+				}
+			});
 		}
 
 		@Override
@@ -73,7 +103,8 @@ public class NotesFragment extends Fragment {
 		//RecyclerView custom ViewHolder
 		static class NoteViewHolder extends RecyclerView.ViewHolder {
 			TextView titleView, previewView;
-			ImageButton overflowButton;
+			ImageButton overflowButton, deleteButton, exportButton, cancelButton;
+			LinearLayout itemOverlay;
 
 			NoteViewHolder(@NonNull View itemView) {
 				super(itemView);
@@ -81,6 +112,10 @@ public class NotesFragment extends Fragment {
 				titleView = itemView.findViewById(R.id.item_title);
 				previewView = itemView.findViewById(R.id.item_preview);
 				overflowButton = itemView.findViewById(R.id.item_btn_overflow);
+				deleteButton = itemView.findViewById(R.id.item_btn_delete);
+				exportButton = itemView.findViewById(R.id.item_btn_export);
+				cancelButton = itemView.findViewById(R.id.item_btn_cancel);
+				itemOverlay = itemView.findViewById(R.id.item_overlay);
 			}
 		}
 	}

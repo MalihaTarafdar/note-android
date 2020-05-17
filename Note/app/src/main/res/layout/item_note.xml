@@ -18,8 +18,7 @@
         android:paddingTop="12dp"
         android:paddingEnd="8dp"
         android:paddingRight="8dp"
-        android:paddingBottom="24dp"
-        tools:visibility="visible">
+        android:paddingBottom="24dp">
 
         <TextView
             android:id="@+id/item_title"
@@ -66,11 +65,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/item_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#CCFFFFFF"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible">
 
         <ImageButton
             android:id="@+id/item_btn_delete"
