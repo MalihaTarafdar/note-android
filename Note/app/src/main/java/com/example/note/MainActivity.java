@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -41,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 		toggle.syncState();
 
 		//navigation view
+		//replace fragment
 		navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+		//toolbar option items
 		switch (item.getItemId()) {
 			case R.id.menu_search:
 				Toast.makeText(this, "Search item selected", Toast.LENGTH_SHORT).show();
