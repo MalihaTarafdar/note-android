@@ -16,30 +16,51 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 public class NotesFragment extends Fragment {
+
+	RecyclerView recyclerView;
+	FloatingActionButton addButton;
+
+	static RecyclerView.Adapter adapter;
+	static ArrayList<NoteItem> noteList;
 
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_notes, container, false);
 
-		RecyclerView recyclerView = v.findViewById(R.id.rv_notes);
+		recyclerView = v.findViewById(R.id.notes_recyclerView);
+		addButton = v.findViewById(R.id.notes_btn_add);
 
-		//note list
-		ArrayList<NoteItem> noteList = new ArrayList<>();
+		//create note list
+		noteList = new ArrayList<>();
 		noteList.add(new NoteItem("Note Title 1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-		noteList.add(new NoteItem("Note Title 2", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-		noteList.add(new NoteItem("Note Title 3", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-		noteList.add(new NoteItem("Note Title 4", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
 
-		//RecyclerView
+		//build RecyclerView
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext());
-		RecyclerView.Adapter adapter = new NoteAdapter(noteList);
+		adapter = new NoteAdapter(noteList);
 		recyclerView.setHasFixedSize(true);
 		recyclerView.setLayoutManager(layoutManager);
 		recyclerView.setAdapter(adapter);
+
+		//add button
+		addButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//TEMP NOTE DATA FOR TESTING ADD
+				int ind = 0;
+				if (noteList.size() > 0) {
+					String lastTitle = noteList.get(noteList.size() - 1).getTitle();
+					ind = Integer.parseInt(lastTitle.substring(lastTitle.length() - 1)) + 1;
+				}
+				noteList.add(new NoteItem("Note Title " + ind, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+				adapter.notifyItemInserted(noteList.size() - 1);
+			}
+		});
 
 		return v;
 	}
@@ -47,11 +68,11 @@ public class NotesFragment extends Fragment {
 	//RecyclerView Custom Adapter
 	public static class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
-		private ArrayList<NoteItem> noteList;
+		private ArrayList<NoteItem> list;
 		private Context context;
 
 		NoteAdapter(ArrayList<NoteItem> noteList) {
-			this.noteList = noteList;
+			this.list = noteList;
 		}
 
 		@NonNull
@@ -63,22 +84,26 @@ public class NotesFragment extends Fragment {
 		}
 
 		@Override
-		public void onBindViewHolder(@NonNull final NoteViewHolder holder, int position) {
-			NoteItem curItem = noteList.get(position);
+		public void onBindViewHolder(@NonNull final NoteViewHolder holder, final int position) {
+			NoteItem curItem = list.get(position);
 
 			holder.titleView.setText(curItem.getTitle());
 			holder.previewView.setText(curItem.getPreview());
-
 			holder.overflowButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					holder.itemOverlay.setVisibility(View.VISIBLE);
 				}
 			});
+
+			//overlay actions
 			holder.deleteButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(context, "Delete button pressed", Toast.LENGTH_SHORT).show();
+					holder.itemOverlay.setVisibility(View.INVISIBLE);
+					noteList.remove(position);
+					adapter.notifyItemRemoved(position);
+					adapter.notifyItemRangeChanged(position, noteList.size());
 				}
 			});
 			holder.exportButton.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +122,7 @@ public class NotesFragment extends Fragment {
 
 		@Override
 		public int getItemCount() {
-			return noteList.size();
+			return list.size();
 		}
 
 		//RecyclerView custom ViewHolder
