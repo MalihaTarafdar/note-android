@@ -7,17 +7,16 @@
     app:cardElevation="5dp"
     app:cardCornerRadius="2dp"
     android:layout_margin="4dp"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:id="@+id/item_card">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorForeground"
         android:paddingStart="24dp"
-        android:paddingLeft="24dp"
         android:paddingTop="12dp"
         android:paddingEnd="8dp"
-        android:paddingRight="8dp"
         android:paddingBottom="24dp">
 
         <TextView
@@ -39,7 +38,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,11 +23,11 @@ import java.util.ArrayList;
 
 public class NotesFragment extends Fragment {
 
-	RecyclerView recyclerView;
-	FloatingActionButton addButton;
+	private RecyclerView recyclerView;
+	private FloatingActionButton addButton;
 
-	static RecyclerView.Adapter adapter;
-	static ArrayList<NoteItem> noteList;
+	private static RecyclerView.Adapter adapter;
+	private static ArrayList<NoteItem> noteList;
 
 	@Nullable
 	@Override
@@ -51,20 +52,44 @@ public class NotesFragment extends Fragment {
 		addButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				//TEMP NOTE DATA FOR TESTING ADD
-				int ind = 0;
-				if (noteList.size() > 0) {
-					String lastTitle = noteList.get(noteList.size() - 1).getTitle();
-					ind = Integer.parseInt(lastTitle.substring(lastTitle.length() - 1)) + 1;
-				}
-				noteList.add(new NoteItem("Note Title " + ind, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
-				adapter.notifyItemInserted(noteList.size() - 1);
+				addNote();
 			}
 		});
 
 		return v;
 	}
 
+	//=====================================================================================
+	//Note actions
+	private static void addNote() {
+		//TEMP NOTE DATA FOR TESTING ADD
+		int ind = 1;
+		if (noteList.size() > 0) {
+			String lastTitle = noteList.get(noteList.size() - 1).getTitle();
+			ind = Integer.parseInt(lastTitle.substring(lastTitle.length() - 1)) + 1;
+		}
+		noteList.add(new NoteItem("Note Title " + ind, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+		adapter.notifyItemInserted(noteList.size() - 1);
+	}
+
+	private static void deleteNote(NoteAdapter.NoteViewHolder holder, int position) {
+		holder.itemOverlay.setVisibility(View.INVISIBLE);
+		noteList.remove(position);
+		adapter.notifyItemRemoved(position);
+		adapter.notifyItemRangeChanged(position, noteList.size());
+	}
+
+	//Actions overlay
+	private static void showActionsOverlay(NoteAdapter.NoteViewHolder holder) {
+		holder.itemOverlay.setVisibility(View.VISIBLE);
+		holder.cardView.setElevation(50);
+	}
+
+	private static void hideActionsOverlay(NoteAdapter.NoteViewHolder holder) {
+		holder.itemOverlay.setVisibility(View.INVISIBLE);
+		holder.cardView.setElevation(5);
+	}
+	//=====================================================================================
 	//RecyclerView Custom Adapter
 	public static class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
@@ -89,33 +114,35 @@ public class NotesFragment extends Fragment {
 
 			holder.titleView.setText(curItem.getTitle());
 			holder.previewView.setText(curItem.getPreview());
+
+			//show overlay
 			holder.overflowButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					holder.itemOverlay.setVisibility(View.VISIBLE);
+					showActionsOverlay(holder);
 				}
 			});
 
 			//overlay actions
+			//delete note
 			holder.deleteButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					holder.itemOverlay.setVisibility(View.INVISIBLE);
-					noteList.remove(position);
-					adapter.notifyItemRemoved(position);
-					adapter.notifyItemRangeChanged(position, noteList.size());
+					deleteNote(holder, position);
 				}
 			});
+			//export note
 			holder.exportButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					Toast.makeText(context, "Export button pressed", Toast.LENGTH_SHORT).show();
 				}
 			});
+			//hide overlay
 			holder.cancelButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					holder.itemOverlay.setVisibility(View.INVISIBLE);
+					hideActionsOverlay(holder);
 				}
 			});
 		}
@@ -125,15 +152,17 @@ public class NotesFragment extends Fragment {
 			return list.size();
 		}
 
+		//=====================================================================================
 		//RecyclerView custom ViewHolder
 		static class NoteViewHolder extends RecyclerView.ViewHolder {
+			CardView cardView;
 			TextView titleView, previewView;
 			ImageButton overflowButton, deleteButton, exportButton, cancelButton;
 			LinearLayout itemOverlay;
 
 			NoteViewHolder(@NonNull View itemView) {
 				super(itemView);
-
+				cardView = itemView.findViewById(R.id.item_card);
 				titleView = itemView.findViewById(R.id.item_title);
 				previewView = itemView.findViewById(R.id.item_preview);
 				overflowButton = itemView.findViewById(R.id.item_btn_overflow);
@@ -145,6 +174,7 @@ public class NotesFragment extends Fragment {
 		}
 	}
 
+	//=====================================================================================
 	//RecyclerView item
 	public static class NoteItem {
 		private String title;
