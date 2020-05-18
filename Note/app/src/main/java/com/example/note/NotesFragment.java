@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +27,7 @@ public class NotesFragment extends Fragment {
 	private RecyclerView recyclerView;
 	private FloatingActionButton addButton;
 
-	private static RecyclerView.Adapter adapter;
+	private static NoteAdapter adapter;
 	private static ArrayList<NoteItem> noteList;
 
 	@Nullable
@@ -72,22 +73,24 @@ public class NotesFragment extends Fragment {
 		adapter.notifyItemInserted(noteList.size() - 1);
 	}
 
-	private static void deleteNote(NoteAdapter.NoteViewHolder holder, int position) {
-		holder.itemOverlay.setVisibility(View.INVISIBLE);
+	private static void deleteNote(NoteAdapter.NoteViewHolder holder, int position, Context context) {
+		holder.layout.setFocusable(false);
+		holder.layout.setClickable(false);
+		hideActionsOverlay(holder, context);
 		noteList.remove(position);
 		adapter.notifyItemRemoved(position);
 		adapter.notifyItemRangeChanged(position, noteList.size());
 	}
 
 	//Actions overlay
-	private static void showActionsOverlay(NoteAdapter.NoteViewHolder holder) {
-		holder.itemOverlay.setVisibility(View.VISIBLE);
-		holder.cardView.setElevation(50);
+	private static void showActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
+		holder.overlay.setVisibility(View.VISIBLE);
+		holder.cardView.setCardElevation(24 * context.getResources().getDisplayMetrics().density); //24dp to px
 	}
 
-	private static void hideActionsOverlay(NoteAdapter.NoteViewHolder holder) {
-		holder.itemOverlay.setVisibility(View.INVISIBLE);
-		holder.cardView.setElevation(5);
+	private static void hideActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
+		holder.overlay.setVisibility(View.INVISIBLE);
+		holder.cardView.setCardElevation(4 * context.getResources().getDisplayMetrics().density); //4dp to px
 	}
 	//=====================================================================================
 	//RecyclerView Custom Adapter
@@ -115,11 +118,19 @@ public class NotesFragment extends Fragment {
 			holder.titleView.setText(curItem.getTitle());
 			holder.previewView.setText(curItem.getPreview());
 
+			//note click listener
+			holder.layout.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(context, holder.titleView.getText() + " clicked", Toast.LENGTH_SHORT).show();
+				}
+			});
+
 			//show overlay
 			holder.overflowButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					showActionsOverlay(holder);
+					showActionsOverlay(holder, context);
 				}
 			});
 
@@ -128,7 +139,7 @@ public class NotesFragment extends Fragment {
 			holder.deleteButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					deleteNote(holder, position);
+					deleteNote(holder, position, context);
 				}
 			});
 			//export note
@@ -142,7 +153,7 @@ public class NotesFragment extends Fragment {
 			holder.cancelButton.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					hideActionsOverlay(holder);
+					hideActionsOverlay(holder, context);
 				}
 			});
 		}
@@ -158,10 +169,12 @@ public class NotesFragment extends Fragment {
 			CardView cardView;
 			TextView titleView, previewView;
 			ImageButton overflowButton, deleteButton, exportButton, cancelButton;
-			LinearLayout itemOverlay;
+			ConstraintLayout layout;
+			LinearLayout overlay;
 
 			NoteViewHolder(@NonNull View itemView) {
 				super(itemView);
+
 				cardView = itemView.findViewById(R.id.item_card);
 				titleView = itemView.findViewById(R.id.item_title);
 				previewView = itemView.findViewById(R.id.item_preview);
@@ -169,7 +182,8 @@ public class NotesFragment extends Fragment {
 				deleteButton = itemView.findViewById(R.id.item_btn_delete);
 				exportButton = itemView.findViewById(R.id.item_btn_export);
 				cancelButton = itemView.findViewById(R.id.item_btn_cancel);
-				itemOverlay = itemView.findViewById(R.id.item_overlay);
+				layout = itemView.findViewById(R.id.item_layout);
+				overlay = itemView.findViewById(R.id.item_overlay);
 			}
 		}
 	}
