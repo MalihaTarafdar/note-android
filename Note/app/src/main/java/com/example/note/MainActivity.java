@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 		toggle.syncState();
 
 		//navigation view
-		//replace fragment
+		//replace fragment on item select
 		navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 			@Override
 			public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	public void onBackPressed() {
-		//close navigation drawer
+		//close navigation drawer on back press
 		if (drawer.isDrawerOpen(GravityCompat.START)) {
 			drawer.closeDrawer(GravityCompat.START);
 		} else {
