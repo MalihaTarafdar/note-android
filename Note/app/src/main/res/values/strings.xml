@@ -7,13 +7,13 @@
     <string name="notes">Notes</string>
     <string name="settings">Settings</string>
 
-    <!--icons-->
+    <!-- icons -->
     <string name="overflow_icon">overflow icon</string>
     <string name="delete_icon">delete icon</string>
     <string name="export_icon">export icon</string>
     <string name="cancel_icon">cancel icon</string>
 
-    <!--navigation drawer-->
+    <!-- navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
