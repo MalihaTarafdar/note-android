@@ -87,7 +87,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/delete_icon"
             android:tint="@color/colorAccent"
-            app:srcCompat="@drawable/ic_delete" />
+            app:srcCompat="@drawable/ic_delete32x32" />
 
         <Space
             android:layout_width="0dp"
@@ -101,7 +101,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/export_icon"
             android:tint="@color/colorAccent"
-            app:srcCompat="@drawable/ic_export" />
+            app:srcCompat="@drawable/ic_export32x32" />
 
         <Space
             android:layout_width="0dp"
@@ -115,7 +115,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/cancel_icon"
             android:tint="@color/colorAccent"
-            app:srcCompat="@drawable/ic_cancel" />
+            app:srcCompat="@drawable/ic_cancel32x32" />
 
         <Space
             android:layout_width="0dp"
