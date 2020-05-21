@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="@color/colorTitle"
+            android:textColor="@color/colorCardTitle"
             android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/item_btn_overflow"
             app:layout_constraintHorizontal_bias="0.0"
