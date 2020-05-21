@@ -8,7 +8,6 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -77,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu, menu);
+		getMenuInflater().inflate(R.menu.menu_main, menu);
 		return true;
 	}
 
@@ -85,13 +84,13 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		//toolbar option items
 		switch (item.getItemId()) {
-			case R.id.menu_search:
+			case R.id.menu_main_search:
 				Toast.makeText(this, "Search item selected", Toast.LENGTH_SHORT).show();
 				return true;
-			case R.id.menu_sort:
+			case R.id.menu_main_sort:
 				Toast.makeText(this, "Sort item selected", Toast.LENGTH_SHORT).show();
 				return true;
-			case R.id.menu_filter:
+			case R.id.menu_main_filter:
 				Toast.makeText(this, "Filter item selected", Toast.LENGTH_SHORT).show();
 				return true;
 			default: return super.onOptionsItemSelected(item);

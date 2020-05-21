@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_search"
+        android:id="@+id/menu_editor_find"
         android:icon="@drawable/ic_search"
-        android:title="@string/search"
+        android:title="@string/find"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/menu_sort"
-        android:icon="@drawable/ic_sort"
-        android:title="@string/sort"
+        android:id="@+id/menu_editor_export"
+        android:icon="@drawable/ic_export"
+        android:title="@string/export"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/menu_filter"
-        android:icon="@drawable/ic_filter"
-        android:title="@string/filter"
+        android:id="@+id/menu_editor_info"
+        android:icon="@drawable/ic_info"
+        android:title="@string/info"
         app:showAsAction="ifRoom" />
 </menu>
