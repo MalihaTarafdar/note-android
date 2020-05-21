@@ -11,12 +11,7 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-    </style>
-
-    <!-- app bar theme -->
-    <style name="AppBar" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">@drawable/appbar_bg</item>
+<!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
 
 </resources>

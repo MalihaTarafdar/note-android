@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
 		//set toolbar
 		setSupportActionBar(toolbar);
-		//set toolbar background
-		getSupportActionBar().setBackgroundDrawable(getResources().getDrawable(R.drawable.appbar_bg));
 
 		//action bar navigation drawer
 		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
