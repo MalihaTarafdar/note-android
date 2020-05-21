@@ -10,8 +10,11 @@
     <color name="colorBackground">#D9E4ED</color>
     <color name="colorForeground">#FFFFFF</color>
 
-    <!-- text colors -->
-    <color name="colorTitle">#384A5E</color>
-    <color name="colorText">#718394</color>
-    <color name="colorLighterText">#ACB4BA</color>
+    <!-- Card text colors -->
+    <color name="colorCardTitle">#384A5E</color>
+    <color name="colorCardText">#718394</color>
+    <color name="colorCardLighterText">#ACB4BA</color>
+
+    <!-- Text colors -->
+    <color name="colorText">#333F4D</color>
 </resources>
