@@ -50,7 +50,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 		holder.layout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				listener.openNote();
+				listener.openNote(position);
 				Toast.makeText(context, holder.titleView.getText() + " clicked", Toast.LENGTH_SHORT).show();
 			}
 		});
@@ -96,7 +96,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 	//listener for note item actions
 	public interface ItemActionListener {
 		void deleteNote(NoteViewHolder holder, int position, Context context);
-		void openNote();
+		void openNote(int position);
 		void showActionsOverlay(NoteViewHolder holder, Context context);
 		void hideActionsOverlay(NoteViewHolder holder, Context context);
 	}
