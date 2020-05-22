@@ -19,5 +19,6 @@
     <string name="find">Find</string>
     <string name="export">Export</string>
     <string name="info">Info</string>
-    <string name="note_content_hint">Start your note here...</string>
+    <string name="note_content_hint">Start your note here…</string>
+    <string name="note_title_hint">Title</string>
 </resources>
