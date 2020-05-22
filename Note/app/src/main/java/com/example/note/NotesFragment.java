@@ -22,6 +22,8 @@ public class NotesFragment extends Fragment {
 	private NoteAdapter adapter;
 	private ArrayList<NoteItem> noteList;
 
+	static final String NOTE_ITEM = "note item code";
+
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,8 +46,8 @@ public class NotesFragment extends Fragment {
 				NotesFragment.this.deleteNote(holder, position, context);
 			}
 			@Override
-			public void openNote() {
-				NotesFragment.this.openNote();
+			public void openNote(int position) {
+				NotesFragment.this.openNote(position);
 			}
 			@Override
 			public void showActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
@@ -84,8 +86,9 @@ public class NotesFragment extends Fragment {
 		adapter.notifyItemInserted(noteList.size() - 1);
 	}
 
-	private void openNote() {
+	private void openNote(int position) {
 		Intent loadNoteEditor = new Intent(getActivity(), EditorActivity.class);
+		loadNoteEditor.putExtra(NOTE_ITEM, noteList.get(position));
 		startActivity(loadNoteEditor);
 	}
 

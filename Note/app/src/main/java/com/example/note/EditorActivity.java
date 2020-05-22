@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class EditorActivity extends AppCompatActivity {
@@ -17,13 +19,28 @@ public class EditorActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_editor);
 
-		Toolbar toolbar = findViewById(R.id.editor_toolbar);
+		NoteItem note = (NoteItem)getIntent().getSerializableExtra(NotesFragment.NOTE_ITEM);
+		if (note == null) {
+			Log.d("TAG", "note is null");
+			return;
+		}
+
+		//set title
+		setTitle(note.getTitle());
 
 		//set toolbar
+		Toolbar toolbar = findViewById(R.id.editor_toolbar);
 		setSupportActionBar(toolbar);
 		//set toolbar up action
 		ActionBar appBar = getSupportActionBar();
-		appBar.setDisplayHomeAsUpEnabled(true);
+		if (appBar != null) appBar.setDisplayHomeAsUpEnabled(true);
+
+		//show note
+		EditText titleEditText = findViewById(R.id.editor_note_title);
+		EditText contentEditText = findViewById(R.id.editor_note_content);
+
+		titleEditText.setText(note.getTitle());
+		contentEditText.setText(note.getPreview());
 	}
 
 	@Override
