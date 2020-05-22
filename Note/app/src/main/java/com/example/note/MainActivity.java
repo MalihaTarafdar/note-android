@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
@@ -77,7 +78,11 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
+
+		MenuItem searchItem = menu.findItem(R.id.menu_main_search);
+		SearchView searchView = (SearchView)searchItem.getActionView();
+
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
