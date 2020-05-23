@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	private static final String FIELD_PARAGRAPH_COUNT = "ParagraphCount";
 	private static final String FIELD_READ_TIME = "ReadTime"; //seconds
 
-	public DatabaseHelper(@Nullable Context context) {
+	DatabaseHelper(@Nullable Context context) {
 		super(context, DATABASE_NAME, null, 1);
 	}
 
@@ -33,7 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 		//generate Note table
 		String createNoteTableStatement = "CREATE TABLE " + TABLE_NOTE + " (" +
 				FIELD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-				FIELD_REFERENCE + " TEXT, " +
+				FIELD_REFERENCE + " TEXT NOT NULL, " +
 				FIELD_TITLE + " TEXT, " +
 				FIELD_DATE_CREATED + " DATE NOT NULL, " +
 				FIELD_DATE_MODIFIED + " DATE NOT NULL, " +
