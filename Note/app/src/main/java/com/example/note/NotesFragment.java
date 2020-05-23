@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class NotesFragment extends Fragment {
 
 	private NoteAdapter adapter;
-	private ArrayList<NoteItem> noteList;
+	private ArrayList<Note> noteList;
 
 	static final String NOTE_ITEM = "note item code";
 
@@ -35,7 +35,7 @@ public class NotesFragment extends Fragment {
 		//create note list
 		noteList = new ArrayList<>();
 		//testing item
-		noteList.add(new NoteItem("Note Title 1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+		noteList.add(new Note("Note Title 1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
 
 		//build RecyclerView
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext());
@@ -82,7 +82,7 @@ public class NotesFragment extends Fragment {
 			String lastTitle = noteList.get(noteList.size() - 1).getTitle();
 			ind = Integer.parseInt(lastTitle.substring(lastTitle.length() - 1)) + 1;
 		}
-		noteList.add(new NoteItem("Note Title " + ind, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+		noteList.add(new Note("Note Title " + ind, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
 		adapter.notifyItemInserted(noteList.size() - 1);
 	}
 

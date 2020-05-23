@@ -19,7 +19,7 @@ public class EditorActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_editor);
 
-		NoteItem note = (NoteItem)getIntent().getSerializableExtra(NotesFragment.NOTE_ITEM);
+		Note note = (Note)getIntent().getSerializableExtra(NotesFragment.NOTE_ITEM);
 		if (note == null) {
 			Log.d("TAG", "note is null");
 			return;
