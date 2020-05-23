@@ -19,11 +19,11 @@ import java.util.ArrayList;
 //RecyclerView Custom Adapter
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
-	private ArrayList<NoteItem> list;
+	private ArrayList<Note> list;
 	private Context context;
 	private ItemActionListener listener;
 
-	NoteAdapter(ArrayList<NoteItem> noteList) {
+	NoteAdapter(ArrayList<Note> noteList) {
 		this.list = noteList;
 	}
 
@@ -41,7 +41,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
 	@Override
 	public void onBindViewHolder(@NonNull final NoteViewHolder holder, final int position) {
-		NoteItem curItem = list.get(position);
+		Note curItem = list.get(position);
 
 		holder.titleView.setText(curItem.getTitle());
 		holder.previewView.setText(curItem.getPreview());
