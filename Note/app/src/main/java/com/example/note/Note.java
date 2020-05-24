@@ -2,13 +2,12 @@ package com.example.note;
 
 import android.content.Context;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-class Note implements Serializable {
+class Note {
 	private static int curId = 0;
 
 	//database fields
@@ -55,6 +54,11 @@ class Note implements Serializable {
 		//TODO: calculate and set note length measurements
 		storageHelper.updateNote(this);
 		databaseHelper.updateNote(this);
+	}
+
+	void delete() {
+		storageHelper.deleteNote(this);
+		databaseHelper.deleteNote(this);
 	}
 
 	//ID
