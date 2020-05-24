@@ -1,9 +1,14 @@
 package com.example.note;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 class Note implements Serializable {
+	private static int curId = 0;
+
 	//database fields
 	private int id, characterCount, wordCount, paragraphCount, readTime;
 	private String reference, title;
@@ -19,11 +24,11 @@ class Note implements Serializable {
 	}
 
 	Note() {
-		id = -1; //will be set after note is created in database
-		//will be set on file creation in storage
+		id = ++curId;
 		reference = id + ".txt";
-		dateCreated = null;
-		dateModified = null;
+		//will be set on file creation in storage
+		dateCreated = Calendar.getInstance(Locale.getDefault()).getTime();
+		dateModified = dateCreated;
 		//will be set on note modification
 		title = "A new note";
 		characterCount = 0;
@@ -58,16 +63,18 @@ class Note implements Serializable {
 	}
 
 	//date created
-	Date getDateCreated() {
-		return dateCreated;
+	String getDateCreated() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+		return dateFormat.format(dateCreated);
 	}
 	void setDateCreated(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
 	//date modified
-	Date getDateModified() {
-		return dateModified;
+	String getDateModified() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+		return dateFormat.format(dateModified);
 	}
 	void setDateModified(Date dateModified) {
 		this.dateModified = dateModified;

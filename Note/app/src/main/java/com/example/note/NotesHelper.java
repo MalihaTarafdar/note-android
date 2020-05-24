@@ -3,12 +3,12 @@ package com.example.note;
 import android.content.Context;
 
 public class NotesHelper {
-	private DatabaseHelper databaseHelper;
 	private StorageHelper storageHelper;
+	private DatabaseHelper databaseHelper;
 
 	public NotesHelper(Context context) {
-		databaseHelper = new DatabaseHelper(context);
 		storageHelper = new StorageHelper(context);
+		databaseHelper = new DatabaseHelper(context);
 	}
 
 	public void createNote(Note note) {
