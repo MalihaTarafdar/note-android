@@ -1,7 +1,6 @@
 package com.example.note;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,7 @@ class StorageHelper {
 		try (OutputStreamWriter writer = new OutputStreamWriter(context.openFileOutput(file.getName(), Context.MODE_PRIVATE))) {
 			writer.write(note.getContent());
 		} catch (IOException e) {
-			Log.d("TAG", e.toString());
+			e.printStackTrace();
 		}
 	}
 

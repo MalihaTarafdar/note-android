@@ -15,14 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class NotesFragment extends Fragment {
 
 	private NoteAdapter adapter;
-	private ArrayList<Note> noteList;
-
-	static final String NOTE_ITEM = "note item code";
+	private List<Note> noteList;
+	static final String NOTE_ID = "note id";
 
 	@Nullable
 	@Override
@@ -32,13 +31,8 @@ public class NotesFragment extends Fragment {
 		RecyclerView recyclerView = v.findViewById(R.id.notes_recyclerView);
 		FloatingActionButton addButton = v.findViewById(R.id.notes_btn_add);
 
-		//create note list
-		noteList = new ArrayList<>();
-		//testing item
-		Note note = new Note(v.getContext());
-		note.setTitle("Note Title 1");
-		note.setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-		noteList.add(note);
+		//list
+		noteList = new DatabaseHelper(v.getContext()).getAll();
 
 		//build RecyclerView
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext());
@@ -79,22 +73,14 @@ public class NotesFragment extends Fragment {
 	//====================================================================================================
 	//Note actions
 	private void addNote() {
-		//TEMP NOTE DATA FOR TESTING ADD
-		int ind = 1;
-		if (noteList.size() > 0) {
-			String lastTitle = noteList.get(noteList.size() - 1).getTitle();
-			ind = Integer.parseInt(lastTitle.substring(lastTitle.length() - 1)) + 1;
-		}
 		Note note = new Note(getContext());
-		note.setTitle("Note Title 1");
-		note.setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
 		noteList.add(note);
 		adapter.notifyItemInserted(noteList.size() - 1);
 	}
 
 	private void openNote(int position) {
 		Intent loadNoteEditor = new Intent(getActivity(), EditorActivity.class);
-		loadNoteEditor.putExtra(NOTE_ITEM, noteList.get(position));
+		loadNoteEditor.putExtra(NOTE_ID, noteList.get(position).getId());
 		startActivity(loadNoteEditor);
 	}
 
@@ -102,7 +88,10 @@ public class NotesFragment extends Fragment {
 		holder.layout.setFocusable(false);
 		holder.layout.setClickable(false);
 		hideActionsOverlay(holder, context);
+
+		noteList.get(position).delete();
 		noteList.remove(position);
+
 		adapter.notifyItemRemoved(position);
 		adapter.notifyItemRangeChanged(position, noteList.size());
 	}

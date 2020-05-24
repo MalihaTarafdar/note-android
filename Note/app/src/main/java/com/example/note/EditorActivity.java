@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -14,16 +13,15 @@ import android.widget.Toast;
 
 public class EditorActivity extends AppCompatActivity {
 
+	Note note;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_editor);
 
-		Note note = (Note)getIntent().getSerializableExtra(NotesFragment.NOTE_ITEM);
-		if (note == null) {
-			Log.d("TAG", "note is null");
-			return;
-		}
+		DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+		note = databaseHelper.getNoteById(getIntent().getIntExtra(NotesFragment.NOTE_ID, -1));
 
 		//set title
 		setTitle(note.getTitle());

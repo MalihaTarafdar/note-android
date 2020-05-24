@@ -14,16 +14,16 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
+import java.util.List;
 
 //RecyclerView Custom Adapter
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
-	private ArrayList<Note> list;
+	private List<Note> list;
 	private Context context;
 	private ItemActionListener listener;
 
-	NoteAdapter(ArrayList<Note> noteList) {
+	NoteAdapter(List<Note> noteList) {
 		this.list = noteList;
 	}
 
@@ -43,7 +43,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 	public void onBindViewHolder(@NonNull final NoteViewHolder holder, final int position) {
 		Note curItem = list.get(position);
 
-		holder.titleView.setText(curItem.getTitle());
+		holder.titleView.setText(curItem.getPreviewTitle());
 		holder.previewView.setText(curItem.getPreviewContent());
 
 		//open note on item click
