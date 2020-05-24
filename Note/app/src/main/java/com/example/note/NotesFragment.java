@@ -59,6 +59,9 @@ public class NotesFragment extends Fragment {
 		recyclerView.setLayoutManager(layoutManager);
 		recyclerView.setAdapter(adapter);
 
+		//add a note if there are none
+		if (noteList.size() == 0) addNote();
+
 		//add button
 		addButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -74,6 +77,7 @@ public class NotesFragment extends Fragment {
 	//Note actions
 	private void addNote() {
 		Note note = new Note(getContext());
+		note.create();
 		noteList.add(note);
 		adapter.notifyItemInserted(noteList.size() - 1);
 	}

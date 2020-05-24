@@ -7,16 +7,15 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 class StorageHelper {
-	private final String rootDir = "Note";
 	private Context context;
 
 	StorageHelper(Context context) {
 		this.context = context;
 	}
 
-	//creates a note in the app's filesystem
+	//creates a note in internal storage
 	boolean createNote(Note note) {
-		File file = new File(context.getDir(rootDir, Context.MODE_PRIVATE), note.getReference());
+		File file = new File(note.getReference());
 		try (OutputStreamWriter writer = new OutputStreamWriter(context.openFileOutput(file.getName(), Context.MODE_PRIVATE))) {
 			writer.write(note.getContent());
 		} catch (IOException e) {
@@ -31,9 +30,8 @@ class StorageHelper {
 
 	}
 
-	//deletes a note from the app's filesystem
+	//deletes a note from internal storage
 	boolean deleteNote(Note note) {
-		File file = new File(context.getDir(rootDir, Context.MODE_PRIVATE), note.getReference());
-		return file.delete();
+		return context.deleteFile(note.getReference());
 	}
 }

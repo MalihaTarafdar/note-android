@@ -36,12 +36,13 @@ class Note {
 		previewTitle = "A new note";
 		previewContent = "Write something in your beautiful new note";
 
-		//create note in storage
+		//set helpers
 		storageHelper = new StorageHelper(context);
-		storageHelper.createNote(this);
-
-		//create note to database
 		databaseHelper = new DatabaseHelper(context);
+	}
+
+	void create() {
+		storageHelper.createNote(this);
 		databaseHelper.insertNote(this);
 	}
 
