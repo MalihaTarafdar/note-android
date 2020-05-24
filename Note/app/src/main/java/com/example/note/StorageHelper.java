@@ -15,13 +15,15 @@ class StorageHelper {
 	}
 
 	//creates a note in the app's filesystem
-	void createNote(Note note) {
+	boolean createNote(Note note) {
 		File file = new File(context.getDir(rootDir, Context.MODE_PRIVATE), note.getReference());
 		try (OutputStreamWriter writer = new OutputStreamWriter(context.openFileOutput(file.getName(), Context.MODE_PRIVATE))) {
 			writer.write(note.getContent());
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
+		return true;
 	}
 
 	//updates a note's content
@@ -30,7 +32,8 @@ class StorageHelper {
 	}
 
 	//deletes a note from the app's filesystem
-	void deleteNote(Note note) {
-
+	boolean deleteNote(Note note) {
+		File file = new File(context.getDir(rootDir, Context.MODE_PRIVATE), note.getReference());
+		return file.delete();
 	}
 }
