@@ -3,51 +3,26 @@ package com.example.note;
 import android.content.Context;
 import android.util.Log;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.nio.file.Files;
-import java.nio.file.LinkOption;
-import java.nio.file.attribute.BasicFileAttributeView;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.List;
 
 class StorageHelper {
 	private final String rootDir = "Note";
+	private Context context;
 
 	StorageHelper(Context context) {
-		//create test file in root dir in internal storage
-		String test = "this is a test text\nhello world";
-		File file = new File(context.getDir(rootDir, Context.MODE_PRIVATE), "test.txt");
-
-		//metadata
-		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-			try {
-				BasicFileAttributes attr = Files.readAttributes(file.toPath(), BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
-				Log.d("TAG", attr.creationTime().toString());
-				Log.d("TAG", attr.lastModifiedTime().toString()); //GMT
-				Log.d("TAG", attr.size() + "");
-				Log.d("TAG", file.lastModified() + ""); //epoch time
-				Log.d("TAG", file.length() + "");
-			} catch (IOException e) {
-				Log.d("TAG", "IOException");
-			}
-		}
-
-		try {
-			OutputStreamWriter writer = new OutputStreamWriter(context.openFileOutput(file.getName(), Context.MODE_PRIVATE));
-			writer.write(test);
-			writer.close();
-		} catch (IOException e) {
-			Log.d("TAG", e.toString());
-		}
+		this.context = context;
 	}
 
 	//creates a note in the app's filesystem
 	void createNote(Note note) {
-
+		File file = new File(context.getDir(rootDir, Context.MODE_PRIVATE), note.getReference());
+		try (OutputStreamWriter writer = new OutputStreamWriter(context.openFileOutput(file.getName(), Context.MODE_PRIVATE))) {
+			writer.write(note.getContent());
+		} catch (IOException e) {
+			Log.d("TAG", e.toString());
+		}
 	}
 
 	//updates a note's content

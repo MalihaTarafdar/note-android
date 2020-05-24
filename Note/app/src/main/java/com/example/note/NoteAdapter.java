@@ -44,7 +44,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 		Note curItem = list.get(position);
 
 		holder.titleView.setText(curItem.getTitle());
-		holder.previewView.setText(curItem.getPreview());
+		holder.previewView.setText(curItem.getPreviewContent());
 
 		//open note on item click
 		holder.layout.setOnClickListener(new View.OnClickListener() {

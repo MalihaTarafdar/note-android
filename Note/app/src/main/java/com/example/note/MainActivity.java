@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
 
 	private DrawerLayout drawer;
@@ -23,13 +25,6 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-
-		//TEST
-		NotesHelper helper = new NotesHelper(getApplicationContext());
-		helper.createNote(new Note());
-
-
 
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		drawer = findViewById(R.id.drawer_layout);
