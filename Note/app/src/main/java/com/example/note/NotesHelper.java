@@ -8,7 +8,7 @@ public class NotesHelper {
 
 	public NotesHelper(Context context) {
 		databaseHelper = new DatabaseHelper(context);
-		storageHelper = new StorageHelper();
+		storageHelper = new StorageHelper(context);
 	}
 
 	public void createNote(Note note) {
