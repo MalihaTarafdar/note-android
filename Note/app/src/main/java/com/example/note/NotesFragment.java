@@ -35,10 +35,10 @@ public class NotesFragment extends Fragment {
 		//create note list
 		noteList = new ArrayList<>();
 		//testing item
-		noteList.add(new Note("Note Title" +
-				" Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
-				"1", "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +
-				"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+		Note note = new Note(v.getContext());
+		note.setTitle("Note Title 1");
+		note.setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		noteList.add(note);
 
 		//build RecyclerView
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext());
@@ -85,7 +85,10 @@ public class NotesFragment extends Fragment {
 			String lastTitle = noteList.get(noteList.size() - 1).getTitle();
 			ind = Integer.parseInt(lastTitle.substring(lastTitle.length() - 1)) + 1;
 		}
-		noteList.add(new Note("Note Title " + ind, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."));
+		Note note = new Note(getContext());
+		note.setTitle("Note Title 1");
+		note.setContent("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
+		noteList.add(note);
 		adapter.notifyItemInserted(noteList.size() - 1);
 	}
 

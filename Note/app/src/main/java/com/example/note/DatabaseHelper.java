@@ -2,10 +2,8 @@ package com.example.note;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -74,7 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 		cv.put(COLUMN_READ_TIME, note.getReadTime());
 
 		long inserted = db.insert(TABLE_NOTE, null, cv);
-		
+
 		db.close();
 
 		return inserted == 1;

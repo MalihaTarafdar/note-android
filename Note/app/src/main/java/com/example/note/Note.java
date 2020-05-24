@@ -1,5 +1,7 @@
 package com.example.note;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -15,27 +17,44 @@ class Note implements Serializable {
 	private Date dateCreated, dateModified;
 
 	//other data
-	private String preview;
+	private String content, previewContent, previewTitle;
 
-	//TEMP CONSTRUCTOR FOR TESTING
-	Note(String title, String preview) {
-		this.title = title;
-		this.preview = preview;
-	}
+	private StorageHelper storageHelper;
+	private DatabaseHelper databaseHelper;
 
-	Note() {
+	Note(Context context) {
+		//set note data
 		id = ++curId;
 		reference = id + ".txt";
-		//will be set on file creation in storage
+		title = "";
 		dateCreated = Calendar.getInstance(Locale.getDefault()).getTime();
 		dateModified = dateCreated;
-		//will be set on note modification
-		title = "A new note";
 		characterCount = 0;
 		wordCount = 0;
 		paragraphCount = 0;
 		readTime = 0;
-		preview = "Write something in your beautiful new note";
+		content = "";
+		previewTitle = "A new note";
+		previewContent = "Write something in your beautiful new note";
+
+		//create note in storage
+		storageHelper = new StorageHelper(context);
+		storageHelper.createNote(this);
+
+		//create note to database
+		databaseHelper = new DatabaseHelper(context);
+		databaseHelper.insertNote(this);
+	}
+
+	void update(String title, String content, Date dateModified) {
+		setTitle(title);
+		setContent(content);
+		setDateModified(dateModified);
+		if (title.matches("\\S")) setPreviewTitle(title);
+		if (content.matches("\\S")) setPreviewContent(content);
+		//TODO: calculate and set note length measurements
+		storageHelper.updateNote(this);
+		databaseHelper.updateNote(this);
 	}
 
 	//ID
@@ -112,11 +131,26 @@ class Note implements Serializable {
 		this.readTime = readTime;
 	}
 
-	//preview
-	String getPreview() {
-		return preview;
+	//content
+	String getContent() {
+		return content;
 	}
-	void setPreview(String preview) {
-		this.preview = preview;
+	void setContent(String content) {
+		this.content = content;
+	}
+
+	//preview
+	String getPreviewContent() {
+		return previewContent;
+	}
+	void setPreviewContent(String previewContent) {
+		this.previewContent = previewContent;
+	}
+
+	String getPreviewTitle() {
+		return previewTitle;
+	}
+	void setPreviewTitle(String previewTitle) {
+		this.previewTitle = previewTitle;
 	}
 }

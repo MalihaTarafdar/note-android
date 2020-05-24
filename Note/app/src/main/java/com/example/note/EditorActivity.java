@@ -40,7 +40,7 @@ public class EditorActivity extends AppCompatActivity {
 		EditText contentEditText = findViewById(R.id.editor_note_content);
 
 		titleEditText.setText(note.getTitle());
-		contentEditText.setText(note.getPreview());
+		contentEditText.setText(note.getContent());
 	}
 
 	@Override
