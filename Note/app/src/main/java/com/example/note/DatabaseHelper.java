@@ -145,6 +145,14 @@ public class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	//removes a note from the database
 	@Override
 	public boolean deleteNote(Note note) {
-		return false;
+		SQLiteDatabase db = this.getWritableDatabase();
+		String deleteQuery = "DELETE FROM " + TABLE_NOTE + " WHERE " + COLUMN_ID + " = " + note.getId();
+
+		Cursor cursor = db.rawQuery(deleteQuery, null);
+		boolean deleted = cursor.moveToFirst();
+
+		cursor.close();
+
+		return deleted;
 	}
 }
