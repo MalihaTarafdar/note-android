@@ -18,13 +18,14 @@ class Note implements Serializable {
 		this.preview = preview;
 	}
 
-	Note(Date dateCreated) {
-		this.dateCreated = dateCreated;
+	Note() {
 		id = -1; //will be set after note is created in database
-		reference = id + ".txt"; //will be set after note is created in storage
-		//will be set after note is modified
+		//will be set on file creation in storage
+		reference = id + ".txt";
+		dateCreated = null;
+		dateModified = null;
+		//will be set on note modification
 		title = "A new note";
-		dateModified = dateCreated;
 		characterCount = 0;
 		wordCount = 0;
 		paragraphCount = 0;
