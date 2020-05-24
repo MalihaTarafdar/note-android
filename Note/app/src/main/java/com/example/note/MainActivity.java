@@ -24,6 +24,13 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+
+		//TEST
+		NotesHelper helper = new NotesHelper(getApplicationContext());
+		helper.createNote(new Note());
+
+
+
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		drawer = findViewById(R.id.drawer_layout);
 		NavigationView navView = findViewById(R.id.nav_view);

@@ -40,20 +40,8 @@ class StorageHelper {
 			OutputStreamWriter writer = new OutputStreamWriter(context.openFileOutput(file.getName(), Context.MODE_PRIVATE));
 			writer.write(test);
 			writer.close();
-
-			File[] files = context.getDir(rootDir, Context.MODE_PRIVATE).listFiles();
-			for (File f : files) {
-				Log.d("TAG", f.getAbsolutePath());
-			}
-
-			BufferedReader reader = new BufferedReader(new InputStreamReader(context.openFileInput(file.getName())));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				Log.d("TAG", line);
-			}
-			reader.close();
 		} catch (IOException e) {
-			Log.d("TAG", "error");
+			Log.d("TAG", e.toString());
 		}
 	}
 
