@@ -17,7 +17,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
-public class NotesFragment extends Fragment {
+public class NotesFragment extends Fragment implements NoteAdapter.ItemActionListener {
 
 	private NoteAdapter adapter;
 	private List<Note> noteList;
@@ -37,24 +37,7 @@ public class NotesFragment extends Fragment {
 		//build RecyclerView
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext());
 		adapter = new NoteAdapter(noteList);
-		adapter.setItemActionListener(new NoteAdapter.ItemActionListener() {
-			@Override
-			public void deleteNote(NoteAdapter.NoteViewHolder holder, int position, Context context) {
-				NotesFragment.this.deleteNote(holder, position, context);
-			}
-			@Override
-			public void openNote(int position) {
-				NotesFragment.this.openNote(position);
-			}
-			@Override
-			public void showActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
-				NotesFragment.this.showActionsOverlay(holder, context);
-			}
-			@Override
-			public void hideActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
-				NotesFragment.this.hideActionsOverlay(holder, context);
-			}
-		});
+		adapter.setItemActionListener(this);
 		recyclerView.setHasFixedSize(true);
 		recyclerView.setLayoutManager(layoutManager);
 		recyclerView.setAdapter(adapter);
@@ -73,8 +56,6 @@ public class NotesFragment extends Fragment {
 		return v;
 	}
 
-	//====================================================================================================
-	//Note actions
 	private void addNote() {
 		Note note = new Note(getContext());
 		note.create();
@@ -82,13 +63,17 @@ public class NotesFragment extends Fragment {
 		adapter.notifyItemInserted(noteList.size() - 1);
 	}
 
-	private void openNote(int position) {
+	//====================================================================================================
+	//Note actions
+	@Override
+	public void openNote(int position) {
 		Intent loadNoteEditor = new Intent(getActivity(), EditorActivity.class);
 		loadNoteEditor.putExtra(NOTE_ID, noteList.get(position).getId());
 		startActivity(loadNoteEditor);
 	}
 
-	private void deleteNote(NoteAdapter.NoteViewHolder holder, int position, Context context) {
+	@Override
+	public void deleteNote(NoteAdapter.NoteViewHolder holder, int position, Context context) {
 		holder.layout.setFocusable(false);
 		holder.layout.setClickable(false);
 		hideActionsOverlay(holder, context);
@@ -101,12 +86,14 @@ public class NotesFragment extends Fragment {
 	}
 
 	//Actions overlay
-	private void showActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
+	@Override
+	public void showActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
 		holder.overlay.setVisibility(View.VISIBLE);
 		holder.cardView.setCardElevation(24 * context.getResources().getDisplayMetrics().density); //24dp to px
 	}
 
-	private void hideActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
+	@Override
+	public void hideActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
 		holder.overlay.setVisibility(View.INVISIBLE);
 		holder.cardView.setCardElevation(4 * context.getResources().getDisplayMetrics().density); //4dp to px
 	}
