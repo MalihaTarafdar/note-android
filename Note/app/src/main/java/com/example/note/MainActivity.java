@@ -15,8 +15,6 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.io.IOException;
-
 public class MainActivity extends AppCompatActivity {
 
 	private DrawerLayout drawer;

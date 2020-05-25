@@ -14,21 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
+class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 
 	private static final String DATABASE_NAME = "Note.db";
 
 	private static final String TABLE_NOTE = "Note";
 
-	private static final String COLUMN_ID = "Id";
-	private static final String COLUMN_REFERENCE = "Reference"; //reference to file in storage
-	private static final String COLUMN_TITLE = "Title";
-	private static final String COLUMN_DATE_CREATED = "DateCreated";
-	private static final String COLUMN_DATE_MODIFIED = "DateModified";
-	private static final String COLUMN_CHARACTER_COUNT = "CharacterCount";
-	private static final String COLUMN_WORD_COUNT = "WordCount";
-	private static final String COLUMN_PARAGRAPH_COUNT = "ParagraphCount";
-	private static final String COLUMN_READ_TIME = "ReadTime"; //seconds
+	private static final String COL_ID = "Id";
+	private static final String COL_REFERENCE = "Reference"; //reference to file in storage
+	private static final String COL_TITLE = "Title";
+	private static final String COL_DATE_CREATED = "DateCreated";
+	private static final String COL_DATE_MODIFIED = "DateModified";
+	private static final String COL_CHARACTER_COUNT = "CharacterCount";
+	private static final String COL_WORD_COUNT = "WordCount";
+	private static final String COL_PARAGRAPH_COUNT = "ParagraphCount";
+	private static final String COL_READ_TIME = "ReadTime"; //seconds
 
 	private Context context;
 
@@ -41,15 +41,15 @@ public class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	public void onCreate(SQLiteDatabase db) {
 		//generate Note table
 		String createNoteTableStatement = "CREATE TABLE " + TABLE_NOTE + " (" +
-				COLUMN_ID + " INTEGER PRIMARY KEY, " +
-				COLUMN_REFERENCE + " TEXT, " +
-				COLUMN_TITLE + " TEXT, " +
-				COLUMN_DATE_CREATED + " DATETIME, " +
-				COLUMN_DATE_MODIFIED + " DATETIME, " +
-				COLUMN_CHARACTER_COUNT + " INT, " +
-				COLUMN_WORD_COUNT + " INT, " +
-				COLUMN_PARAGRAPH_COUNT + " INT, " +
-				COLUMN_READ_TIME + " INT" +
+				COL_ID + " INTEGER PRIMARY KEY, " +
+				COL_REFERENCE + " TEXT, " +
+				COL_TITLE + " TEXT, " +
+				COL_DATE_CREATED + " DATETIME, " +
+				COL_DATE_MODIFIED + " DATETIME, " +
+				COL_CHARACTER_COUNT + " INT, " +
+				COL_WORD_COUNT + " INT, " +
+				COL_PARAGRAPH_COUNT + " INT, " +
+				COL_READ_TIME + " INT" +
 				");";
 		db.execSQL(createNoteTableStatement);
 	}
@@ -64,7 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 		note.setId(id);
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		String getByIdQuery = "SELECT * FROM " + TABLE_NOTE + " WHERE " + COLUMN_ID + " = " + id;
+		String getByIdQuery = "SELECT * FROM " + TABLE_NOTE + " WHERE " + COL_ID + " = " + id;
 
 		Cursor cursor = db.rawQuery(getByIdQuery, null);
 		if (cursor.moveToFirst()) {
@@ -118,36 +118,43 @@ public class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	@Override
 	public boolean insertNote(Note note) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		ContentValues cv = new ContentValues();
-
-		cv.put(COLUMN_ID, note.getId());
-		cv.put(COLUMN_REFERENCE, note.getReference());
-		cv.put(COLUMN_TITLE, note.getTitle());
-		cv.put(COLUMN_DATE_CREATED, note.getDateCreated());
-		cv.put(COLUMN_DATE_MODIFIED, note.getDateModified());
-		cv.put(COLUMN_CHARACTER_COUNT, note.getCharacterCount());
-		cv.put(COLUMN_WORD_COUNT, note.getWordCount());
-		cv.put(COLUMN_PARAGRAPH_COUNT, note.getParagraphCount());
-		cv.put(COLUMN_READ_TIME, note.getReadTime());
-
+		ContentValues cv = getNoteCV(note);
 		long inserted = db.insert(TABLE_NOTE, null, cv);
-
 		db.close();
-
 		return inserted == 1;
 	}
 
 	//updates the fields of a note
 	@Override
 	public boolean updateNote(Note note) {
-		return false;
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues cv = getNoteCV(note);
+		long updated = db.update(TABLE_NOTE, cv, COL_ID + " = " + note.getId(), null);
+		db.close();
+		return updated == 1;
+	}
+
+	private ContentValues getNoteCV(Note note) {
+		ContentValues cv = new ContentValues();
+
+		cv.put(COL_ID, note.getId());
+		cv.put(COL_REFERENCE, note.getReference());
+		cv.put(COL_TITLE, note.getTitle());
+		cv.put(COL_DATE_CREATED, note.getDateCreated());
+		cv.put(COL_DATE_MODIFIED, note.getDateModified());
+		cv.put(COL_CHARACTER_COUNT, note.getCharacterCount());
+		cv.put(COL_WORD_COUNT, note.getWordCount());
+		cv.put(COL_PARAGRAPH_COUNT, note.getParagraphCount());
+		cv.put(COL_READ_TIME, note.getReadTime());
+
+		return cv;
 	}
 
 	//removes a note from the database
 	@Override
 	public boolean deleteNote(Note note) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		String deleteQuery = "DELETE FROM " + TABLE_NOTE + " WHERE " + COLUMN_ID + " = " + note.getId();
+		String deleteQuery = "DELETE FROM " + TABLE_NOTE + " WHERE " + COL_ID + " = " + note.getId();
 
 		Cursor cursor = db.rawQuery(deleteQuery, null);
 		boolean deleted = cursor.moveToFirst();
