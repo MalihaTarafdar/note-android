@@ -21,6 +21,9 @@ public class EditorActivity extends AppCompatActivity {
 	private Note note;
 	private EditText etTitle, etContent;
 
+	private Handler autoSaveHandler;
+	private long AUTO_SAVE_INTERVAL;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,22 +51,25 @@ public class EditorActivity extends AppCompatActivity {
 		etContent.setText(note.getContent());
 
 		//auto-save every 30 seconds
-		final long AUTO_SAVE_INTERVAL = 30000;
-		final Handler autoSaveHandler = new Handler();
-		Runnable autoSaveRunnable = new Runnable() {
-			@Override
-			public void run() {
-				note.save(etTitle.getText().toString(), etContent.getText().toString(),
-						Calendar.getInstance(Locale.getDefault()).getTime());
-				autoSaveHandler.postDelayed(this, AUTO_SAVE_INTERVAL);
-			}
-		};
+		AUTO_SAVE_INTERVAL = 30000;
+		autoSaveHandler = new Handler();
 		autoSaveHandler.postDelayed(autoSaveRunnable, 0);
 	}
+
+	private Runnable autoSaveRunnable = new Runnable() {
+		@Override
+		public void run() {
+			note.save(etTitle.getText().toString(), etContent.getText().toString(),
+					Calendar.getInstance(Locale.getDefault()).getTime());
+			autoSaveHandler.postDelayed(this, AUTO_SAVE_INTERVAL);
+		}
+	};
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		//stop auto save when leaving editor
+		autoSaveHandler.removeCallbacks(autoSaveRunnable);
 		//save when leaving editor
 		note.save(etTitle.getText().toString(), etContent.getText().toString(),
 				Calendar.getInstance(Locale.getDefault()).getTime());
