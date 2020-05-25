@@ -16,7 +16,7 @@ class Note {
 	private Date dateCreated, dateModified;
 
 	//other data
-	private String content, previewContent, previewTitle;
+	private String previewContent, previewTitle;
 
 	private StorageHelper storageHelper;
 	private DatabaseHelper databaseHelper;
@@ -32,7 +32,6 @@ class Note {
 		wordCount = 0;
 		paragraphCount = 0;
 		readTime = 0;
-		content = "";
 		previewTitle = "A new note";
 		previewContent = "Write something in your beautiful new note";
 
@@ -41,19 +40,22 @@ class Note {
 		databaseHelper = new DatabaseHelper(context);
 	}
 
+	String getContent() {
+		return storageHelper.getNoteContent(this);
+	}
+
 	void create() {
-		storageHelper.createNote(this);
+		storageHelper.createNote(this, "");
 		databaseHelper.insertNote(this);
 	}
 
 	void save(String title, String content, Date dateModified) {
-		setTitle(title);
-		setContent(content);
-		setDateModified(dateModified);
+		this.title = title;
+		this.dateModified = dateModified;
 		if (title.matches("\\S")) setPreviewTitle(title);
 		if (content.matches("\\S")) setPreviewContent(content);
 		//TODO: calculate and set note length measurements
-		storageHelper.updateNote(this);
+		storageHelper.createNote(this, content);
 		databaseHelper.updateNote(this);
 	}
 
@@ -134,14 +136,6 @@ class Note {
 	}
 	void setReadTime(int readTime) {
 		this.readTime = readTime;
-	}
-
-	//content
-	String getContent() {
-		return content;
-	}
-	void setContent(String content) {
-		this.content = content;
 	}
 
 	//preview

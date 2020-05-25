@@ -2,8 +2,10 @@ package com.example.note;
 
 import android.content.Context;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 class StorageHelper {
@@ -13,22 +15,32 @@ class StorageHelper {
 		this.context = context;
 	}
 
-	//creates a note in internal storage
-	boolean createNote(Note note) {
+	String getNoteContent(Note note) {
+		StringBuilder content = new StringBuilder();
+		File file = new File(note.getReference());
+		try (BufferedReader reader = new BufferedReader(
+				new InputStreamReader(context.openFileInput(file.getName())))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				content.append(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return content.toString();
+	}
+
+	//creates or overwrites a note in internal storage
+	boolean createNote(Note note, String content) {
 		File file = new File(note.getReference());
 		try (OutputStreamWriter writer = new OutputStreamWriter(context.openFileOutput(file.getName(),
 				Context.MODE_PRIVATE))) {
-			writer.write(note.getContent());
+			writer.write(content);
 		} catch (IOException e) {
 			e.printStackTrace();
 			return false;
 		}
 		return true;
-	}
-
-	//updates a note's content
-	void updateNote(Note note) {
-
 	}
 
 	//deletes a note from internal storage
