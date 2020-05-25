@@ -44,11 +44,11 @@ public class EditorActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.menu_editor_find:
-				Toast.makeText(this, "Find item selected", Toast.LENGTH_SHORT).show();
-				return true;
 			case R.id.menu_editor_export:
 				Toast.makeText(this, "Export item selected", Toast.LENGTH_SHORT).show();
+				return true;
+			case R.id.menu_editor_delete:
+				Toast.makeText(this, "Delete item selected", Toast.LENGTH_SHORT).show();
 				return true;
 			case R.id.menu_editor_info:
 				Toast.makeText(this, "Info item selected", Toast.LENGTH_SHORT).show();

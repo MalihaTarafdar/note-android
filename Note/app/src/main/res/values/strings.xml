@@ -21,4 +21,5 @@
     <string name="info">Info</string>
     <string name="note_content_hint">Start your note here…</string>
     <string name="note_title_hint">Title</string>
+    <string name="delete">Delete</string>
 </resources>
