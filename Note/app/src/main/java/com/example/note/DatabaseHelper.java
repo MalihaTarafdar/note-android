@@ -71,7 +71,8 @@ public class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 			note.setReference(cursor.getString(1));
 			note.setTitle(cursor.getString(2));
 
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+					Locale.getDefault());
 			try {
 				note.setDateCreated(dateFormat.parse(cursor.getString(3)));
 				note.setDateModified(dateFormat.parse(cursor.getString(4)));
