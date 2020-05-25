@@ -16,7 +16,8 @@ class StorageHelper {
 	//creates a note in internal storage
 	boolean createNote(Note note) {
 		File file = new File(note.getReference());
-		try (OutputStreamWriter writer = new OutputStreamWriter(context.openFileOutput(file.getName(), Context.MODE_PRIVATE))) {
+		try (OutputStreamWriter writer = new OutputStreamWriter(context.openFileOutput(file.getName(),
+				Context.MODE_PRIVATE))) {
 			writer.write(note.getContent());
 		} catch (IOException e) {
 			e.printStackTrace();

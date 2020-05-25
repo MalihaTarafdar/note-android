@@ -46,7 +46,7 @@ class Note {
 		databaseHelper.insertNote(this);
 	}
 
-	void update(String title, String content, Date dateModified) {
+	void save(String title, String content, Date dateModified) {
 		setTitle(title);
 		setContent(content);
 		setDateModified(dateModified);

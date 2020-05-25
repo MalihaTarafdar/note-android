@@ -6,22 +6,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.Locale;
+
 public class EditorActivity extends AppCompatActivity {
 
 	Note note;
+
+	EditText etTitle, etContent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_editor);
 
-		DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
-		note = databaseHelper.getNoteById(getIntent().getIntExtra(NotesFragment.NOTE_ID, -1));
+		DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+		note = dbHelper.getNoteById(getIntent().getIntExtra(NotesFragment.NOTE_ID, -1));
 
 		//set title
 		setTitle(note.getTitle());
@@ -34,11 +41,35 @@ public class EditorActivity extends AppCompatActivity {
 		if (appBar != null) appBar.setDisplayHomeAsUpEnabled(true);
 
 		//show note
-		EditText titleEditText = findViewById(R.id.editor_note_title);
-		EditText contentEditText = findViewById(R.id.editor_note_content);
+		etTitle = findViewById(R.id.editor_note_title);
+		etContent = findViewById(R.id.editor_note_content);
 
-		titleEditText.setText(note.getTitle());
-		contentEditText.setText(note.getContent());
+		//set title and content in editor
+		etTitle.setText(note.getTitle());
+		etContent.setText(note.getContent());
+
+		//auto-save every 30 seconds
+		final long AUTO_SAVE_INTERVAL = 30000;
+		final Handler autoSaveHandler = new Handler();
+		Runnable autoSaveRunnable = new Runnable() {
+			@Override
+			public void run() {
+				Log.d("TAG", "auto-save");
+				note.save(etTitle.getText().toString(), etContent.getText().toString(),
+						Calendar.getInstance(Locale.getDefault()).getTime());
+				autoSaveHandler.postDelayed(this, AUTO_SAVE_INTERVAL);
+			}
+		};
+		autoSaveHandler.postDelayed(autoSaveRunnable, 0);
+	}
+
+	@Override
+	public void onBackPressed() {
+		//save when leaving editor
+		Log.d("TAG", "save on back press");
+		note.save(etTitle.getText().toString(), etContent.getText().toString(),
+				Calendar.getInstance(Locale.getDefault()).getTime());
+		super.onBackPressed();
 	}
 
 	@Override

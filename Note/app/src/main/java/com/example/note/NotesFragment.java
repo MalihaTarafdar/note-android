@@ -32,6 +32,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		FloatingActionButton addButton = v.findViewById(R.id.notes_btn_add);
 
 		//list
+		//TODO: call get all notes on background thread
 		noteList = new DatabaseHelper(v.getContext()).getAll();
 
 		//build RecyclerView
