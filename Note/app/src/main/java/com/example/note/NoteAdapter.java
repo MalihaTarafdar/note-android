@@ -43,8 +43,11 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 	public void onBindViewHolder(@NonNull final NoteViewHolder holder, final int position) {
 		Note curItem = list.get(position);
 
-		holder.titleView.setText(curItem.getPreviewTitle());
-		holder.previewView.setText(curItem.getPreviewContent());
+		String pTitle = (curItem.getTitle().trim().length() > 0) ? curItem.getTitle() : context.getString(R.string.preview_title);
+		String pContent = curItem.getContent();
+		if (pContent.trim().length() == 0) pContent = context.getString(R.string.preview_content);
+		holder.titleView.setText(pTitle);
+		holder.previewView.setText(pContent);
 
 		//open note on item click
 		holder.layout.setOnClickListener(new View.OnClickListener() {

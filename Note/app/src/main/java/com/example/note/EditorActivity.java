@@ -18,9 +18,8 @@ import java.util.Locale;
 
 public class EditorActivity extends AppCompatActivity {
 
-	Note note;
-
-	EditText etTitle, etContent;
+	private Note note;
+	private EditText etTitle, etContent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +45,6 @@ public class EditorActivity extends AppCompatActivity {
 
 		//set title and content in editor
 		etTitle.setText(note.getTitle());
-		Log.d("TAG", "Title: " + note.getTitle());
-		Log.d("TAG", "Content: " + note.getContent());
 		etContent.setText(note.getContent());
 
 		//auto-save every 30 seconds
@@ -56,7 +53,6 @@ public class EditorActivity extends AppCompatActivity {
 		Runnable autoSaveRunnable = new Runnable() {
 			@Override
 			public void run() {
-				Log.d("TAG", "auto-save");
 				note.save(etTitle.getText().toString(), etContent.getText().toString(),
 						Calendar.getInstance(Locale.getDefault()).getTime());
 				autoSaveHandler.postDelayed(this, AUTO_SAVE_INTERVAL);
@@ -68,9 +64,10 @@ public class EditorActivity extends AppCompatActivity {
 	@Override
 	public void onBackPressed() {
 		//save when leaving editor
-		Log.d("TAG", "save on back press");
 		note.save(etTitle.getText().toString(), etContent.getText().toString(),
 				Calendar.getInstance(Locale.getDefault()).getTime());
+		setResult(RESULT_OK);
+		finish();
 		super.onBackPressed();
 	}
 

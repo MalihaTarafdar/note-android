@@ -2,7 +2,7 @@ package com.example.note;
 
 import java.util.List;
 
-public interface NoteDAO {
+interface NoteDAO {
 	Note getNoteById(int id);
 	List<Note> getAll();
 	boolean insertNote(Note note);
