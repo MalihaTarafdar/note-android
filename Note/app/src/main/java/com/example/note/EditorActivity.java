@@ -62,13 +62,13 @@ public class EditorActivity extends AppCompatActivity {
 	}
 
 	@Override
-	public void onBackPressed() {
+	protected void onPause() {
+		super.onPause();
 		//save when leaving editor
 		note.save(etTitle.getText().toString(), etContent.getText().toString(),
 				Calendar.getInstance(Locale.getDefault()).getTime());
 		setResult(RESULT_OK);
 		finish();
-		super.onBackPressed();
 	}
 
 	@Override
