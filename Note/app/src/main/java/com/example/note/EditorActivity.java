@@ -46,6 +46,8 @@ public class EditorActivity extends AppCompatActivity {
 
 		//set title and content in editor
 		etTitle.setText(note.getTitle());
+		Log.d("TAG", "Title: " + note.getTitle());
+		Log.d("TAG", "Content: " + note.getContent());
 		etContent.setText(note.getContent());
 
 		//auto-save every 30 seconds
