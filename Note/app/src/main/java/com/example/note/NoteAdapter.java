@@ -54,7 +54,6 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 			@Override
 			public void onClick(View v) {
 				listener.openNote(position);
-				Toast.makeText(context, holder.titleView.getText() + " clicked", Toast.LENGTH_SHORT).show();
 			}
 		});
 

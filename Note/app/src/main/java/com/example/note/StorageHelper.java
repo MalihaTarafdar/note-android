@@ -22,7 +22,7 @@ class StorageHelper {
 				new InputStreamReader(context.openFileInput(file.getName())))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				content.append(line);
+				content.append(line + "\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
