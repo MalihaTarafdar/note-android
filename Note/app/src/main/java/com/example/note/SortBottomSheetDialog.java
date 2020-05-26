@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 	LinearLayout titleLayout, dateCreatedLayout, dateModifiedLayout, characterCountLayout,
 			wordCountLayout, paragraphCountLayout, readTimeLayout;
+	ImageButton closeButton;
 
 	@Nullable
 	@Override
@@ -28,6 +30,14 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 		wordCountLayout = v.findViewById(R.id.sort_word_count);
 		paragraphCountLayout = v.findViewById(R.id.sort_paragraph_count);
 		readTimeLayout = v.findViewById(R.id.sort_read_time);
+		closeButton = v.findViewById(R.id.sort_btn_close);
+
+		closeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				dismiss();
+			}
+		});
 
 		return v;
 	}

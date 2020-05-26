@@ -100,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
 				Toast.makeText(this, "Search item selected", Toast.LENGTH_SHORT).show();
 				return true;
 			case R.id.menu_main_sort:
-				Toast.makeText(this, "Sort item selected", Toast.LENGTH_SHORT).show();
+				SortBottomSheetDialog sortDialog = new SortBottomSheetDialog();
+				sortDialog.show(getSupportFragmentManager(), "sortBottomSheet");
 				return true;
 			case R.id.menu_main_filter:
 				Toast.makeText(this, "Filter item selected", Toast.LENGTH_SHORT).show();
