@@ -32,6 +32,11 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 
 	private Context context;
 
+	//Sort options
+	enum Sort {
+		TITLE, DATE_CREATED, DATE_MODIFIED, CHARACTER_COUNT, WORD_COUNT, PARAGRAPH_COUNT, READ_TIME
+	}
+
 	DatabaseHelper(@Nullable Context context) {
 		super(context, DATABASE_NAME, null, 1);
 		this.context = context;

@@ -1,7 +1,6 @@
 package com.example.note;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,7 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SortBottomSheetDialog.SortListener {
 
 	private DrawerLayout drawer;
 
@@ -108,5 +107,10 @@ public class MainActivity extends AppCompatActivity {
 				return true;
 			default: return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onClick(DatabaseHelper.Sort sort) {
+		Toast.makeText(this, "Clicked on: " + sort.name(), Toast.LENGTH_SHORT).show();
 	}
 }
