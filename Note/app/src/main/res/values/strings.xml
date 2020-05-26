@@ -22,10 +22,14 @@
     <string name="information">Information</string>
     <string name="date_created">Date Created</string>
     <string name="date_modified">Date Modified</string>
-    <string name="character_count">Characters</string>
-    <string name="paragraph_count">Paragraphs</string>
+    <string name="characters">Characters</string>
+    <string name="words">Words</string>
+    <string name="paragraphs">Paragraphs</string>
     <string name="read_time">Read Time</string>
+    <string name="character_count">Character Count</string>
     <string name="word_count">Word Count</string>
+    <string name="paragraph_count">Paragraph Count</string>
+    <string name="title">Title</string>
 
     <!-- icons -->
     <string name="overflow_icon">overflow icon</string>
@@ -33,6 +37,10 @@
     <string name="export_icon">export icon</string>
     <string name="cancel_icon">cancel icon</string>
     <string name="close_icon">close icon</string>
+    <string name="title_icon">title icon</string>
+    <string name="date_icon">date icon</string>
+    <string name="text_icon">text icon</string>
+    <string name="time_icon">time icon</string>
 
     <!-- navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>

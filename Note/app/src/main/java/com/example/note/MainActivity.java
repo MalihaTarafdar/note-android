@@ -77,10 +77,12 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
+		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof NotesFragment) {
+			getMenuInflater().inflate(R.menu.menu_main, menu);
 
-		MenuItem searchItem = menu.findItem(R.id.menu_main_search);
-		SearchView searchView = (SearchView)searchItem.getActionView();
+			MenuItem searchItem = menu.findItem(R.id.menu_main_search);
+			SearchView searchView = (SearchView)searchItem.getActionView();
+		}
 
 		return super.onCreateOptionsMenu(menu);
 	}
