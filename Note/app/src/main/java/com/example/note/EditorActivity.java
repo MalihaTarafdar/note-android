@@ -83,6 +83,10 @@ public class EditorActivity extends AppCompatActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+		//save note before performing actions on it
+		note.save(etTitle.getText().toString(), etContent.getText().toString(),
+				Calendar.getInstance(Locale.getDefault()).getTime());
+
 		switch (item.getItemId()) {
 			case R.id.menu_editor_export:
 				Toast.makeText(this, "Export item selected", Toast.LENGTH_SHORT).show();

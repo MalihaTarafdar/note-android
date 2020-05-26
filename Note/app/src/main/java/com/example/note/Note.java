@@ -1,11 +1,14 @@
 package com.example.note;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 class Note {
 	private static int curId = 0;
@@ -47,7 +50,29 @@ class Note {
 	void save(String title, String content, Date dateModified) {
 		this.title = title;
 		this.dateModified = dateModified;
-		//TODO: calculate and set note length measurements
+
+		//character count
+		characterCount = content.length();
+
+		//word count
+		int wordCount = 0;
+		String[] words = content.split("\\s+");
+		for (String word : words) {
+			if (!word.matches("[\\p{Punct}]+")) wordCount++;
+		}
+		this.wordCount = wordCount;
+
+		//paragraph count
+		int paragraphCount = 0;
+		String[] paragraphs = content.split("\\n+");
+		for (String paragraph : paragraphs) {
+			if (!paragraph.matches("[\\s\\p{Punct}]+")) paragraphCount++;
+		}
+		this.paragraphCount = paragraphCount;
+
+		//read time based on average reading speed of 200wpm
+		readTime = (int)(wordCount / 200.0 * 60);
+
 		storageHelper.createNote(this, content);
 		databaseHelper.updateNote(this);
 	}

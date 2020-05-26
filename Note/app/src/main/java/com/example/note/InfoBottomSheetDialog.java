@@ -42,7 +42,7 @@ public class InfoBottomSheetDialog extends BottomSheetDialogFragment {
 		characterCountView.setText(String.format(Locale.getDefault(),"%d", note.getCharacterCount()));
 		wordCountView.setText(String.format(Locale.getDefault(),"%d", note.getWordCount()));
 		paragraphCountView.setText(String.format(Locale.getDefault(),"%d", note.getParagraphCount()));
-		readTimeView.setText(String.format(Locale.getDefault(),"%d", note.getReadTime()));
+		readTimeView.setText(formatTime(note.getReadTime()));
 
 		closeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -52,6 +52,15 @@ public class InfoBottomSheetDialog extends BottomSheetDialogFragment {
 		});
 
 		return v;
+	}
+
+	private String formatTime(int timeInSeconds) {
+		int hours = timeInSeconds / 3600;
+		int minutes = (timeInSeconds % 3600) / 60;
+		int seconds = timeInSeconds % 3600 % 60;
+		if (hours != 0) return hours + "h " + minutes + "m " + seconds + "s";
+		if (minutes != 0) return minutes + "m " + seconds + "s";
+		return seconds + "s";
 	}
 
 	private String formatDate(String dateTime) {
