@@ -1,6 +1,7 @@
 package com.example.note;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Toolbar toolbar = findViewById(R.id.toolbar);
+		final Toolbar toolbar = findViewById(R.id.toolbar);
 		drawer = findViewById(R.id.drawer_layout);
 		NavigationView navView = findViewById(R.id.nav_view);
 
@@ -46,10 +47,14 @@ public class MainActivity extends AppCompatActivity {
 					case R.id.nav_notes:
 						getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
 								new NotesFragment()).commit();
+						invalidateOptionsMenu();
+						toolbar.setTitle(getString(R.string.notes));
 						break;
 					case R.id.nav_settings:
 						getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
 								new SettingsFragment()).commit();
+						invalidateOptionsMenu();
+						toolbar.setTitle(getString(R.string.settings));
 						break;
 				}
 				drawer.closeDrawer(GravityCompat.START);
