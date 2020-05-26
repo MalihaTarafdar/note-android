@@ -65,6 +65,10 @@ public class EditorActivity extends AppCompatActivity {
 		}
 	};
 
+	public Note getNote() {
+		return note;
+	}
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -87,7 +91,8 @@ public class EditorActivity extends AppCompatActivity {
 				Toast.makeText(this, "Delete item selected", Toast.LENGTH_SHORT).show();
 				return true;
 			case R.id.menu_editor_info:
-				Toast.makeText(this, "Info item selected", Toast.LENGTH_SHORT).show();
+				InfoBottomSheetDialog infoDialog = new InfoBottomSheetDialog();
+				infoDialog.show(getSupportFragmentManager(), "infoBottomSheet");
 				return true;
 			default: return super.onOptionsItemSelected(item);
 		}
