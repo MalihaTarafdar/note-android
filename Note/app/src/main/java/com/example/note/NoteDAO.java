@@ -3,9 +3,8 @@ package com.example.note;
 import java.util.List;
 
 interface NoteDAO {
-	//Sort options
 	enum SortOption {
-		TITLE, DATE_CREATED, DATE_MODIFIED, CHARACTER_COUNT, WORD_COUNT, PARAGRAPH_COUNT, READ_TIME, ALL
+		TITLE, DATE_CREATED, DATE_MODIFIED, CHARACTER_COUNT, WORD_COUNT, PARAGRAPH_COUNT, READ_TIME
 	}
 
 	Note getNoteById(int id);

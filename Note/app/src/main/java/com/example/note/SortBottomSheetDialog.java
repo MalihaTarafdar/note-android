@@ -69,6 +69,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment implements 
 		} else if (v == readTimeLayout) {
 			listener.onClick(DatabaseHelper.SortOption.READ_TIME);
 		}
+		dismiss();
 	}
 
 	interface SortListener {

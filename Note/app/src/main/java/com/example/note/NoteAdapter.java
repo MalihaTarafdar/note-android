@@ -27,6 +27,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 		this.list = noteList;
 	}
 
+	void setList(List<Note> list) {
+		this.list = list;
+	}
+
 	void setItemActionListener(ItemActionListener listener) {
 		this.listener = listener;
 	}

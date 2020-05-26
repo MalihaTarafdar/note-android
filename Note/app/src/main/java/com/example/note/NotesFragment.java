@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,7 +38,8 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		FloatingActionButton addButton = v.findViewById(R.id.notes_btn_add);
 
 		//list
-		sortOption = NoteDAO.SortOption.ALL;
+		//default sorting is by date modified
+		sortOption = NoteDAO.SortOption.DATE_MODIFIED;
 		noteList = new DatabaseHelper(v.getContext()).getAll(sortOption);
 
 		//build RecyclerView
@@ -74,6 +74,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 	void setSortOption(NoteDAO.SortOption sortOption) {
 		this.sortOption = sortOption;
 		noteList = new DatabaseHelper(getContext()).getAll(sortOption);
+		adapter.setList(noteList);
 		adapter.notifyDataSetChanged();
 	}
 

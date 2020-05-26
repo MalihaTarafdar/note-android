@@ -1,14 +1,13 @@
 package com.example.note;
 
 import android.content.Context;
-import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
 class Note {
 	private static int curId = 0;
@@ -154,5 +153,11 @@ class Note {
 	}
 	void setReadTime(int readTime) {
 		this.readTime = readTime;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return id + "";
 	}
 }

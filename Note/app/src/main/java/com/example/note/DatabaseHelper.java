@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -99,7 +98,23 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 		List<Note> notes = new ArrayList<>();
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		String getAllQuery = "SELECT * FROM " + TABLE_NOTE;
+		String getAllQuery = "SELECT * FROM " + TABLE_NOTE + " ORDER BY ";
+
+		if (sortOption == SortOption.TITLE) {
+			getAllQuery += COL_TITLE;
+		} else if (sortOption == SortOption.DATE_CREATED) {
+			getAllQuery += COL_DATE_CREATED;
+		} else if (sortOption == SortOption.DATE_MODIFIED) {
+			getAllQuery += COL_DATE_MODIFIED;
+		} else if (sortOption == SortOption.CHARACTER_COUNT) {
+			getAllQuery += COL_CHARACTER_COUNT;
+		} else if (sortOption == SortOption.WORD_COUNT) {
+			getAllQuery += COL_WORD_COUNT;
+		} else if (sortOption == SortOption.PARAGRAPH_COUNT) {
+			getAllQuery += COL_PARAGRAPH_COUNT;
+		} else if (sortOption == SortOption.READ_TIME) {
+			getAllQuery += COL_READ_TIME;
+		}
 
 		Cursor cursor = db.rawQuery(getAllQuery, null);
 		if (cursor.moveToFirst()) {
