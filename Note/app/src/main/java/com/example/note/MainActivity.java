@@ -81,7 +81,8 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof NotesFragment) {
+		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
+				instanceof NotesFragment) {
 			getMenuInflater().inflate(R.menu.menu_main, menu);
 
 			MenuItem searchItem = menu.findItem(R.id.menu_main_search);
@@ -110,7 +111,12 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 	}
 
 	@Override
-	public void onClick(DatabaseHelper.Sort sort) {
-		Toast.makeText(this, "Clicked on: " + sort.name(), Toast.LENGTH_SHORT).show();
+	public void onClick(NoteDAO.SortOption sortOption) {
+		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
+				instanceof NotesFragment) {
+			NotesFragment notesFragment = (NotesFragment)getSupportFragmentManager()
+					.findFragmentById(R.id.fragment_container);
+			if (notesFragment != null) notesFragment.setSortOption(sortOption);
+		}
 	}
 }

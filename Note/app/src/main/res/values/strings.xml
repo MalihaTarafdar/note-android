@@ -11,7 +11,7 @@
 
     <!-- labels -->
     <string name="search">Search</string>
-    <string name="sort">Sort</string>
+    <string name="sortOption">Sort</string>
     <string name="filter">Filter</string>
     <string name="notes">Notes</string>
     <string name="settings">Settings</string>

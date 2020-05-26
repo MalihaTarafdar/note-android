@@ -2,7 +2,6 @@ package com.example.note;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,24 +55,24 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment implements 
 	@Override
 	public void onClick(View v) {
 		if (v == titleLayout) {
-			listener.onClick(DatabaseHelper.Sort.TITLE);
+			listener.onClick(NoteDAO.SortOption.TITLE);
 		} else if (v == dateCreatedLayout) {
-			listener.onClick(DatabaseHelper.Sort.DATE_CREATED);
+			listener.onClick(NoteDAO.SortOption.DATE_CREATED);
 		} else if (v == dateModifiedLayout) {
-			listener.onClick(DatabaseHelper.Sort.DATE_MODIFIED);
+			listener.onClick(NoteDAO.SortOption.DATE_MODIFIED);
 		} else if (v == characterCountLayout) {
-			listener.onClick(DatabaseHelper.Sort.CHARACTER_COUNT);
+			listener.onClick(NoteDAO.SortOption.CHARACTER_COUNT);
 		} else if (v == wordCountLayout) {
-			listener.onClick(DatabaseHelper.Sort.WORD_COUNT);
+			listener.onClick(NoteDAO.SortOption.WORD_COUNT);
 		} else if (v == paragraphCountLayout) {
-			listener.onClick(DatabaseHelper.Sort.PARAGRAPH_COUNT);
+			listener.onClick(NoteDAO.SortOption.PARAGRAPH_COUNT);
 		} else if (v == readTimeLayout) {
-			listener.onClick(DatabaseHelper.Sort.READ_TIME);
+			listener.onClick(DatabaseHelper.SortOption.READ_TIME);
 		}
 	}
 
 	interface SortListener {
-		void onClick(DatabaseHelper.Sort sort);
+		void onClick(NoteDAO.SortOption sortOption);
 	}
 
 	@Override

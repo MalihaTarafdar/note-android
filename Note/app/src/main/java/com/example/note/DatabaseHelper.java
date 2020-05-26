@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -31,11 +32,6 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	private static final String COL_READ_TIME = "ReadTime"; //seconds
 
 	private Context context;
-
-	//Sort options
-	enum Sort {
-		TITLE, DATE_CREATED, DATE_MODIFIED, CHARACTER_COUNT, WORD_COUNT, PARAGRAPH_COUNT, READ_TIME
-	}
 
 	DatabaseHelper(@Nullable Context context) {
 		super(context, DATABASE_NAME, null, 1);
@@ -99,7 +95,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 
 	//retrieves all the notes in the database
 	@Override
-	public List<Note> getAll() {
+	public List<Note> getAll(SortOption sortOption) {
 		List<Note> notes = new ArrayList<>();
 
 		SQLiteDatabase db = this.getReadableDatabase();

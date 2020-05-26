@@ -3,7 +3,6 @@ package com.example.note;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,11 +23,12 @@ import static android.app.Activity.RESULT_CANCELED;
 
 public class NotesFragment extends Fragment implements NoteAdapter.ItemActionListener {
 
-	private NoteAdapter adapter;
-	private List<Note> noteList;
-
 	static final String NOTE_ID = "note id";
 	private static final int REQUEST_CODE = 1;
+
+	private NoteAdapter adapter;
+	private List<Note> noteList;
+	private NoteDAO.SortOption sortOption;
 
 	@Nullable
 	@Override
@@ -39,8 +39,8 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		FloatingActionButton addButton = v.findViewById(R.id.notes_btn_add);
 
 		//list
-		//TODO: call get all notes on background thread
-		noteList = new DatabaseHelper(v.getContext()).getAll();
+		sortOption = NoteDAO.SortOption.ALL;
+		noteList = new DatabaseHelper(v.getContext()).getAll(sortOption);
 
 		//build RecyclerView
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext());
@@ -69,6 +69,12 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		note.create();
 		noteList.add(note);
 		adapter.notifyItemInserted(noteList.size() - 1);
+	}
+
+	void setSortOption(NoteDAO.SortOption sortOption) {
+		this.sortOption = sortOption;
+		noteList = new DatabaseHelper(getContext()).getAll(sortOption);
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override
