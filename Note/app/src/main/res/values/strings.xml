@@ -9,6 +9,7 @@
     <string name="preview_title">A new note</string>
     <string name="preview_content">Write something in your beautiful new note</string>
 
+    <!-- labels -->
     <string name="search">Search</string>
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
@@ -18,12 +19,20 @@
     <string name="export">Export</string>
     <string name="info">Info</string>
     <string name="delete">Delete</string>
+    <string name="information">Information</string>
+    <string name="date_created">Date Created</string>
+    <string name="date_modified">Date Modified</string>
+    <string name="character_count">Characters</string>
+    <string name="paragraph_count">Paragraphs</string>
+    <string name="read_time">Read Time</string>
+    <string name="word_count">Word Count</string>
 
     <!-- icons -->
     <string name="overflow_icon">overflow icon</string>
     <string name="delete_icon">delete icon</string>
     <string name="export_icon">export icon</string>
     <string name="cancel_icon">cancel icon</string>
+    <string name="close_icon">close icon</string>
 
     <!-- navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
