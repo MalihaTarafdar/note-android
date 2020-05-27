@@ -30,8 +30,14 @@
     <string name="word_count">Word Count</string>
     <string name="paragraph_count">Paragraph Count</string>
     <string name="title">Title</string>
+    <string name="sort_by">Sort By</string>
+    <string name="apply">Apply</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="ascending">Asc…</string>
 
     <!-- icons -->
+    <string name="icon">icon</string>
     <string name="overflow_icon">overflow icon</string>
     <string name="delete_icon">delete icon</string>
     <string name="export_icon">export icon</string>
@@ -45,8 +51,4 @@
     <!-- navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="sort_by">Sort By</string>
-    <string name="apply">Apply</string>
-    <string name="start">Start</string>
-    <string name="end">End</string>
 </resources>

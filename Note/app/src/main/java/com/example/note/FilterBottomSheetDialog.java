@@ -2,7 +2,6 @@ package com.example.note;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,27 +15,14 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class FilterBottomSheetDialog extends BottomSheetDialogFragment implements View.OnClickListener {
+public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private LinearLayout dateCreatedLayout, dateModifiedLayout, characterCountLayout, wordCountLayout,
 			paragraphCountLayout, readTimeLayout;
 
 	private FilterListener listener;
-	private NoteDAO.FilterOption filterOption;
-
-	private final Map<Integer, NoteDAO.FilterOption> OPTIONS = new HashMap<Integer, NoteDAO.FilterOption>() {{
-		put(R.id.filter_title, NoteDAO.FilterOption.TITLE);
-		put(R.id.filter_date_created, NoteDAO.FilterOption.DATE_CREATED);
-		put(R.id.filter_date_modified, NoteDAO.FilterOption.DATE_MODIFIED);
-		put(R.id.filter_character_count, NoteDAO.FilterOption.CHARACTER_COUNT);
-		put(R.id.filter_word_count, NoteDAO.FilterOption.WORD_COUNT);
-		put(R.id.filter_paragraph_count, NoteDAO.FilterOption.PARAGRAPH_COUNT);
-		put(R.id.filter_read_time, NoteDAO.FilterOption.READ_TIME);
-	}};
 
 	@Nullable
 	@Override
@@ -48,10 +34,6 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment implement
 		Button applyButton = v.findViewById(R.id.filter_btn_apply);
 		ImageButton closeButton = v.findViewById(R.id.filter_btn_close);
 
-		for (Map.Entry<Integer, NoteDAO.FilterOption> entry : OPTIONS.entrySet()) {
-			v.findViewById(entry.getKey()).setOnClickListener(this);
-		}
-
 		closeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -62,23 +44,11 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment implement
 		applyButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				listener.onClick(filterOption, startInput.getText().toString(), endInput.getText().toString());
 				dismiss();
 			}
 		});
 
 		return v;
-	}
-
-	@Override
-	public void onClick(View v) {
-		filterOption = OPTIONS.get(v.getId());
-		for (Map.Entry<Integer, NoteDAO.FilterOption> entry : OPTIONS.entrySet()) {
-			TypedValue outValue = new TypedValue();
-			getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-			v.getRootView().findViewById(entry.getKey()).setBackgroundResource(outValue.resourceId);
-		}
-		v.setBackgroundColor(getResources().getColor(R.color.colorBackground));
 	}
 
 	interface FilterListener {

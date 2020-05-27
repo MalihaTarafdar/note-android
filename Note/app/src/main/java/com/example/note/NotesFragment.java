@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -39,6 +40,8 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		FloatingActionButton addButton = v.findViewById(R.id.notes_btn_add);
 
 		//list
+		sortByList = new ArrayList<>();
+		filterByList = new ArrayList<>();
 		noteList = new DatabaseHelper(v.getContext()).getAll(sortByList, filterByList);
 
 		//build RecyclerView

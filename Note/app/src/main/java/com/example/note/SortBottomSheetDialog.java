@@ -1,24 +1,27 @@
 package com.example.note;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SortBottomSheetDialog extends BottomSheetDialogFragment implements View.OnClickListener {
-
-	private LinearLayout titleLayout, dateCreatedLayout, dateModifiedLayout, characterCountLayout,
-			wordCountLayout, paragraphCountLayout, readTimeLayout;
+public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private SortListener listener;
 
@@ -27,23 +30,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment implements 
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.bottom_sheet_sort, container, false);
 
-		titleLayout = v.findViewById(R.id.sort_title);
-		dateCreatedLayout = v.findViewById(R.id.sort_date_created);
-		dateModifiedLayout = v.findViewById(R.id.sort_date_modified);
-		characterCountLayout = v.findViewById(R.id.sort_character_count);
-		wordCountLayout = v.findViewById(R.id.sort_word_count);
-		paragraphCountLayout = v.findViewById(R.id.sort_paragraph_count);
-		readTimeLayout = v.findViewById(R.id.sort_read_time);
 		ImageButton closeButton = v.findViewById(R.id.sort_btn_close);
-
-		titleLayout.setOnClickListener(this);
-		dateCreatedLayout.setOnClickListener(this);
-		dateModifiedLayout.setOnClickListener(this);
-		characterCountLayout.setOnClickListener(this);
-		wordCountLayout.setOnClickListener(this);
-		paragraphCountLayout.setOnClickListener(this);
-		readTimeLayout.setOnClickListener(this);
-
 		closeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -51,27 +38,54 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment implements 
 			}
 		});
 
+		ListView listView = v.findViewById(R.id.sort_lv_options);
+		List<SortItem> items = new ArrayList<SortItem>() {{
+			add(new SortItem("Title", R.drawable.ic_title));
+			add(new SortItem("Date Created", R.drawable.ic_date_range));
+			add(new SortItem("Date Modified", R.drawable.ic_date_range));
+			add(new SortItem("Word Count", R.drawable.ic_text));
+			add(new SortItem("Read Time", R.drawable.ic_time));
+			add(new SortItem("Paragraph Count", R.drawable.ic_text));
+			add(new SortItem("Character Count", R.drawable.ic_text));
+		}};
+		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), R.layout.item_sort, items);
+		listView.setAdapter(customAdapter);
+
 		return v;
 	}
 
-	@Override
-	public void onClick(View v) {
-		if (v == titleLayout) {
-			listener.onClick(NoteDAO.SortOption.TITLE);
-		} else if (v == dateCreatedLayout) {
-			listener.onClick(NoteDAO.SortOption.DATE_CREATED);
-		} else if (v == dateModifiedLayout) {
-			listener.onClick(NoteDAO.SortOption.DATE_MODIFIED);
-		} else if (v == characterCountLayout) {
-			listener.onClick(NoteDAO.SortOption.CHARACTER_COUNT);
-		} else if (v == wordCountLayout) {
-			listener.onClick(NoteDAO.SortOption.WORD_COUNT);
-		} else if (v == paragraphCountLayout) {
-			listener.onClick(NoteDAO.SortOption.PARAGRAPH_COUNT);
-		} else if (v == readTimeLayout) {
-			listener.onClick(DatabaseHelper.SortOption.READ_TIME);
+	private static class CustomAdapter extends ArrayAdapter<SortItem> {
+		private Context context;
+		private List<SortItem> list;
+		CustomAdapter(@NonNull Context context, int resource, @NonNull List<SortItem> objects) {
+			super(context, resource, objects);
+			this.context = context;
+			list = objects;
 		}
-		dismiss();
+
+		@NonNull
+		@Override
+		public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+			LayoutInflater inflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+			View v = inflater.inflate(R.layout.item_sort, null);
+
+			ImageView icon = v.findViewById(R.id.sort_item_iv_icon);
+			TextView nameView = v.findViewById(R.id.sort_item_name);
+
+			icon.setImageResource(list.get(position).iconId);
+			nameView.setText(list.get(position).name);
+
+			return v;
+		}
+	}
+
+	private static class SortItem {
+		String name;
+		int iconId;
+		SortItem(String name, int iconId) {
+			this.name = name;
+			this.iconId = iconId;
+		}
 	}
 
 	interface SortListener {

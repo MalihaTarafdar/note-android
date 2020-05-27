@@ -5,283 +5,43 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingBottom="8dp"
-    android:backgroundTint="@color/colorForeground">
+    android:backgroundTint="@color/colorForeground"
+    android:paddingTop="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp">
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:paddingTop="16dp"
+            android:layout_weight="1"
             android:paddingBottom="12dp"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
             android:text="@string/sort_by"
             android:textColor="@color/colorTitle"
             android:textSize="20sp"/>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="1"
             android:gravity="top|end">
-
             <ImageButton
                 android:id="@+id/sort_btn_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/close_icon"
                 android:tint="@color/colorAccent"
                 app:srcCompat="@drawable/ic_close" />
-
         </LinearLayout>
 
-
     </LinearLayout>
 
-    <!-- title -->
-    <LinearLayout
-        android:id="@+id/sort_title"
+    <ListView
+        android:id="@+id/sort_lv_options"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:padding="4dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            app:srcCompat="@drawable/ic_title"
-            android:tint="@color/colorPrimaryMid"
-            android:scaleType="fitCenter"
-            android:background="#00000000"
-            android:contentDescription="@string/title_icon" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:gravity="start|center_vertical"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimaryMid"
-            android:text="@string/title"/>
-
-    </LinearLayout>
-
-    <!-- date created -->
-    <LinearLayout
-        android:id="@+id/sort_date_created"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:padding="4dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            app:srcCompat="@drawable/ic_date_range"
-            android:tint="@color/colorPrimaryMid"
-            android:scaleType="fitCenter"
-            android:background="#00000000"
-            android:contentDescription="@string/date_icon" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:gravity="start|center_vertical"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimaryMid"
-            android:text="@string/date_created"/>
-
-    </LinearLayout>
-
-    <!-- date modified -->
-    <LinearLayout
-        android:id="@+id/sort_date_modified"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:padding="4dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            app:srcCompat="@drawable/ic_date_range"
-            android:tint="@color/colorPrimaryMid"
-            android:scaleType="fitCenter"
-            android:background="#00000000"
-            android:contentDescription="@string/date_icon" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:gravity="start|center_vertical"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimaryMid"
-            android:text="@string/date_modified"/>
-
-    </LinearLayout>
-
-    <!-- character count -->
-    <LinearLayout
-        android:id="@+id/sort_character_count"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:padding="4dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            app:srcCompat="@drawable/ic_text"
-            android:tint="@color/colorPrimaryMid"
-            android:scaleType="fitCenter"
-            android:background="#00000000"
-            android:contentDescription="@string/text_icon" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:gravity="start|center_vertical"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimaryMid"
-            android:text="@string/character_count" />
-
-    </LinearLayout>
-
-    <!-- word count -->
-    <LinearLayout
-        android:id="@+id/sort_word_count"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:padding="4dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            app:srcCompat="@drawable/ic_text"
-            android:tint="@color/colorPrimaryMid"
-            android:scaleType="fitCenter"
-            android:background="#00000000"
-            android:contentDescription="@string/text_icon" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:gravity="start|center_vertical"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimaryMid"
-            android:text="@string/word_count" />
-
-    </LinearLayout>
-
-    <!-- paragraph count -->
-    <LinearLayout
-        android:id="@+id/sort_paragraph_count"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:padding="4dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            app:srcCompat="@drawable/ic_text"
-            android:tint="@color/colorPrimaryMid"
-            android:scaleType="fitCenter"
-            android:background="#00000000"
-            android:contentDescription="@string/text_icon" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:gravity="start|center_vertical"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimaryMid"
-            android:text="@string/paragraph_count" />
-
-    </LinearLayout>
-
-    <!-- read time -->
-    <LinearLayout
-        android:id="@+id/sort_read_time"
-        android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:padding="4dp"
-        android:focusable="true"
-        android:clickable="true"
-        android:background="?attr/selectableItemBackground">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="4dp"
-            app:srcCompat="@drawable/ic_time"
-            android:tint="@color/colorPrimaryMid"
-            android:scaleType="fitCenter"
-            android:background="#00000000"
-            android:contentDescription="@string/time_icon" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:gravity="start|center_vertical"
-            android:textSize="16sp"
-            android:textColor="@color/colorPrimaryMid"
-            android:text="@string/read_time" />
-
-    </LinearLayout>
+        android:layout_height="match_parent" />
 
 </LinearLayout>
