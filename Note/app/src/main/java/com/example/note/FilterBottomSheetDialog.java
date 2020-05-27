@@ -17,6 +17,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FilterBottomSheetDialog extends BottomSheetDialogFragment implements View.OnClickListener {
@@ -27,7 +28,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment implement
 	private FilterListener listener;
 	private NoteDAO.FilterOption filterOption;
 
-	private final HashMap<Integer, NoteDAO.FilterOption> OPTIONS = new HashMap<Integer, NoteDAO.FilterOption>() {{
+	private final Map<Integer, NoteDAO.FilterOption> OPTIONS = new HashMap<Integer, NoteDAO.FilterOption>() {{
 		put(R.id.filter_title, NoteDAO.FilterOption.TITLE);
 		put(R.id.filter_date_created, NoteDAO.FilterOption.DATE_CREATED);
 		put(R.id.filter_date_modified, NoteDAO.FilterOption.DATE_MODIFIED);
@@ -81,7 +82,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment implement
 	}
 
 	interface FilterListener {
-		void onClick(NoteDAO.FilterOption filterOption, String start, String end);
+		void onFilterApplied(List<DatabaseHelper.FilterData> filterByList);
 	}
 
 	@Override

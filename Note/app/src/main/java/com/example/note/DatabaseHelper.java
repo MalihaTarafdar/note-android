@@ -14,21 +14,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
+class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "Note.db";
 
 	private static final String TABLE_NOTE = "Note";
 
-	private static final String COL_ID = "Id";
-	private static final String COL_REFERENCE = "Reference"; //reference to file in storage
-	private static final String COL_TITLE = "Title";
-	private static final String COL_DATE_CREATED = "DateCreated";
-	private static final String COL_DATE_MODIFIED = "DateModified";
-	private static final String COL_CHARACTER_COUNT = "CharacterCount";
-	private static final String COL_WORD_COUNT = "WordCount";
-	private static final String COL_PARAGRAPH_COUNT = "ParagraphCount";
-	private static final String COL_READ_TIME = "ReadTime"; //seconds
+	static final String COL_ID = "Id";
+	static final String COL_REFERENCE = "Reference"; //reference to file in storage
+	static final String COL_TITLE = "Title";
+	static final String COL_DATE_CREATED = "DateCreated";
+	static final String COL_DATE_MODIFIED = "DateModified";
+	static final String COL_CHARACTER_COUNT = "CharacterCount";
+	static final String COL_WORD_COUNT = "WordCount";
+	static final String COL_PARAGRAPH_COUNT = "ParagraphCount";
+	static final String COL_READ_TIME = "ReadTime"; //seconds
 
 	private Context context;
 
@@ -58,8 +58,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
 	//retrieves a single note from the database from the id
-	@Override
-	public Note getNoteById(int id) {
+	Note getNoteById(int id) {
 		Note note = new Note(context);
 		note.setId(id);
 
@@ -92,52 +91,80 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 		return note;
 	}
 
+	static class SortData {
+		private String col;
+		private boolean ascending;
+		SortData(String col, boolean ascending) {
+			this.col = col;
+			this.ascending = ascending;
+		}
+		String getCol() {
+			return col;
+		}
+		void setCol(String col) {
+			this.col = col;
+		}
+		boolean isAscending() {
+			return ascending;
+		}
+		void setAscending(boolean ascending) {
+			this.ascending = ascending;
+		}
+	}
+
+	static class FilterData {
+		private String col, lowerBound, upperBound;
+		FilterData(String col, String lowerBound, String upperBound) {
+			this.col = col;
+			this.lowerBound = lowerBound;
+			this.upperBound = upperBound;
+		}
+		String getCol() {
+			return col;
+		}
+		public void setCol(String col) {
+			this.col = col;
+		}
+		String getLowerBound() {
+			return lowerBound;
+		}
+		public void setLowerBound(String lowerBound) {
+			this.lowerBound = lowerBound;
+		}
+		String getUpperBound() {
+			return upperBound;
+		}
+		void setUpperBound(String upperBound) {
+			this.upperBound = upperBound;
+		}
+	}
+
 	//retrieves all the notes in the database
-	@Override
-	public List<Note> getAll(SortOption sortOption, FilterOption filterOption, String start, String end) {
+	List<Note> getAll(List<SortData> sortByList, List<FilterData> filterByList) {
 		List<Note> notes = new ArrayList<>();
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		String getQuery = "SELECT * FROM " + TABLE_NOTE;
+		StringBuilder getQuery = new StringBuilder("SELECT * FROM " + TABLE_NOTE);
 
-		if (filterOption != null) {
-			getQuery += " WHERE ";
-			if (filterOption == FilterOption.TITLE) {
-				getQuery += COL_TITLE;
-			} else if (filterOption == FilterOption.DATE_CREATED) {
-				getQuery += COL_DATE_CREATED;
-			} else if (filterOption == FilterOption.DATE_MODIFIED) {
-				getQuery += COL_DATE_MODIFIED;
-			} else if (filterOption == FilterOption.CHARACTER_COUNT) {
-				getQuery += COL_CHARACTER_COUNT;
-			} else if (filterOption == FilterOption.WORD_COUNT) {
-				getQuery += COL_WORD_COUNT;
-			} else if (filterOption == FilterOption.PARAGRAPH_COUNT) {
-				getQuery += COL_PARAGRAPH_COUNT;
-			} else if (filterOption == FilterOption.READ_TIME) {
-				getQuery += COL_READ_TIME;
+		if (filterByList.size() > 0) getQuery.append(" WHERE ");
+		for (FilterData fd : filterByList) {
+			getQuery.append(fd.getCol());
+			if (fd.getLowerBound() != null && fd.getUpperBound() != null) {
+				getQuery.append(" BETWEEN ").append(fd.getLowerBound()).append(" AND ").append(fd.getUpperBound());
+			} else if (fd.getLowerBound() != null) {
+				getQuery.append(" >= ").append(fd.getLowerBound());
+			} else if (fd.getUpperBound() != null) {
+				getQuery.append(" <= ").append(fd.getUpperBound());
 			}
-			getQuery += " BETWEEN '" + start + "' AND '" + end + "'";
 		}
 
-		getQuery += " ORDER BY ";
-		if (sortOption == SortOption.TITLE) {
-			getQuery += COL_TITLE;
-		} else if (sortOption == SortOption.DATE_CREATED) {
-			getQuery += COL_DATE_CREATED;
-		} else if (sortOption == SortOption.DATE_MODIFIED) {
-			getQuery += COL_DATE_MODIFIED;
-		} else if (sortOption == SortOption.CHARACTER_COUNT) {
-			getQuery += COL_CHARACTER_COUNT;
-		} else if (sortOption == SortOption.WORD_COUNT) {
-			getQuery += COL_WORD_COUNT;
-		} else if (sortOption == SortOption.PARAGRAPH_COUNT) {
-			getQuery += COL_PARAGRAPH_COUNT;
-		} else if (sortOption == SortOption.READ_TIME) {
-			getQuery += COL_READ_TIME;
+		if (sortByList.size() > 0) getQuery.append(" ORDER BY ");
+		for (SortData sd : sortByList) {
+			getQuery.append(sd.getCol()).append((sd.isAscending()) ? " ASC, " : " DESC, ");
 		}
+		getQuery.substring(0, getQuery.length() - 2);
 
-		Cursor cursor = db.rawQuery(getQuery, null);
+		Cursor cursor = db.rawQuery(getQuery.toString(), null);
 		if (cursor.moveToFirst()) {
 			do {
 				int id = cursor.getInt(0);
@@ -152,8 +179,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	}
 
 	//inserts a note into the database
-	@Override
-	public boolean insertNote(Note note) {
+	boolean insertNote(Note note) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues cv = getNoteCV(note);
 		long inserted = db.insert(TABLE_NOTE, null, cv);
@@ -162,8 +188,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	}
 
 	//updates the fields of a note
-	@Override
-	public boolean updateNote(Note note) {
+	boolean updateNote(Note note) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues cv = getNoteCV(note);
 		long updated = db.update(TABLE_NOTE, cv, COL_ID + " = " + note.getId(), null);
@@ -188,8 +213,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	}
 
 	//removes a note from the database
-	@Override
-	public boolean deleteNote(Note note) {
+	boolean deleteNote(Note note) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String deleteQuery = "DELETE FROM " + TABLE_NOTE + " WHERE " + COL_ID + " = " + note.getId();
 

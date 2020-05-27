@@ -27,7 +27,8 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 
 	private NoteAdapter adapter;
 	private List<Note> noteList;
-	private NoteDAO.SortOption sortOption;
+	private List<DatabaseHelper.SortData> sortByList;
+	private List<DatabaseHelper.FilterData> filterByList;
 
 	@Nullable
 	@Override
@@ -38,9 +39,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		FloatingActionButton addButton = v.findViewById(R.id.notes_btn_add);
 
 		//list
-		//default sorting is by date modified
-		sortOption = NoteDAO.SortOption.DATE_MODIFIED;
-		noteList = new DatabaseHelper(v.getContext()).getAll(sortOption, null, "", "");
+		noteList = new DatabaseHelper(v.getContext()).getAll(sortByList, filterByList);
 
 		//build RecyclerView
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext());
@@ -71,15 +70,18 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		adapter.notifyItemInserted(noteList.size() - 1);
 	}
 
-	void filterNotes(NoteDAO.FilterOption filterOption, String start, String end) {
-		noteList = new DatabaseHelper(getContext()).getAll(sortOption, filterOption, start, end);
-		adapter.setList(noteList);
-		adapter.notifyDataSetChanged();
+	void sortNotes(List<DatabaseHelper.SortData> sortByList) {
+		this.sortByList = sortByList;
+		reloadNotes();
 	}
 
-	void setSortOption(NoteDAO.SortOption sortOption) {
-		this.sortOption = sortOption;
-		noteList = new DatabaseHelper(getContext()).getAll(sortOption, null, "", "");
+	void filterNotes(List<DatabaseHelper.FilterData> filterByList) {
+		this.filterByList = filterByList;
+		reloadNotes();
+	}
+
+	void reloadNotes() {
+		noteList = new DatabaseHelper(getContext()).getAll(sortByList, filterByList);
 		adapter.setList(noteList);
 		adapter.notifyDataSetChanged();
 	}

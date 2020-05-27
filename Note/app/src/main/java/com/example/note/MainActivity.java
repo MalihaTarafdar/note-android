@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements SortBottomSheetDialog.SortListener, FilterBottomSheetDialog.FilterListener {
 
 	private DrawerLayout drawer;
@@ -112,22 +114,22 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 	}
 
 	@Override
-	public void onClick(NoteDAO.SortOption sortOption) {
+	public void onSortApplied(List<DatabaseHelper.SortData> sortByList) {
 		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
 				instanceof NotesFragment) {
 			NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.fragment_container);
-			if (notesFragment != null) notesFragment.setSortOption(sortOption);
+			if (notesFragment != null) notesFragment.sortNotes(sortByList);
 		}
 	}
 
 	@Override
-	public void onClick(NoteDAO.FilterOption filterOption, String start, String end) {
+	public void onFilterApplied(List<DatabaseHelper.FilterData> filterByList) {
 		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
 				instanceof NotesFragment) {
 			NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.fragment_container);
-			if (notesFragment != null) notesFragment.filterNotes(filterOption, start, end);
+			if (notesFragment != null) notesFragment.filterNotes(filterByList);
 		}
 	}
 }

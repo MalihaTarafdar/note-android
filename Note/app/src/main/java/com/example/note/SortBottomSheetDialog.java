@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import java.util.List;
+
 public class SortBottomSheetDialog extends BottomSheetDialogFragment implements View.OnClickListener {
 
 	private LinearLayout titleLayout, dateCreatedLayout, dateModifiedLayout, characterCountLayout,
@@ -73,7 +75,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment implements 
 	}
 
 	interface SortListener {
-		void onClick(NoteDAO.SortOption sortOption);
+		void onSortApplied(List<DatabaseHelper.SortData> sortByList);
 	}
 
 	@Override
