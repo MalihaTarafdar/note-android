@@ -97,14 +97,14 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 		//toolbar option items
 		switch (item.getItemId()) {
 			case R.id.menu_main_search:
-				Toast.makeText(this, "Search item selected", Toast.LENGTH_SHORT).show();
 				return true;
 			case R.id.menu_main_sort:
 				SortBottomSheetDialog sortDialog = new SortBottomSheetDialog();
 				sortDialog.show(getSupportFragmentManager(), "sortBottomSheet");
 				return true;
 			case R.id.menu_main_filter:
-				Toast.makeText(this, "Filter item selected", Toast.LENGTH_SHORT).show();
+				FilterBottomSheetDialog filterDialog = new FilterBottomSheetDialog();
+				filterDialog.show(getSupportFragmentManager(), "filterBottomSheet");
 				return true;
 			default: return super.onOptionsItemSelected(item);
 		}

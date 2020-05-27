@@ -46,4 +46,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="sort_by">Sort By</string>
+    <string name="apply">Apply</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
 </resources>
