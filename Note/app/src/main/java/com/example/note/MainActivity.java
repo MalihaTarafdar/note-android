@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity implements SortBottomSheetDialog.SortListener {
+public class MainActivity extends AppCompatActivity implements SortBottomSheetDialog.SortListener, FilterBottomSheetDialog.FilterListener {
 
 	private DrawerLayout drawer;
 
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 			getMenuInflater().inflate(R.menu.menu_main, menu);
 
 			MenuItem searchItem = menu.findItem(R.id.menu_main_search);
-			SearchView searchView = (SearchView)searchItem.getActionView();
+			SearchView searchView = (SearchView) searchItem.getActionView();
 		}
 
 		return super.onCreateOptionsMenu(menu);
@@ -106,7 +106,8 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 				FilterBottomSheetDialog filterDialog = new FilterBottomSheetDialog();
 				filterDialog.show(getSupportFragmentManager(), "filterBottomSheet");
 				return true;
-			default: return super.onOptionsItemSelected(item);
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -114,9 +115,19 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 	public void onClick(NoteDAO.SortOption sortOption) {
 		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
 				instanceof NotesFragment) {
-			NotesFragment notesFragment = (NotesFragment)getSupportFragmentManager()
+			NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.fragment_container);
 			if (notesFragment != null) notesFragment.setSortOption(sortOption);
+		}
+	}
+
+	@Override
+	public void onClick(NoteDAO.FilterOption filterOption, String start, String end) {
+		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
+				instanceof NotesFragment) {
+			NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.fragment_container);
+			if (notesFragment != null) notesFragment.filterNotes(filterOption, start, end);
 		}
 	}
 }

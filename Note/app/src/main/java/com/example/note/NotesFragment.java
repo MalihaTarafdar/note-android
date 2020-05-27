@@ -40,7 +40,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		//list
 		//default sorting is by date modified
 		sortOption = NoteDAO.SortOption.DATE_MODIFIED;
-		noteList = new DatabaseHelper(v.getContext()).getAll(sortOption);
+		noteList = new DatabaseHelper(v.getContext()).getAll(sortOption, null, "", "");
 
 		//build RecyclerView
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext());
@@ -71,9 +71,15 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		adapter.notifyItemInserted(noteList.size() - 1);
 	}
 
+	void filterNotes(NoteDAO.FilterOption filterOption, String start, String end) {
+		noteList = new DatabaseHelper(getContext()).getAll(sortOption, filterOption, start, end);
+		adapter.setList(noteList);
+		adapter.notifyDataSetChanged();
+	}
+
 	void setSortOption(NoteDAO.SortOption sortOption) {
 		this.sortOption = sortOption;
-		noteList = new DatabaseHelper(getContext()).getAll(sortOption);
+		noteList = new DatabaseHelper(getContext()).getAll(sortOption, null, "", "");
 		adapter.setList(noteList);
 		adapter.notifyDataSetChanged();
 	}

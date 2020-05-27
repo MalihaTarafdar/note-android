@@ -82,7 +82,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment implements 
 		try {
 			listener = (SortListener)context;
 		} catch (ClassCastException e) {
-			throw new ClassCastException(context.toString() + " must implement ItemClickListener");
+			throw new ClassCastException(context.toString() + " must implement SortListener");
 		}
 	}
 }

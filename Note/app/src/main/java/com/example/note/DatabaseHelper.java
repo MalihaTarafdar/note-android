@@ -94,29 +94,50 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 
 	//retrieves all the notes in the database
 	@Override
-	public List<Note> getAll(SortOption sortOption) {
+	public List<Note> getAll(SortOption sortOption, FilterOption filterOption, String start, String end) {
 		List<Note> notes = new ArrayList<>();
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		String getAllQuery = "SELECT * FROM " + TABLE_NOTE + " ORDER BY ";
+		String getQuery = "SELECT * FROM " + TABLE_NOTE;
 
-		if (sortOption == SortOption.TITLE) {
-			getAllQuery += COL_TITLE;
-		} else if (sortOption == SortOption.DATE_CREATED) {
-			getAllQuery += COL_DATE_CREATED;
-		} else if (sortOption == SortOption.DATE_MODIFIED) {
-			getAllQuery += COL_DATE_MODIFIED;
-		} else if (sortOption == SortOption.CHARACTER_COUNT) {
-			getAllQuery += COL_CHARACTER_COUNT;
-		} else if (sortOption == SortOption.WORD_COUNT) {
-			getAllQuery += COL_WORD_COUNT;
-		} else if (sortOption == SortOption.PARAGRAPH_COUNT) {
-			getAllQuery += COL_PARAGRAPH_COUNT;
-		} else if (sortOption == SortOption.READ_TIME) {
-			getAllQuery += COL_READ_TIME;
+		if (filterOption != null) {
+			getQuery += " WHERE ";
+			if (filterOption == FilterOption.TITLE) {
+				getQuery += COL_TITLE;
+			} else if (filterOption == FilterOption.DATE_CREATED) {
+				getQuery += COL_DATE_CREATED;
+			} else if (filterOption == FilterOption.DATE_MODIFIED) {
+				getQuery += COL_DATE_MODIFIED;
+			} else if (filterOption == FilterOption.CHARACTER_COUNT) {
+				getQuery += COL_CHARACTER_COUNT;
+			} else if (filterOption == FilterOption.WORD_COUNT) {
+				getQuery += COL_WORD_COUNT;
+			} else if (filterOption == FilterOption.PARAGRAPH_COUNT) {
+				getQuery += COL_PARAGRAPH_COUNT;
+			} else if (filterOption == FilterOption.READ_TIME) {
+				getQuery += COL_READ_TIME;
+			}
+			getQuery += " BETWEEN '" + start + "' AND '" + end + "'";
 		}
 
-		Cursor cursor = db.rawQuery(getAllQuery, null);
+		getQuery += " ORDER BY ";
+		if (sortOption == SortOption.TITLE) {
+			getQuery += COL_TITLE;
+		} else if (sortOption == SortOption.DATE_CREATED) {
+			getQuery += COL_DATE_CREATED;
+		} else if (sortOption == SortOption.DATE_MODIFIED) {
+			getQuery += COL_DATE_MODIFIED;
+		} else if (sortOption == SortOption.CHARACTER_COUNT) {
+			getQuery += COL_CHARACTER_COUNT;
+		} else if (sortOption == SortOption.WORD_COUNT) {
+			getQuery += COL_WORD_COUNT;
+		} else if (sortOption == SortOption.PARAGRAPH_COUNT) {
+			getQuery += COL_PARAGRAPH_COUNT;
+		} else if (sortOption == SortOption.READ_TIME) {
+			getQuery += COL_READ_TIME;
+		}
+
+		Cursor cursor = db.rawQuery(getQuery, null);
 		if (cursor.moveToFirst()) {
 			do {
 				int id = cursor.getInt(0);

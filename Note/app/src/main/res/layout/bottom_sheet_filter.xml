@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="8dp"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    android:backgroundTint="@color/colorForeground">
 
     <TextView
         android:id="@+id/filter_sheet_title"
@@ -43,7 +44,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/filter_input_start"
+        android:id="@+id/filter_input_start_layout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginStart="24dp"
@@ -57,13 +58,14 @@
         app:layout_constraintTop_toBottomOf="@+id/filter_sheet_title">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_input_start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/filter_input_end"
+        android:id="@+id/filter_input_end_layout"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginStart="24dp"
@@ -74,9 +76,10 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter_input_start">
+        app:layout_constraintTop_toBottomOf="@+id/filter_input_start_layout">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_input_end"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -91,13 +94,13 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:background="@color/colorLighterText"
-        app:layout_constraintTop_toBottomOf="@+id/filter_input_end"
+        app:layout_constraintTop_toBottomOf="@+id/filter_input_end_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <!-- date created -->
+    <!-- title -->
     <LinearLayout
-        android:id="@+id/filter_date_created"
+        android:id="@+id/filter_title"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginTop="16dp"
@@ -107,6 +110,42 @@
         android:background="?attr/selectableItemBackground"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/filter_divider">
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="4dp"
+            app:srcCompat="@drawable/ic_title"
+            android:tint="@color/colorPrimaryMid"
+            android:scaleType="fitCenter"
+            android:background="#00000000"
+            android:contentDescription="@string/title_icon" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:gravity="start|center_vertical"
+            android:textSize="16sp"
+            android:textColor="@color/colorPrimaryMid"
+            android:text="@string/title"/>
+
+    </LinearLayout>
+
+    <!-- date created -->
+    <LinearLayout
+        android:id="@+id/filter_date_created"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:padding="4dp"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filter_title">
 
         <ImageButton
             android:layout_width="0dp"
