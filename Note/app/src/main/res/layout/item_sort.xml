@@ -9,7 +9,8 @@
     android:paddingEnd="24dp"
     android:clickable="true"
     android:focusable="true"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    android:id="@+id/sort_item_layout">
 
     <ImageView
         android:id="@+id/sort_item_iv_icon"
