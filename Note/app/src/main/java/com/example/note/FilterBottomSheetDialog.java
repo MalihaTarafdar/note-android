@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,14 +15,10 @@ import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.List;
-
 public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 
-	private LinearLayout dateCreatedLayout, dateModifiedLayout, characterCountLayout, wordCountLayout,
-			paragraphCountLayout, readTimeLayout;
-
 	private FilterListener listener;
+	private DatabaseHelper.FilterData filterData;
 
 	@Nullable
 	@Override
@@ -31,8 +27,10 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 
 		final TextInputEditText startInput = v.findViewById(R.id.filter_input_start);
 		final TextInputEditText endInput = v.findViewById(R.id.filter_input_end);
-		Button applyButton = v.findViewById(R.id.filter_btn_apply);
+		Button applyButton = v.findViewById(R.id.filter_btn_add);
 		ImageButton closeButton = v.findViewById(R.id.filter_btn_close);
+
+		filterData = new DatabaseHelper.FilterData(null, null, null);
 
 		closeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -44,7 +42,14 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 		applyButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				dismiss();
+				if (filterData.getCol() != null) {
+					filterData.setLowerBound((startInput.getText() != null) ? startInput.getText().toString() : null);
+					filterData.setUpperBound((endInput.getText() != null) ? endInput.getText().toString() : null);
+					listener.onFilterApplied(filterData);
+					dismiss();
+				} else {
+					Toast.makeText(getContext(), "Please select a filter option", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
@@ -52,7 +57,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 	}
 
 	interface FilterListener {
-		void onFilterApplied(List<DatabaseHelper.FilterData> filterByList);
+		void onFilterApplied(DatabaseHelper.FilterData filterData);
 	}
 
 	@Override

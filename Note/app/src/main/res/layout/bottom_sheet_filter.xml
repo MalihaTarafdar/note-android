@@ -33,12 +33,12 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/filter_btn_apply"
+        android:id="@+id/filter_btn_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/apply"
+        android:text="@string/add"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         app:layout_constraintEnd_toStartOf="@+id/filter_btn_close"
         app:layout_constraintTop_toTopOf="parent" />

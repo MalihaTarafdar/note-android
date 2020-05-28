@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -124,12 +123,12 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 	}
 
 	@Override
-	public void onFilterApplied(List<DatabaseHelper.FilterData> filterByList) {
+	public void onFilterApplied(DatabaseHelper.FilterData filterData) {
 		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
 				instanceof NotesFragment) {
 			NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.fragment_container);
-			if (notesFragment != null) notesFragment.filterNotes(filterByList);
+			if (notesFragment != null) notesFragment.addToFilters(filterData);
 		}
 	}
 }

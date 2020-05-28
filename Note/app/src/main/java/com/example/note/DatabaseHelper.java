@@ -21,15 +21,15 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String TABLE_NOTE = "Note";
 
-	static final String COL_ID = "Id";
-	static final String COL_REFERENCE = "Reference"; //reference to file in storage
-	static final String COL_TITLE = "Title";
-	static final String COL_DATE_CREATED = "DateCreated";
-	static final String COL_DATE_MODIFIED = "DateModified";
-	static final String COL_CHARACTER_COUNT = "CharacterCount";
-	static final String COL_WORD_COUNT = "WordCount";
-	static final String COL_PARAGRAPH_COUNT = "ParagraphCount";
-	static final String COL_READ_TIME = "ReadTime"; //seconds
+	private static final String COL_ID = "Id";
+	private static final String COL_REFERENCE = "Reference"; //reference to file in storage
+	private static final String COL_TITLE = "Title";
+	private static final String COL_DATE_CREATED = "DateCreated";
+	private static final String COL_DATE_MODIFIED = "DateModified";
+	private static final String COL_CHARACTER_COUNT = "CharacterCount";
+	private static final String COL_WORD_COUNT = "WordCount";
+	private static final String COL_PARAGRAPH_COUNT = "ParagraphCount";
+	private static final String COL_READ_TIME = "ReadTime"; //seconds
 
 	private Context context;
 
@@ -92,54 +92,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
 		return note;
 	}
 
-	static class SortData {
-		private String col;
-		private boolean ascending;
-		SortData(String col, boolean ascending) {
-			this.col = col;
-			this.ascending = ascending;
-		}
-		String getCol() {
-			return col;
-		}
-		void setCol(String col) {
-			this.col = col;
-		}
-		boolean isAscending() {
-			return ascending;
-		}
-		void setAscending(boolean ascending) {
-			this.ascending = ascending;
-		}
-	}
-
-	static class FilterData {
-		private String col, lowerBound, upperBound;
-		FilterData(String col, String lowerBound, String upperBound) {
-			this.col = col;
-			this.lowerBound = lowerBound;
-			this.upperBound = upperBound;
-		}
-		String getCol() {
-			return col;
-		}
-		public void setCol(String col) {
-			this.col = col;
-		}
-		String getLowerBound() {
-			return lowerBound;
-		}
-		public void setLowerBound(String lowerBound) {
-			this.lowerBound = lowerBound;
-		}
-		String getUpperBound() {
-			return upperBound;
-		}
-		void setUpperBound(String upperBound) {
-			this.upperBound = upperBound;
-		}
-	}
-
 	//retrieves all the notes in the database
 	List<Note> getAll(List<SortData> sortByList, List<FilterData> filterByList) {
 		List<Note> notes = new ArrayList<>();
@@ -147,6 +99,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		StringBuilder getQuery = new StringBuilder("SELECT * FROM " + TABLE_NOTE);
 
+		//add filtering to query
 		if (filterByList.size() > 0) getQuery.append(" WHERE ");
 		for (FilterData fd : filterByList) {
 			getQuery.append(fd.getCol());
@@ -159,6 +112,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			}
 		}
 
+		//add sorting to query
 		if (sortByList.size() > 0) {
 			getQuery.append(" ORDER BY ");
 			for (SortData sd : sortByList) {
@@ -166,6 +120,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			}
 			getQuery.setLength(getQuery.length() - 2);
 		}
+
 		Toast.makeText(context, getQuery.toString(), Toast.LENGTH_SHORT).show();
 
 		Cursor cursor = db.rawQuery(getQuery.toString(), null);
@@ -227,5 +182,72 @@ class DatabaseHelper extends SQLiteOpenHelper {
 		cursor.close();
 
 		return deleted;
+	}
+
+	String getColName(String name) throws IllegalArgumentException {
+		if (name.equals(context.getString(R.string.title))) {
+			return DatabaseHelper.COL_TITLE;
+		} else if (name.equals(context.getString(R.string.date_created))) {
+			return DatabaseHelper.COL_DATE_CREATED;
+		} else if (name.equals(context.getString(R.string.date_modified))) {
+			return DatabaseHelper.COL_DATE_MODIFIED;
+		} else if (name.equals(context.getString(R.string.character_count))) {
+			return DatabaseHelper.COL_CHARACTER_COUNT;
+		} else if (name.equals(context.getString(R.string.word_count))) {
+			return DatabaseHelper.COL_WORD_COUNT;
+		} else if (name.equals(context.getString(R.string.paragraph_count))) {
+			return DatabaseHelper.COL_PARAGRAPH_COUNT;
+		} else if (name.equals(context.getString(R.string.read_time))) {
+			return DatabaseHelper.COL_READ_TIME;
+		}
+		throw new IllegalArgumentException("Provided string does not match any column name");
+	}
+
+	static class SortData {
+		private String col;
+		private boolean ascending;
+		SortData(String col, boolean ascending) {
+			this.col = col;
+			this.ascending = ascending;
+		}
+		String getCol() {
+			return col;
+		}
+		void setCol(String col) {
+			this.col = col;
+		}
+		boolean isAscending() {
+			return ascending;
+		}
+		void setAscending(boolean ascending) {
+			this.ascending = ascending;
+		}
+	}
+
+	static class FilterData {
+		private String col, lowerBound, upperBound;
+		FilterData(String col, String lowerBound, String upperBound) {
+			this.col = col;
+			this.lowerBound = lowerBound;
+			this.upperBound = upperBound;
+		}
+		String getCol() {
+			return col;
+		}
+		public void setCol(String col) {
+			this.col = col;
+		}
+		String getLowerBound() {
+			return lowerBound;
+		}
+		public void setLowerBound(String lowerBound) {
+			this.lowerBound = lowerBound;
+		}
+		String getUpperBound() {
+			return upperBound;
+		}
+		void setUpperBound(String upperBound) {
+			this.upperBound = upperBound;
+		}
 	}
 }

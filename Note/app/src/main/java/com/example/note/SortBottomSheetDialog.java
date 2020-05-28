@@ -109,7 +109,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 						nameView.setTextColor(getResources().getColor(R.color.colorPrimary));
 						ascSwitch.setEnabled(true);
 						try {
-							sortData.put(getColName(nameView.getText().toString()), ascSwitch.isChecked());
+							sortData.put(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()), ascSwitch.isChecked());
 						} catch (IllegalArgumentException e) {
 							e.printStackTrace();
 						}
@@ -118,7 +118,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 						nameView.setTextColor(getResources().getColor(R.color.colorText));
 						ascSwitch.setEnabled(false);
 						try {
-							sortData.remove(getColName(nameView.getText().toString()));
+							sortData.remove(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()));
 						} catch (IllegalArgumentException e) {
 							e.printStackTrace();
 						}
@@ -130,7 +130,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					try {
-						sortData.put(getColName(nameView.getText().toString()), isChecked);
+						sortData.put(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()), isChecked);
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					}
@@ -139,25 +139,6 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 			return v;
 		}
-	}
-
-	private String getColName(String name) throws IllegalArgumentException {
-		if (name.equals(getString(R.string.title))) {
-			return DatabaseHelper.COL_TITLE;
-		} else if (name.equals(getString(R.string.date_created))) {
-			return DatabaseHelper.COL_DATE_CREATED;
-		} else if (name.equals(getString(R.string.date_modified))) {
-			return DatabaseHelper.COL_DATE_MODIFIED;
-		} else if (name.equals(getString(R.string.character_count))) {
-			return DatabaseHelper.COL_CHARACTER_COUNT;
-		} else if (name.equals(getString(R.string.word_count))) {
-			return DatabaseHelper.COL_WORD_COUNT;
-		} else if (name.equals(getString(R.string.paragraph_count))) {
-			return DatabaseHelper.COL_PARAGRAPH_COUNT;
-		} else if (name.equals(getString(R.string.read_time))) {
-			return DatabaseHelper.COL_READ_TIME;
-		}
-		throw new IllegalArgumentException("Provided string does not match any column name");
 	}
 
 	private static class SortItem {

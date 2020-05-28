@@ -78,12 +78,12 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		reloadNotes();
 	}
 
-	void filterNotes(List<DatabaseHelper.FilterData> filterByList) {
-		this.filterByList = filterByList;
+	void addToFilters(DatabaseHelper.FilterData filterData) {
+		filterByList.add(filterData);
 		reloadNotes();
 	}
 
-	void reloadNotes() {
+	private void reloadNotes() {
 		noteList = new DatabaseHelper(getContext()).getAll(sortByList, filterByList);
 		adapter.setList(noteList);
 		adapter.notifyDataSetChanged();
