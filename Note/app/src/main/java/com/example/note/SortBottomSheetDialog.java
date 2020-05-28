@@ -57,6 +57,24 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 			add(new SortItem("Character Count", R.drawable.ic_text));
 		}};
 
+		//show current sort data
+		if (getFragmentManager() != null) {
+			NotesFragment notesFragment = (NotesFragment) getFragmentManager().findFragmentById(R.id.fragment_container);
+			if (notesFragment != null) {
+				List<DatabaseHelper.SortData> sortByList = notesFragment.getSortByList();
+				for (DatabaseHelper.SortData sd : sortByList) {
+					for (SortItem item : items) {
+						if (sd.getCol().equals(new DatabaseHelper(v.getContext()).getColName(item.name))) {
+							item.selected = true;
+							item.asc = sd.isAscending();
+							sortData.put(sd.getCol(), sd.isAscending());
+						}
+					}
+				}
+			}
+		}
+
+		//list view
 		ListView listView = v.findViewById(R.id.sort_lv_options);
 		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), R.layout.item_sort_filter, items);
 		listView.setAdapter(customAdapter);
@@ -89,7 +107,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 		@NonNull
 		@Override
-		public View getView(int position, @Nullable View convertView, @NonNull final ViewGroup parent) {
+		public View getView(final int position, @Nullable View convertView, @NonNull final ViewGroup parent) {
 			LayoutInflater inflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 			View v = inflater.inflate(R.layout.item_sort_filter, null);
 
@@ -100,29 +118,33 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 			icon.setImageResource(list.get(position).iconId);
 			nameView.setText(list.get(position).name);
+			ascSwitch.setChecked(list.get(position).asc);
+
+			if (list.get(position).selected) {
+				icon.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.colorPrimary));
+				nameView.setTextColor(getResources().getColor(R.color.colorPrimary));
+				ascSwitch.setEnabled(true);
+				try {
+					sortData.put(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()), ascSwitch.isChecked());
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				}
+			} else {
+				icon.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.colorAccent));
+				nameView.setTextColor(getResources().getColor(R.color.colorText));
+				ascSwitch.setEnabled(false);
+				try {
+					sortData.remove(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()));
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				}
+			}
 
 			layout.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if (nameView.getCurrentTextColor() != getResources().getColor(R.color.colorPrimary)) {
-						icon.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.colorPrimary));
-						nameView.setTextColor(getResources().getColor(R.color.colorPrimary));
-						ascSwitch.setEnabled(true);
-						try {
-							sortData.put(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()), ascSwitch.isChecked());
-						} catch (IllegalArgumentException e) {
-							e.printStackTrace();
-						}
-					} else {
-						icon.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.colorAccent));
-						nameView.setTextColor(getResources().getColor(R.color.colorText));
-						ascSwitch.setEnabled(false);
-						try {
-							sortData.remove(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()));
-						} catch (IllegalArgumentException e) {
-							e.printStackTrace();
-						}
-					}
+					list.get(position).selected = !list.get(position).selected;
+					notifyDataSetChanged();
 				}
 			});
 
@@ -131,6 +153,8 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					try {
 						sortData.put(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()), isChecked);
+						list.get(position).asc = isChecked;
+						notifyDataSetChanged();
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					}
@@ -144,9 +168,12 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 	private static class SortItem {
 		String name;
 		int iconId;
+		boolean selected, asc;
 		SortItem(String name, int iconId) {
 			this.name = name;
 			this.iconId = iconId;
+			selected = false;
+			asc = false;
 		}
 	}
 

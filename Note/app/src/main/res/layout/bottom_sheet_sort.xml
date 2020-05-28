@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:paddingBottom="8dp"
-    android:backgroundTint="@color/colorForeground">
+    android:backgroundTint="@color/colorForeground"
+    android:animateLayoutChanges="true">
 
     <LinearLayout
         android:layout_width="match_parent"

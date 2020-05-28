@@ -89,6 +89,10 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		return v;
 	}
 
+	List<DatabaseHelper.SortData> getSortByList() {
+		return sortByList;
+	}
+
 	private void expandOrCollapse() {
 		if (showingFilters) {
 			expandFiltersButton.setImageResource(R.drawable.ic_expand_less);
