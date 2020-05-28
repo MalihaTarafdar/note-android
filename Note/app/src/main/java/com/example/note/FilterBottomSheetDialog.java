@@ -29,7 +29,18 @@ import java.util.List;
 public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private FilterListener listener;
-	private DatabaseHelper.FilterData filterData;
+	private DatabaseHelper.FilterData oldFilterData, filterData;
+	private boolean editing;
+
+	FilterBottomSheetDialog(DatabaseHelper.FilterData filterData) {
+		oldFilterData = filterData;
+		this.filterData = filterData;
+		editing = true;
+	}
+	FilterBottomSheetDialog() {
+		editing = false;
+		filterData = null;
+	}
 
 	@Nullable
 	@Override
@@ -38,10 +49,32 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 
 		final TextInputEditText startInput = v.findViewById(R.id.filter_input_start);
 		final TextInputEditText endInput = v.findViewById(R.id.filter_input_end);
-		Button applyButton = v.findViewById(R.id.filter_btn_add);
+		Button addButton = v.findViewById(R.id.filter_btn_add);
 		ImageButton closeButton = v.findViewById(R.id.filter_btn_close);
 
-		filterData = new DatabaseHelper.FilterData(null, "", "");
+		List<FilterItem> items = new ArrayList<FilterItem>() {{
+			add(new FilterItem("Title", R.drawable.ic_title));
+			add(new FilterItem("Date Created", R.drawable.ic_date_range));
+			add(new FilterItem("Date Modified", R.drawable.ic_date_range));
+			add(new FilterItem("Word Count", R.drawable.ic_text));
+			add(new FilterItem("Read Time", R.drawable.ic_time));
+			add(new FilterItem("Paragraph Count", R.drawable.ic_text));
+			add(new FilterItem("Character Count", R.drawable.ic_text));
+		}};
+
+		if (filterData != null) {
+			addButton.setText(R.string.save);
+			startInput.setText(filterData.getLowerBound().replaceAll("'", ""));
+			endInput.setText(filterData.getUpperBound().replaceAll("'", ""));
+			for (FilterItem item : items) {
+				if (new DatabaseHelper(v.getContext()).getColName(item.name).equals(filterData.getCol())) {
+					item.selected = true;
+					break;
+				}
+			}
+		} else {
+			filterData = new DatabaseHelper.FilterData(null, "", "");
+		}
 
 		closeButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -50,7 +83,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 			}
 		});
 
-		applyButton.setOnClickListener(new View.OnClickListener() {
+		addButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (filterData.getCol() == null) {
@@ -84,20 +117,11 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 				filterData.setLowerBound(lowerBound);
 				filterData.setUpperBound(upperBound);
 				filterData.setCol(new DatabaseHelper(v.getContext()).getColName(col));
-				listener.onFilterApplied(filterData);
+				if (editing) listener.onFilterSaved(oldFilterData, filterData);
+				else listener.onFilterAdded(filterData);
 				dismiss();
 			}
 		});
-
-		List<FilterItem> items = new ArrayList<FilterItem>() {{
-			add(new FilterItem("Title", R.drawable.ic_title));
-			add(new FilterItem("Date Created", R.drawable.ic_date_range));
-			add(new FilterItem("Date Modified", R.drawable.ic_date_range));
-			add(new FilterItem("Word Count", R.drawable.ic_text));
-			add(new FilterItem("Read Time", R.drawable.ic_time));
-			add(new FilterItem("Paragraph Count", R.drawable.ic_text));
-			add(new FilterItem("Character Count", R.drawable.ic_text));
-		}};
 
 		ListView listView = v.findViewById(R.id.filter_lv_options);
 		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), R.layout.item_sort_filter, items);
@@ -166,7 +190,8 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 	}
 
 	interface FilterListener {
-		void onFilterApplied(DatabaseHelper.FilterData filterData);
+		void onFilterAdded(DatabaseHelper.FilterData filterData);
+		void onFilterSaved(DatabaseHelper.FilterData oldFilterData, DatabaseHelper.FilterData filterData);
 	}
 
 	@Override

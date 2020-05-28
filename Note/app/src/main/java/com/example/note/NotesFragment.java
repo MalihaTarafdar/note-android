@@ -120,9 +120,26 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		reloadNotes();
 	}
 
-	void addToFilters(final DatabaseHelper.FilterData filterData) {
+	void addToFilters(DatabaseHelper.FilterData filterData) {
 		filterByList.add(filterData);
+		reloadNotes();
+		reloadFilterChips();
+	}
 
+	void removeFromFilters(DatabaseHelper.FilterData filterData) {
+		filterByList.remove(filterData);
+		reloadNotes();
+		reloadFilterChips();
+	}
+
+	private void reloadFilterChips() {
+		filtersContainer.removeAllViews();
+		for (DatabaseHelper.FilterData fd : filterByList) {
+			filtersContainer.addView(getChip(fd));
+		}
+	}
+
+	Chip getChip(final DatabaseHelper.FilterData filterData) {
 		final Chip chip = new Chip(context);
 		chip.setText(filterData.getCol());
 		chip.setChipBackgroundColorResource(R.color.colorForeground);
@@ -146,13 +163,17 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 			}
 		});
 
-		filtersContainer.addView(chip);
-		reloadNotes();
-	}
+		chip.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FilterBottomSheetDialog filterDialog = new FilterBottomSheetDialog(filterData);
+				if (getFragmentManager() != null) {
+					filterDialog.show(getFragmentManager(), "filterBottomSheet");
+				}
+			}
+		});
 
-	private void removeFromFilters(DatabaseHelper.FilterData filterData) {
-		filterByList.remove(filterData);
-		reloadNotes();
+		return chip;
 	}
 
 	private void reloadNotes() {

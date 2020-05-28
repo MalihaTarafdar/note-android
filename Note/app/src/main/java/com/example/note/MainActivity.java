@@ -123,12 +123,25 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 	}
 
 	@Override
-	public void onFilterApplied(DatabaseHelper.FilterData filterData) {
+	public void onFilterAdded(DatabaseHelper.FilterData filterData) {
 		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
 				instanceof NotesFragment) {
 			NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.fragment_container);
 			if (notesFragment != null) notesFragment.addToFilters(filterData);
+		}
+	}
+
+	@Override
+	public void onFilterSaved(DatabaseHelper.FilterData oldFilterData, DatabaseHelper.FilterData filterData) {
+		if (getSupportFragmentManager().findFragmentById(R.id.fragment_container)
+				instanceof NotesFragment) {
+			NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.fragment_container);
+			if (notesFragment != null) {
+				notesFragment.removeFromFilters(oldFilterData);
+				notesFragment.addToFilters(filterData);
+			}
 		}
 	}
 }
