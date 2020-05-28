@@ -69,8 +69,8 @@ class Note {
 		}
 		this.paragraphCount = paragraphCount;
 
-		//read time based on average reading speed of 200wpm
-		readTime = (int)(wordCount / 200.0 * 60);
+		//read time based on average reading speed of 200wpm and 5 characters per word
+		readTime = (int)(characterCount / 5.0 / 200.0 * 60);
 
 		storageHelper.createNote(this, content);
 		databaseHelper.updateNote(this);
