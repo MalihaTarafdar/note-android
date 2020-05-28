@@ -67,7 +67,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 			startInput.setText(filterData.getLowerBound().replaceAll("'", ""));
 			endInput.setText(filterData.getUpperBound().replaceAll("'", ""));
 			for (FilterItem item : items) {
-				if (new DatabaseHelper(v.getContext()).getColName(item.name).equals(filterData.getCol())) {
+				if (filterData.getCol().equals(item.name.replaceAll(" ", ""))) {
 					item.selected = true;
 					break;
 				}
@@ -116,7 +116,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 
 				filterData.setLowerBound(lowerBound);
 				filterData.setUpperBound(upperBound);
-				filterData.setCol(new DatabaseHelper(v.getContext()).getColName(col));
+				filterData.setCol(col.replaceAll(" ", ""));
 				if (editing) listener.onFilterSaved(oldFilterData, filterData);
 				else listener.onFilterAdded(filterData);
 				dismiss();

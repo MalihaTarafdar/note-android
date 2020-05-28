@@ -188,25 +188,6 @@ class DatabaseHelper extends SQLiteOpenHelper {
 		return deleted;
 	}
 
-	String getColName(String name) throws IllegalArgumentException {
-		if (name.equals(context.getString(R.string.title))) {
-			return DatabaseHelper.COL_TITLE;
-		} else if (name.equals(context.getString(R.string.date_created))) {
-			return DatabaseHelper.COL_DATE_CREATED;
-		} else if (name.equals(context.getString(R.string.date_modified))) {
-			return DatabaseHelper.COL_DATE_MODIFIED;
-		} else if (name.equals(context.getString(R.string.character_count))) {
-			return DatabaseHelper.COL_CHARACTER_COUNT;
-		} else if (name.equals(context.getString(R.string.word_count))) {
-			return DatabaseHelper.COL_WORD_COUNT;
-		} else if (name.equals(context.getString(R.string.paragraph_count))) {
-			return DatabaseHelper.COL_PARAGRAPH_COUNT;
-		} else if (name.equals(context.getString(R.string.read_time))) {
-			return DatabaseHelper.COL_READ_TIME;
-		}
-		throw new IllegalArgumentException("Provided string does not match any column name");
-	}
-
 	static class SortData {
 		private String col;
 		private boolean ascending;

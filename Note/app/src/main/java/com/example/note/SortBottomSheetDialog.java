@@ -64,7 +64,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 				List<DatabaseHelper.SortData> sortByList = notesFragment.getSortByList();
 				for (DatabaseHelper.SortData sd : sortByList) {
 					for (SortItem item : items) {
-						if (sd.getCol().equals(new DatabaseHelper(v.getContext()).getColName(item.name))) {
+						if (sd.getCol().equals(item.name.replace(" ", ""))) {
 							item.selected = true;
 							item.asc = sd.isAscending();
 							sortData.put(sd.getCol(), sd.isAscending());
@@ -125,7 +125,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 				nameView.setTextColor(getResources().getColor(R.color.colorPrimary));
 				ascSwitch.setEnabled(true);
 				try {
-					sortData.put(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()), ascSwitch.isChecked());
+					sortData.put(nameView.getText().toString().replace(" ", ""), ascSwitch.isChecked());
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				}
@@ -134,7 +134,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 				nameView.setTextColor(getResources().getColor(R.color.colorText));
 				ascSwitch.setEnabled(false);
 				try {
-					sortData.remove(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()));
+					sortData.remove(nameView.getText().toString().replace(" ", ""));
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				}
@@ -152,7 +152,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 					try {
-						sortData.put(new DatabaseHelper(getContext()).getColName(nameView.getText().toString()), isChecked);
+						sortData.put(nameView.getText().toString().replace(" ", ""), isChecked);
 						list.get(position).asc = isChecked;
 						notifyDataSetChanged();
 					} catch (IllegalArgumentException e) {
