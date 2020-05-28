@@ -22,8 +22,6 @@ class Note {
 
 	Note(Context context) {
 		//set note data
-		id = ++curId;
-		reference = id + ".txt";
 		title = "";
 		dateCreated = Calendar.getInstance(Locale.getDefault()).getTime();
 		dateModified = dateCreated;
@@ -42,6 +40,8 @@ class Note {
 	}
 
 	void create() {
+		id = ++curId;
+		reference = id + ".txt";
 		storageHelper.createNote(this, "");
 		databaseHelper.insertNote(this);
 	}
@@ -87,6 +87,7 @@ class Note {
 	}
 	void setId(int id) {
 		this.id = id;
+		reference = id + ".txt";
 	}
 
 	//reference

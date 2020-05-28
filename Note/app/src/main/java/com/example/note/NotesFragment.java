@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +15,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.flexbox.FlexboxLayout;
+import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -31,13 +35,23 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 	private List<DatabaseHelper.SortData> sortByList;
 	private List<DatabaseHelper.FilterData> filterByList;
 
+	private ImageButton expandFiltersButton;
+	private boolean showingFilters;
+	private FlexboxLayout filtersContainer;
+
+	private Context context;
+
 	@Nullable
 	@Override
 	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_notes, container, false);
 
+		context = v.getContext();
+
 		RecyclerView recyclerView = v.findViewById(R.id.notes_recyclerView);
 		FloatingActionButton addButton = v.findViewById(R.id.notes_btn_add);
+		expandFiltersButton = v.findViewById(R.id.notes_btn_expand_filters);
+		filtersContainer = v.findViewById(R.id.notes_filters_container);
 
 		//list
 		sortByList = new ArrayList<>();
@@ -63,7 +77,35 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 			}
 		});
 
+		//expand filters button
+		showingFilters = false;
+		expandFiltersButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				expandOrCollapse();
+			}
+		});
+
 		return v;
+	}
+
+	private void expandOrCollapse() {
+		if (showingFilters) {
+			expandFiltersButton.setImageResource(R.drawable.ic_expand_less);
+			hideFilters();
+		} else {
+			expandFiltersButton.setImageResource(R.drawable.ic_expand_more);
+			showFilters();
+		}
+		showingFilters = !showingFilters;
+	}
+
+	private void showFilters() {
+		filtersContainer.setVisibility(View.VISIBLE);
+	}
+
+	private void hideFilters() {
+		filtersContainer.setVisibility(View.GONE);
 	}
 
 	private void addNote() {
@@ -78,8 +120,38 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		reloadNotes();
 	}
 
-	void addToFilters(DatabaseHelper.FilterData filterData) {
+	void addToFilters(final DatabaseHelper.FilterData filterData) {
 		filterByList.add(filterData);
+
+		final Chip chip = new Chip(context);
+		chip.setText(filterData.getCol());
+		chip.setChipBackgroundColorResource(R.color.colorForeground);
+		chip.setTextColor(getResources().getColor(R.color.colorText));
+
+		FlexboxLayout.LayoutParams layoutParams = new FlexboxLayout.LayoutParams(
+				FlexboxLayout.LayoutParams.WRAP_CONTENT, FlexboxLayout.LayoutParams.WRAP_CONTENT);
+		int marginStartEnd = (int)(2 * context.getResources().getDisplayMetrics().density); //convert 2dp to px
+		int marginTopBot = -(int)(4 * context.getResources().getDisplayMetrics().density); //convert 4dp to px
+		layoutParams.setMargins(marginStartEnd, marginTopBot, marginStartEnd, marginTopBot);
+		chip.setLayoutParams(layoutParams);
+
+		chip.setCloseIcon(getResources().getDrawable(R.drawable.ic_close));
+		chip.setCloseIconTintResource(R.color.colorAccent);
+		chip.setCloseIconVisible(true);
+		chip.setOnCloseIconClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				removeFromFilters(filterData);
+				filtersContainer.removeView(chip);
+			}
+		});
+
+		filtersContainer.addView(chip);
+		reloadNotes();
+	}
+
+	private void removeFromFilters(DatabaseHelper.FilterData filterData) {
+		filterByList.remove(filterData);
 		reloadNotes();
 	}
 
@@ -104,6 +176,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		Intent loadNoteEditor = new Intent(getActivity(), EditorActivity.class);
 		loadNoteEditor.putExtra(NOTE_ID, noteList.get(position).getId());
 		startActivityForResult(loadNoteEditor, REQUEST_CODE);
+		Toast.makeText(context, "Opening " + noteList.get(position).getId(), Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
