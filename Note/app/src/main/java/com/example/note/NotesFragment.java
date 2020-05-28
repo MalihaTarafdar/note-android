@@ -95,10 +95,10 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 
 	private void expandOrCollapse() {
 		if (showingFilters) {
-			expandFiltersButton.setImageResource(R.drawable.ic_expand_less);
+			expandFiltersButton.setImageResource(R.drawable.ic_expand_more);
 			hideFilters();
 		} else {
-			expandFiltersButton.setImageResource(R.drawable.ic_expand_more);
+			expandFiltersButton.setImageResource(R.drawable.ic_expand_less);
 			showFilters();
 		}
 		showingFilters = !showingFilters;
@@ -117,6 +117,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		note.create();
 		noteList.add(note);
 		adapter.notifyItemInserted(noteList.size() - 1);
+		openNote(noteList.size() - 1);
 	}
 
 	void sortNotes(List<DatabaseHelper.SortData> sortByList) {
@@ -143,7 +144,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		}
 	}
 
-	Chip getChip(final DatabaseHelper.FilterData filterData) {
+	private Chip getChip(final DatabaseHelper.FilterData filterData) {
 		final Chip chip = new Chip(context);
 		chip.setText(filterData.getCol());
 		chip.setChipBackgroundColorResource(R.color.colorForeground);
@@ -190,7 +191,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK || resultCode == RESULT_CANCELED) {
-			adapter.notifyDataSetChanged();
+			reloadNotes();
 		}
 	}
 

@@ -5,13 +5,14 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -89,10 +90,22 @@ public class EditorActivity extends AppCompatActivity {
 
 		switch (item.getItemId()) {
 			case R.id.menu_editor_export:
-				Toast.makeText(this, "Export item selected", Toast.LENGTH_SHORT).show();
 				return true;
 			case R.id.menu_editor_delete:
-				Toast.makeText(this, "Delete item selected", Toast.LENGTH_SHORT).show();
+				new MaterialAlertDialogBuilder(EditorActivity.this)
+						.setTitle("Delete Note")
+						.setMessage("Would you like to delete this note?")
+						.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {}})
+						.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								note.delete();
+								setResult(RESULT_OK);
+								finish();
+							}
+						}).show();
 				return true;
 			case R.id.menu_editor_info:
 				InfoBottomSheetDialog infoDialog = new InfoBottomSheetDialog();

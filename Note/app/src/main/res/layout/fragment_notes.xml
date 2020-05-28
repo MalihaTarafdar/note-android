@@ -32,7 +32,7 @@
             android:id="@+id/notes_btn_expand_filters"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_expand_less"
+            app:srcCompat="@drawable/ic_expand_more"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:tint="@color/colorAccent"
             android:contentDescription="@string/expand_icon" />
