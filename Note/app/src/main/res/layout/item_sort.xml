@@ -31,7 +31,7 @@
         android:gravity="start|center_vertical"
         android:textSize="16sp"
         android:textColor="@color/colorText"
-        android:text="@string/title"/>
+        tools:text="@string/title"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -41,6 +41,7 @@
             android:id="@+id/sort_item_sw_asc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:theme="@style/SwitchTheme" />
 
         <TextView

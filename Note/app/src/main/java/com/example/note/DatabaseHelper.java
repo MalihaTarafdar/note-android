@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -158,11 +159,14 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			}
 		}
 
-		if (sortByList.size() > 0) getQuery.append(" ORDER BY ");
-		for (SortData sd : sortByList) {
-			getQuery.append(sd.getCol()).append((sd.isAscending()) ? " ASC, " : " DESC, ");
+		if (sortByList.size() > 0) {
+			getQuery.append(" ORDER BY ");
+			for (SortData sd : sortByList) {
+				getQuery.append(sd.getCol()).append((sd.isAscending()) ? " ASC, " : " DESC, ");
+			}
+			getQuery.setLength(getQuery.length() - 2);
 		}
-		getQuery.substring(0, getQuery.length() - 2);
+		Toast.makeText(context, getQuery.toString(), Toast.LENGTH_SHORT).show();
 
 		Cursor cursor = db.rawQuery(getQuery.toString(), null);
 		if (cursor.moveToFirst()) {
