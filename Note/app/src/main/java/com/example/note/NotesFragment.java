@@ -18,9 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import static android.app.Activity.RESULT_OK;
 import static android.app.Activity.RESULT_CANCELED;
@@ -211,11 +216,29 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		holder.layout.setClickable(false);
 		hideActionsOverlay(holder, context);
 
-		noteList.get(position).delete();
+		final Note note = noteList.get(position);
+		final String content = note.getContent();
+		note.delete();
 		noteList.remove(position);
 
 		adapter.notifyItemRemoved(position);
 		adapter.notifyItemRangeChanged(position, noteList.size());
+
+		//Snackbar for undoing delete
+		Snackbar.make(holder.deleteButton, "Undo deletion of \"" + note.getTitle() + "\"", Snackbar.LENGTH_LONG)
+				.setAction("Undo", new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						note.create();
+						try {
+							note.save(note.getTitle(), content, new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
+									Locale.getDefault()).parse(note.getDateModified()));
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						reloadNotes();
+					}
+				}).show();
 	}
 
 	//Actions overlay

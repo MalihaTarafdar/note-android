@@ -51,8 +51,8 @@ public class EditorActivity extends AppCompatActivity {
 		etTitle.setText(note.getTitle());
 		etContent.setText(note.getContent());
 
-		//auto-save every 30 seconds
-		AUTO_SAVE_INTERVAL = 30000;
+		//auto-save every 60 seconds
+		AUTO_SAVE_INTERVAL = 60000;
 		autoSaveHandler = new Handler();
 		autoSaveHandler.postDelayed(autoSaveRunnable, 0);
 	}
@@ -60,8 +60,7 @@ public class EditorActivity extends AppCompatActivity {
 	private Runnable autoSaveRunnable = new Runnable() {
 		@Override
 		public void run() {
-			note.save(etTitle.getText().toString(), etContent.getText().toString(),
-					Calendar.getInstance(Locale.getDefault()).getTime());
+			saveNote();
 			autoSaveHandler.postDelayed(this, AUTO_SAVE_INTERVAL);
 		}
 	};
@@ -76,17 +75,21 @@ public class EditorActivity extends AppCompatActivity {
 		//stop auto save when leaving editor
 		autoSaveHandler.removeCallbacks(autoSaveRunnable);
 		//save when leaving editor
-		note.save(etTitle.getText().toString(), etContent.getText().toString(),
-				Calendar.getInstance(Locale.getDefault()).getTime());
+		saveNote();
 		setResult(RESULT_OK);
 		finish();
+	}
+
+	private void saveNote() {
+		if (!note.getTitle().equals(etTitle.getText().toString()) || !note.getContent().equals(etContent.getText().toString())) {
+			note.save(etTitle.getText().toString(), etContent.getText().toString(), Calendar.getInstance(Locale.getDefault()).getTime());
+		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		//save note before performing actions on it
-		note.save(etTitle.getText().toString(), etContent.getText().toString(),
-				Calendar.getInstance(Locale.getDefault()).getTime());
+		saveNote();
 
 		switch (item.getItemId()) {
 			case R.id.menu_editor_export:
