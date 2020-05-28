@@ -10,10 +10,10 @@
     android:clickable="true"
     android:focusable="true"
     android:background="?attr/selectableItemBackground"
-    android:id="@+id/sort_item_layout">
+    android:id="@+id/sort_filter_item_layout">
 
     <ImageView
-        android:id="@+id/sort_item_iv_icon"
+        android:id="@+id/sort_filter_item_iv_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
@@ -23,7 +23,7 @@
         android:contentDescription="@string/icon" />
 
     <TextView
-        android:id="@+id/sort_item_name"
+        android:id="@+id/sort_filter_item_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -38,13 +38,14 @@
         android:layout_height="match_parent">
 
         <Switch
-            android:id="@+id/sort_item_sw_asc"
+            android:id="@+id/sort_filter_item_sw_asc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
             android:theme="@style/SwitchTheme" />
 
         <TextView
+            android:id="@+id/sort_filter_item_tv_asc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ascending"

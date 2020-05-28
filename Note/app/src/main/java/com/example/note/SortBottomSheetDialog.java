@@ -45,6 +45,8 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 			}
 		});
 
+		sortData = new HashMap<>();
+
 		List<SortItem> items = new ArrayList<SortItem>() {{
 			add(new SortItem("Title", R.drawable.ic_title));
 			add(new SortItem("Date Created", R.drawable.ic_date_range));
@@ -55,10 +57,8 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 			add(new SortItem("Character Count", R.drawable.ic_text));
 		}};
 
-		sortData = new HashMap<>();
-
 		ListView listView = v.findViewById(R.id.sort_lv_options);
-		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), R.layout.item_sort, items);
+		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), R.layout.item_sort_filter, items);
 		listView.setAdapter(customAdapter);
 
 		Button applyButton = v.findViewById(R.id.sort_btn_apply);
@@ -91,12 +91,12 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 		@Override
 		public View getView(int position, @Nullable View convertView, @NonNull final ViewGroup parent) {
 			LayoutInflater inflater = (LayoutInflater)context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-			View v = inflater.inflate(R.layout.item_sort, null);
+			View v = inflater.inflate(R.layout.item_sort_filter, null);
 
-			LinearLayout layout = v.findViewById(R.id.sort_item_layout);
-			final ImageView icon = v.findViewById(R.id.sort_item_iv_icon);
-			final TextView nameView = v.findViewById(R.id.sort_item_name);
-			final Switch ascSwitch = v.findViewById(R.id.sort_item_sw_asc);
+			LinearLayout layout = v.findViewById(R.id.sort_filter_item_layout);
+			final ImageView icon = v.findViewById(R.id.sort_filter_item_iv_icon);
+			final TextView nameView = v.findViewById(R.id.sort_filter_item_name);
+			final Switch ascSwitch = v.findViewById(R.id.sort_filter_item_sw_asc);
 
 			icon.setImageResource(list.get(position).iconId);
 			nameView.setText(list.get(position).name);

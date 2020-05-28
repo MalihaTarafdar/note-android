@@ -100,16 +100,20 @@ class DatabaseHelper extends SQLiteOpenHelper {
 		StringBuilder getQuery = new StringBuilder("SELECT * FROM " + TABLE_NOTE);
 
 		//add filtering to query
-		if (filterByList.size() > 0) getQuery.append(" WHERE ");
-		for (FilterData fd : filterByList) {
-			getQuery.append(fd.getCol());
-			if (fd.getLowerBound() != null && fd.getUpperBound() != null) {
-				getQuery.append(" BETWEEN ").append(fd.getLowerBound()).append(" AND ").append(fd.getUpperBound());
-			} else if (fd.getLowerBound() != null) {
-				getQuery.append(" >= ").append(fd.getLowerBound());
-			} else if (fd.getUpperBound() != null) {
-				getQuery.append(" <= ").append(fd.getUpperBound());
+		if (filterByList.size() > 0) {
+			getQuery.append(" WHERE ");
+			for (FilterData fd : filterByList) {
+				getQuery.append(fd.getCol());
+				if (fd.hasLowerBound() && fd.hasUpperBound()) {
+					getQuery.append(" BETWEEN ").append(fd.getLowerBound()).append(" AND ").append(fd.getUpperBound());
+				} else if (fd.hasLowerBound()) {
+					getQuery.append(" >= ").append(fd.getLowerBound());
+				} else if (fd.hasUpperBound()) {
+					getQuery.append(" <= ").append(fd.getUpperBound());
+				}
+				getQuery.append(" AND ");
 			}
+			getQuery.setLength(getQuery.length() - 5);
 		}
 
 		//add sorting to query
@@ -231,16 +235,22 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			this.lowerBound = lowerBound;
 			this.upperBound = upperBound;
 		}
+		boolean hasLowerBound() {
+			return lowerBound != null && lowerBound.replaceAll("'", "").length() != 0;
+		}
+		boolean hasUpperBound() {
+			return upperBound != null && upperBound.replaceAll("'", "").length() != 0;
+		}
 		String getCol() {
 			return col;
 		}
-		public void setCol(String col) {
+		void setCol(String col) {
 			this.col = col;
 		}
 		String getLowerBound() {
 			return lowerBound;
 		}
-		public void setLowerBound(String lowerBound) {
+		void setLowerBound(String lowerBound) {
 			this.lowerBound = lowerBound;
 		}
 		String getUpperBound() {
