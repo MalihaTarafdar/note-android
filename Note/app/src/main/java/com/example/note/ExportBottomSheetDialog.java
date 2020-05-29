@@ -1,9 +1,6 @@
 package com.example.note;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ExportBottomSheetDialog extends BottomSheetDialogFragment {
+class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private ExportSelectedListener listener;
 

@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SortBottomSheetDialog extends BottomSheetDialogFragment {
+class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private SortListener listener;
 	private HashMap<String, Boolean> sortData;
@@ -76,7 +76,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 		//list view
 		ListView listView = v.findViewById(R.id.sort_lv_options);
-		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), R.layout.item_sort_filter, items);
+		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), items);
 		listView.setAdapter(customAdapter);
 
 		Button applyButton = v.findViewById(R.id.sort_btn_apply);
@@ -99,8 +99,8 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 		private Context context;
 		private List<SortItem> list;
 
-		CustomAdapter(@NonNull Context context, int resource, @NonNull List<SortItem> objects) {
-			super(context, resource, objects);
+		CustomAdapter(@NonNull Context context, @NonNull List<SortItem> objects) {
+			super(context, R.layout.item_sort_filter, objects);
 			this.context = context;
 			list = objects;
 		}

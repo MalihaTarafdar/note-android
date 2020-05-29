@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;

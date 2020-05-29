@@ -26,7 +26,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
+class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private FilterListener listener;
 	private DatabaseHelper.FilterData oldFilterData, filterData;
@@ -125,7 +125,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 		});
 
 		ListView listView = v.findViewById(R.id.filter_lv_options);
-		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), R.layout.item_sort_filter, items);
+		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), items);
 		listView.setAdapter(customAdapter);
 
 		return v;
@@ -135,8 +135,8 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 		private Context context;
 		private List<FilterItem> list;
 
-		CustomAdapter(@NonNull Context context, int resource, @NonNull List<FilterItem> objects) {
-			super(context, resource, objects);
+		CustomAdapter(@NonNull Context context, @NonNull List<FilterItem> objects) {
+			super(context, R.layout.item_sort_filter, objects);
 			this.context = context;
 			list = objects;
 		}

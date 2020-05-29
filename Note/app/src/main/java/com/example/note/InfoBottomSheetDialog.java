@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class InfoBottomSheetDialog extends BottomSheetDialogFragment {
+class InfoBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private Note note;
 
