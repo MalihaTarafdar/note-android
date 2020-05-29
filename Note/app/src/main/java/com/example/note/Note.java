@@ -1,6 +1,7 @@
 package com.example.note;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
@@ -11,17 +12,19 @@ import java.util.Date;
 import java.util.Locale;
 
 class Note {
-	private static int curId = 0;
+	static int curId = 0;
 
 	//database fields
 	private int id, characterCount, wordCount, paragraphCount, readTime;
 	private String reference, title;
 	private Date dateCreated, dateModified;
 
+	private Context context;
 	private StorageHelper storageHelper;
 	private DatabaseHelper databaseHelper;
 
 	Note(Context context) {
+		this.context = context;
 		//set note data
 		title = "";
 		dateCreated = Calendar.getInstance(Locale.getDefault()).getTime();
@@ -42,6 +45,10 @@ class Note {
 
 	void create() {
 		id = ++curId;
+		SharedPreferences pref = context.getSharedPreferences(context.getString(R.string.id_pref), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putInt(context.getString(R.string.id_key), id);
+		editor.commit();
 		reference = id + ".txt";
 		storageHelper.createNote(this, "");
 		databaseHelper.insertNote(this);
