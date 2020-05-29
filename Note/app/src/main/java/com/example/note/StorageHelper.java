@@ -15,6 +15,7 @@ class StorageHelper {
 		this.context = context;
 	}
 
+	//get content of note (not including title)
 	String getNoteContent(Note note) {
 		StringBuilder content = new StringBuilder();
 		File file = new File(note.getReference());

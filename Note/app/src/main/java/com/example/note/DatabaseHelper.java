@@ -21,6 +21,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String TABLE_NOTE = "Note";
 
+	//database columns
 	private static final String COL_ID = "Id";
 	private static final String COL_REFERENCE = "Reference"; //reference to file in storage
 	private static final String COL_TITLE = "Title";
@@ -92,7 +93,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 		return note;
 	}
 
-	//retrieves all the notes in the database
+	//retrieves all the notes in the database with provided sort and filter options
 	List<Note> getAll(List<SortData> sortByList, List<FilterData> filterByList) {
 		List<Note> notes = new ArrayList<>();
 
@@ -125,7 +126,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			getQuery.setLength(getQuery.length() - 2);
 		}
 
-		Toast.makeText(context, getQuery.toString(), Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, getQuery.toString(), Toast.LENGTH_SHORT).show();
 
 		Cursor cursor = db.rawQuery(getQuery.toString(), null);
 		if (cursor.moveToFirst()) {
@@ -159,6 +160,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 		return updated == 1;
 	}
 
+	//get the ContentValues of a note
 	private ContentValues getNoteCV(Note note) {
 		ContentValues cv = new ContentValues();
 

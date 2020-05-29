@@ -25,8 +25,6 @@ import java.util.Locale;
 
 public class EditorActivity extends AppCompatActivity implements ExportBottomSheetDialog.ExportSelectedListener {
 
-	public static final int CREATE_FILE = 1;
-
 	private Note note;
 	private EditText etTitle, etContent;
 
@@ -89,8 +87,11 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 	}
 
 	private void saveNote() {
-		if (!note.getTitle().equals(etTitle.getText().toString()) || !note.getContent().equals(etContent.getText().toString())) {
-			note.save(etTitle.getText().toString(), etContent.getText().toString(), Calendar.getInstance(Locale.getDefault()).getTime());
+		//only save note when there is new content to save
+		if (!note.getTitle().equals(etTitle.getText().toString()) ||
+				!note.getContent().equals(etContent.getText().toString())) {
+			note.save(etTitle.getText().toString(), etContent.getText().toString(),
+					Calendar.getInstance(Locale.getDefault()).getTime());
 		}
 	}
 
@@ -100,11 +101,11 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 		saveNote();
 
 		switch (item.getItemId()) {
-			case R.id.menu_editor_export:
+			case R.id.menu_editor_export: //export
 				ExportBottomSheetDialog exportDialog = new ExportBottomSheetDialog();
 				exportDialog.show(getSupportFragmentManager(), "exportBottomSheet");
 				return true;
-			case R.id.menu_editor_delete:
+			case R.id.menu_editor_delete: //delete
 				new MaterialAlertDialogBuilder(EditorActivity.this)
 						.setTitle("Delete Note")
 						.setMessage("Would you like to delete this note?")
@@ -120,7 +121,7 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 							}
 						}).show();
 				return true;
-			case R.id.menu_editor_info:
+			case R.id.menu_editor_info: //info
 				InfoBottomSheetDialog infoDialog = new InfoBottomSheetDialog();
 				infoDialog.show(getSupportFragmentManager(), "infoBottomSheet");
 				return true;
@@ -137,6 +138,8 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 	@Override
 	public void onExportItemSelected(String ext) {
 		saveNote();
+		//export note
+		//FIXME
 		File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString());
 		File dst = new File(dir, note.getTitle().replaceAll(" ", "_") + "." + ext);
 		try (FileOutputStream fos = this.openFileOutput(dst.getName(), Context.MODE_PRIVATE)) {

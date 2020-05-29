@@ -47,6 +47,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 	public void onBindViewHolder(@NonNull final NoteViewHolder holder, final int position) {
 		Note curItem = list.get(position);
 
+		//set title and content previews on note card
 		String pTitle = (curItem.getTitle().trim().length() > 0) ? curItem.getTitle() : context.getString(R.string.preview_title);
 		String pContent = curItem.getContent();
 		if (pContent.trim().length() == 0) pContent = context.getString(R.string.preview_content);

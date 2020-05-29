@@ -19,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-class InfoBottomSheetDialog extends BottomSheetDialogFragment {
+public class InfoBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private Note note;
 
@@ -39,9 +39,9 @@ class InfoBottomSheetDialog extends BottomSheetDialogFragment {
 
 		dateCreatedView.setText(formatDate(note.getDateCreated()));
 		dateModifiedView.setText(formatDate(note.getDateModified()));
-		characterCountView.setText(String.format(Locale.getDefault(),"%d", note.getCharacterCount()));
-		wordCountView.setText(String.format(Locale.getDefault(),"%d", note.getWordCount()));
-		paragraphCountView.setText(String.format(Locale.getDefault(),"%d", note.getParagraphCount()));
+		characterCountView.setText(String.format(Locale.getDefault(), "%d", note.getCharacterCount()));
+		wordCountView.setText(String.format(Locale.getDefault(), "%d", note.getWordCount()));
+		paragraphCountView.setText(String.format(Locale.getDefault(), "%d", note.getParagraphCount()));
 		readTimeView.setText(formatTime(note.getReadTime()));
 
 		closeButton.setOnClickListener(new View.OnClickListener() {
@@ -54,6 +54,7 @@ class InfoBottomSheetDialog extends BottomSheetDialogFragment {
 		return v;
 	}
 
+	//format time in: Xh Xm Xs
 	private String formatTime(int timeInSeconds) {
 		int hours = timeInSeconds / 3600;
 		int minutes = (timeInSeconds % 3600) / 60;
@@ -63,6 +64,7 @@ class InfoBottomSheetDialog extends BottomSheetDialogFragment {
 		return seconds + "s";
 	}
 
+	//format date in: dd MM yyyy 'at' hh:mm:ss a
 	private String formatDate(String dateTime) {
 		Date date;
 		try {

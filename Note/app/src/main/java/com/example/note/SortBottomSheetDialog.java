@@ -27,10 +27,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class SortBottomSheetDialog extends BottomSheetDialogFragment {
+public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private SortListener listener;
 	private HashMap<String, Boolean> sortData;
+	List<DatabaseHelper.SortData> sortByList;
+
+	SortBottomSheetDialog(List<DatabaseHelper.SortData> sortByList) {
+		this.sortByList = sortByList;
+	}
 
 	@Nullable
 	@Override
@@ -59,22 +64,18 @@ class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 		//show current sort data
 		if (getFragmentManager() != null) {
-			NotesFragment notesFragment = (NotesFragment) getFragmentManager().findFragmentById(R.id.fragment_container);
-			if (notesFragment != null) {
-				List<DatabaseHelper.SortData> sortByList = notesFragment.getSortByList();
-				for (DatabaseHelper.SortData sd : sortByList) {
-					for (SortItem item : items) {
-						if (sd.getCol().equals(item.name.replace(" ", ""))) {
-							item.selected = true;
-							item.asc = sd.isAscending();
-							sortData.put(sd.getCol(), sd.isAscending());
-						}
+			for (DatabaseHelper.SortData sd : sortByList) {
+				for (SortItem item : items) {
+					if (sd.getCol().equals(item.name.replace(" ", ""))) {
+						item.selected = true;
+						item.asc = sd.isAscending();
+						sortData.put(sd.getCol(), sd.isAscending());
 					}
 				}
 			}
 		}
 
-		//list view
+		//build list view
 		ListView listView = v.findViewById(R.id.sort_lv_options);
 		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), items);
 		listView.setAdapter(customAdapter);
@@ -120,7 +121,7 @@ class SortBottomSheetDialog extends BottomSheetDialogFragment {
 			nameView.setText(list.get(position).name);
 			ascSwitch.setChecked(list.get(position).asc);
 
-			if (list.get(position).selected) {
+			if (list.get(position).selected) { //selected
 				icon.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.colorPrimary));
 				nameView.setTextColor(getResources().getColor(R.color.colorPrimary));
 				ascSwitch.setEnabled(true);
@@ -129,7 +130,7 @@ class SortBottomSheetDialog extends BottomSheetDialogFragment {
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				}
-			} else {
+			} else { //not selected
 				icon.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.colorAccent));
 				nameView.setTextColor(getResources().getColor(R.color.colorText));
 				ascSwitch.setEnabled(false);

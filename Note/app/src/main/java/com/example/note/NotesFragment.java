@@ -44,9 +44,9 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 	private List<Note> noteList;
 	private List<DatabaseHelper.SortData> sortByList;
 	private List<DatabaseHelper.FilterData> filterByList;
+	private boolean showingFilters;
 
 	private ImageButton expandFiltersButton;
-	private boolean showingFilters;
 	private FlexboxLayout filtersContainer;
 	private TextView noNotesView;
 
@@ -90,6 +90,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+
 		reloadFilterChips();
 
 		//set note list
@@ -119,7 +120,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		expandFiltersButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				expandOrCollapse();
+				expandOrCollapseFilters();
 			}
 		});
 
@@ -130,7 +131,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		return sortByList;
 	}
 
-	private void expandOrCollapse() {
+	private void expandOrCollapseFilters() {
 		if (showingFilters) {
 			expandFiltersButton.setImageResource(R.drawable.ic_expand_more);
 			hideFilters();
@@ -220,11 +221,11 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 	private void reloadFilterChips() {
 		filtersContainer.removeAllViews();
 		for (DatabaseHelper.FilterData fd : filterByList) {
-			filtersContainer.addView(getChip(fd));
+			filtersContainer.addView(getFilterChip(fd));
 		}
 	}
 
-	private Chip getChip(final DatabaseHelper.FilterData filterData) {
+	private Chip getFilterChip(final DatabaseHelper.FilterData filterData) {
 		final Chip chip = new Chip(context);
 		chip.setText(filterData.getCol());
 		chip.setChipBackgroundColorResource(R.color.colorForeground);
@@ -324,7 +325,6 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		else noNotesView.setVisibility(View.INVISIBLE);
 	}
 
-	//Actions overlay
 	@Override
 	public void showActionsOverlay(NoteAdapter.NoteViewHolder holder, Context context) {
 		holder.overlay.setVisibility(View.VISIBLE);

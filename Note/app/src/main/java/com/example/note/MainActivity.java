@@ -18,7 +18,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SortBottomSheetDialog.SortListener, FilterBottomSheetDialog.FilterListener {
+public class MainActivity extends AppCompatActivity implements SortBottomSheetDialog.SortListener,
+		FilterBottomSheetDialog.FilterListener {
 
 	private DrawerLayout drawer;
 
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//set note id count
+		//set saved note id count
 		SharedPreferences pref = getSharedPreferences(getString(R.string.id_pref), Context.MODE_PRIVATE);
 		Note.curId = pref.getInt(getString(R.string.id_key), 0);
 
@@ -103,13 +104,18 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		//toolbar option items
 		switch (item.getItemId()) {
-			case R.id.menu_main_search:
+			case R.id.menu_main_search: //search
 				return true;
-			case R.id.menu_main_sort:
-				SortBottomSheetDialog sortDialog = new SortBottomSheetDialog();
-				sortDialog.show(getSupportFragmentManager(), "sortBottomSheet");
+			case R.id.menu_main_sort: //sort
+				NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
+						.findFragmentById(R.id.fragment_container);
+				if (notesFragment != null) {
+					//pass sort list from notes fragment
+					SortBottomSheetDialog sortDialog = new SortBottomSheetDialog(notesFragment.getSortByList());
+					sortDialog.show(getSupportFragmentManager(), "sortBottomSheet");
+				}
 				return true;
-			case R.id.menu_main_filter:
+			case R.id.menu_main_filter: //filter
 				FilterBottomSheetDialog filterDialog = new FilterBottomSheetDialog();
 				filterDialog.show(getSupportFragmentManager(), "filterBottomSheet");
 				return true;

@@ -26,7 +26,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.List;
 
-class FilterBottomSheetDialog extends BottomSheetDialogFragment {
+public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private FilterListener listener;
 	private DatabaseHelper.FilterData oldFilterData, filterData;
@@ -62,6 +62,7 @@ class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 			add(new FilterItem("Character Count", R.drawable.ic_text));
 		}};
 
+		//load filter data to be edited
 		if (filterData != null) {
 			addButton.setText(R.string.save);
 			startInput.setText(filterData.getLowerBound().replaceAll("'", ""));
@@ -115,15 +116,18 @@ class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 					}
 				}
 
+				//set filter data
 				filterData.setLowerBound(lowerBound);
 				filterData.setUpperBound(upperBound);
 				filterData.setCol(col.replaceAll(" ", ""));
+
 				if (editing) listener.onFilterSaved(oldFilterData, filterData);
 				else listener.onFilterAdded(filterData);
 				dismiss();
 			}
 		});
 
+		//build list view
 		ListView listView = v.findViewById(R.id.filter_lv_options);
 		CustomAdapter customAdapter = new CustomAdapter(v.getContext(), items);
 		listView.setAdapter(customAdapter);
@@ -153,8 +157,10 @@ class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 			Switch ascSwitch = v.findViewById(R.id.sort_filter_item_sw_asc);
 			TextView swView = v.findViewById(R.id.sort_filter_item_tv_asc);
 
+			//remove switch since not needed
 			ascSwitch.setVisibility(View.GONE);
 			swView.setVisibility(View.GONE);
+
 			icon.setImageResource(list.get(position).iconId);
 			nameView.setText(list.get(position).name);
 
@@ -167,6 +173,7 @@ class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 				@Override
 				public void onClick(View v) {
 					filterData.setCol(nameView.getText().toString().replaceAll(" ", ""));
+					//only 1 filter option can be added at a time
 					for (FilterItem item : list) {
 						item.selected = false;
 					}

@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.Locale;
 
 class Note {
+	//id count so no ids are repeated
 	static int curId = 0;
 
 	//database fields
@@ -44,10 +45,12 @@ class Note {
 
 	void create() {
 		id = ++curId;
+		//save id
 		SharedPreferences pref = context.getSharedPreferences(context.getString(R.string.id_pref), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = pref.edit();
 		editor.putInt(context.getString(R.string.id_key), id);
 		editor.apply();
+
 		reference = id + ".txt";
 		storageHelper.createNote(this, "");
 		databaseHelper.insertNote(this);
