@@ -125,7 +125,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 			getQuery.setLength(getQuery.length() - 2);
 		}
 
-//		Toast.makeText(context, getQuery.toString(), Toast.LENGTH_SHORT).show();
+		Toast.makeText(context, getQuery.toString(), Toast.LENGTH_SHORT).show();
 
 		Cursor cursor = db.rawQuery(getQuery.toString(), null);
 		if (cursor.moveToFirst()) {

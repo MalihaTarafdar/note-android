@@ -100,8 +100,9 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 
 				String col = filterData.getCol();
 				//put quotes around bounds that will be entered as strings
-				if (col.equals(getString(R.string.title)) || col.equals(getString(R.string.date_created)) ||
-						col.equals(getString(R.string.date_modified))) {
+				if (col.equals(getString(R.string.title).replaceAll(" ", "")) ||
+						col.equals(getString(R.string.date_created).replaceAll(" ", "")) ||
+						col.equals(getString(R.string.date_modified).replaceAll(" ", ""))) {
 					lowerBound = "'" + lowerBound + "'";
 					upperBound = "'" + upperBound + "'";
 				} else { //bounds should be integers
@@ -165,7 +166,7 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 			layout.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					filterData.setCol(nameView.getText().toString());
+					filterData.setCol(nameView.getText().toString().replaceAll(" ", ""));
 					for (FilterItem item : list) {
 						item.selected = false;
 					}

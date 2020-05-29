@@ -83,4 +83,17 @@
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/colorForeground" />
 
+    <TextView
+        android:id="@+id/notes_none"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:text="@string/no_notes"
+        android:textColor="@color/colorTitle"
+        app:layout_constraintTop_toTopOf="@id/notes_recyclerView"
+        app:layout_constraintBottom_toBottomOf="@id/notes_recyclerView"
+        app:layout_constraintLeft_toLeftOf="@id/notes_recyclerView"
+        app:layout_constraintRight_toRightOf="@id/notes_recyclerView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

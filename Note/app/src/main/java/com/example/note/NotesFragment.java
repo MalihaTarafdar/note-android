@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 	private ImageButton expandFiltersButton;
 	private boolean showingFilters;
 	private FlexboxLayout filtersContainer;
+	private TextView noNotesView;
 
 	private Context context;
 
@@ -63,7 +65,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		expandFiltersButton = v.findViewById(R.id.notes_btn_expand_filters);
 		filtersContainer = v.findViewById(R.id.notes_filters_container);
 
-		//set sort list
+		//set sort list from saved preferences
 		sortByList = new ArrayList<>();
 		SharedPreferences sortPref = context.getSharedPreferences(getString(R.string.sort_pref), Context.MODE_PRIVATE);
 		try {
@@ -76,7 +78,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 			e.printStackTrace();
 		}
 
-		//set filter list
+		//set filter list from saved preferences
 		filterByList = new ArrayList<>();
 		SharedPreferences filterPref = context.getSharedPreferences(getString(R.string.filter_pref), Context.MODE_PRIVATE);
 		try {
@@ -84,7 +86,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 			for (int i = 0; i < filterJSONArray.length(); i++) {
 				JSONObject fd = filterJSONArray.getJSONObject(i);
 				filterByList.add(new DatabaseHelper.FilterData(fd.getString("col"),
-						fd.getString("upperBound"), fd.getString("lowerBound")));
+						fd.getString("lowerBound"), fd.getString("upperBound")));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -93,6 +95,8 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 
 		//set note list
 		noteList = new DatabaseHelper(v.getContext()).getAll(sortByList, filterByList);
+		noNotesView = v.findViewById(R.id.notes_none);
+		showOrHideNoNotesView();
 
 		//build RecyclerView
 		RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(v.getContext());
@@ -262,6 +266,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		noteList = new DatabaseHelper(getContext()).getAll(sortByList, filterByList);
 		adapter.setList(noteList);
 		adapter.notifyDataSetChanged();
+		showOrHideNoNotesView();
 	}
 
 	@Override
@@ -296,6 +301,8 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		adapter.notifyItemRemoved(position);
 		adapter.notifyItemRangeChanged(position, noteList.size());
 
+		showOrHideNoNotesView();
+
 		//Snackbar for undoing delete
 		Snackbar.make(holder.deleteButton, "Undo deletion of \"" + note.getTitle() + "\"", Snackbar.LENGTH_LONG)
 				.setAction("Undo", new View.OnClickListener() {
@@ -311,6 +318,11 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 						reloadNotes();
 					}
 				}).show();
+	}
+
+	private void showOrHideNoNotesView() {
+		if (noteList.size() == 0) noNotesView.setVisibility(View.VISIBLE);
+		else noNotesView.setVisibility(View.INVISIBLE);
 	}
 
 	//Actions overlay
