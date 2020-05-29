@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -79,6 +80,13 @@ class Note {
 	void delete() {
 		storageHelper.deleteNote(this);
 		databaseHelper.deleteNote(this);
+	}
+
+	File getExported(String ext) {
+		if (ext.equals("txt")) {
+			return storageHelper.exportAsTxt(this);
+		}
+		return storageHelper.exportAsMd(this);
 	}
 
 	//ID

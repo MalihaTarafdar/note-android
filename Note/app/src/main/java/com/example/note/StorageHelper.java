@@ -47,4 +47,12 @@ class StorageHelper {
 	boolean deleteNote(Note note) {
 		return context.deleteFile(note.getReference());
 	}
+
+	File exportAsTxt(Note note) {
+		return new File(note.getReference());
+	}
+
+	File exportAsMd(Note note) {
+		return new File(note.getReference());
+	}
 }

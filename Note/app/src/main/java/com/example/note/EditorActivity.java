@@ -1,23 +1,30 @@
 package com.example.note;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements ExportBottomSheetDialog.ExportSelectedListener {
+
+	public static final int CREATE_FILE = 1;
 
 	private Note note;
 	private EditText etTitle, etContent;
@@ -93,6 +100,8 @@ public class EditorActivity extends AppCompatActivity {
 
 		switch (item.getItemId()) {
 			case R.id.menu_editor_export:
+				ExportBottomSheetDialog exportDialog = new ExportBottomSheetDialog();
+				exportDialog.show(getSupportFragmentManager(), "exportBottomSheet");
 				return true;
 			case R.id.menu_editor_delete:
 				new MaterialAlertDialogBuilder(EditorActivity.this)
@@ -122,5 +131,15 @@ public class EditorActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.menu_editor, menu);
 		return true;
+	}
+
+	@Override
+	public void onExportItemSelected(String ext) {
+		saveNote();
+		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TITLE, note.getTitle().replaceAll(" ", "_") + "." + ext);
+		startActivityForResult(intent, CREATE_FILE);
 	}
 }
