@@ -6,19 +6,27 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.channels.FileChannel;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -136,10 +144,13 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 	@Override
 	public void onExportItemSelected(String ext) {
 		saveNote();
-		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-		intent.addCategory(Intent.CATEGORY_OPENABLE);
-		intent.setType("text/plain");
-		intent.putExtra(Intent.EXTRA_TITLE, note.getTitle().replaceAll(" ", "_") + "." + ext);
-		startActivityForResult(intent, CREATE_FILE);
+		File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString());
+		File dst = new File(dir, note.getTitle().replaceAll(" ", "_") + "." + ext);
+		try (FileOutputStream fos = this.openFileOutput(dst.getName(), Context.MODE_PRIVATE)) {
+			fos.write(etContent.getText().toString().getBytes());
+			Toast.makeText(this, dst.getAbsolutePath(), Toast.LENGTH_LONG).show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

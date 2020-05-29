@@ -45,6 +45,7 @@ public class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 				@Override
 				public void onClick(View v) {
 					listener.onExportItemSelected(entry.getValue());
+					dismiss();
 				}
 			});
 		}

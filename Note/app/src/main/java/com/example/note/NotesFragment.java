@@ -207,7 +207,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		Intent loadNoteEditor = new Intent(getActivity(), EditorActivity.class);
 		loadNoteEditor.putExtra(NOTE_ID, noteList.get(position).getId());
 		startActivityForResult(loadNoteEditor, REQUEST_CODE);
-		Toast.makeText(context, "Opening " + noteList.get(position).getId(), Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, "Opening " + noteList.get(position).getId(), Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
