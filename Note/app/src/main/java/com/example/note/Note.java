@@ -48,7 +48,7 @@ class Note {
 		SharedPreferences pref = context.getSharedPreferences(context.getString(R.string.id_pref), Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = pref.edit();
 		editor.putInt(context.getString(R.string.id_key), id);
-		editor.commit();
+		editor.apply();
 		reference = id + ".txt";
 		storageHelper.createNote(this, "");
 		databaseHelper.insertNote(this);
@@ -87,13 +87,6 @@ class Note {
 	void delete() {
 		storageHelper.deleteNote(this);
 		databaseHelper.deleteNote(this);
-	}
-
-	File getExported(String ext) {
-		if (ext.equals("txt")) {
-			return storageHelper.exportAsTxt(this);
-		}
-		return storageHelper.exportAsMd(this);
 	}
 
 	//ID

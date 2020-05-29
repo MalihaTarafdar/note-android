@@ -2,7 +2,9 @@ package com.example.note;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +22,13 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -58,9 +63,35 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		expandFiltersButton = v.findViewById(R.id.notes_btn_expand_filters);
 		filtersContainer = v.findViewById(R.id.notes_filters_container);
 
-		//list
+		//set sort list
 		sortByList = new ArrayList<>();
+		SharedPreferences sortPref = context.getSharedPreferences(getString(R.string.sort_pref), Context.MODE_PRIVATE);
+		try {
+			JSONArray sortJSONArray = new JSONArray(sortPref.getString(getString(R.string.sort_key), ""));
+			for (int i = 0; i < sortJSONArray.length(); i++) {
+				JSONObject sd = sortJSONArray.getJSONObject(i);
+				sortByList.add(new DatabaseHelper.SortData(sd.getString("col"), sd.getBoolean("ascending")));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		//set filter list
 		filterByList = new ArrayList<>();
+		SharedPreferences filterPref = context.getSharedPreferences(getString(R.string.filter_pref), Context.MODE_PRIVATE);
+		try {
+			JSONArray filterJSONArray = new JSONArray(filterPref.getString(getString(R.string.filter_key), ""));
+			for (int i = 0; i < filterJSONArray.length(); i++) {
+				JSONObject fd = filterJSONArray.getJSONObject(i);
+				filterByList.add(new DatabaseHelper.FilterData(fd.getString("col"),
+						fd.getString("upperBound"), fd.getString("lowerBound")));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		reloadFilterChips();
+
+		//set note list
 		noteList = new DatabaseHelper(v.getContext()).getAll(sortByList, filterByList);
 
 		//build RecyclerView
@@ -71,14 +102,12 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		recyclerView.setLayoutManager(layoutManager);
 		recyclerView.setAdapter(adapter);
 
-		//add a note if there are none
-		if (noteList.size() == 0) addNote();
-
 		//add button
 		addButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				addNote();
+				openNote(noteList.size() - 1);
 			}
 		});
 
@@ -122,11 +151,52 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		note.create();
 		noteList.add(note);
 		adapter.notifyItemInserted(noteList.size() - 1);
-		openNote(noteList.size() - 1);
+	}
+
+	private void saveSortList() {
+		SharedPreferences pref = context.getSharedPreferences(context.getString(R.string.sort_pref), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
+
+		JSONArray jsonArray = new JSONArray();
+		for (DatabaseHelper.SortData sd : sortByList) {
+			try {
+				JSONObject sortJSON = new JSONObject();
+				sortJSON.put("col", sd.getCol());
+				sortJSON.put("ascending", sd.isAscending());
+				jsonArray.put(sortJSON);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		editor.putString(getString(R.string.sort_key), jsonArray.toString());
+		editor.apply();
+	}
+
+	private void saveFilterList() {
+		SharedPreferences pref = context.getSharedPreferences(context.getString(R.string.filter_pref), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
+
+		JSONArray jsonArray = new JSONArray();
+		for (DatabaseHelper.FilterData fd : filterByList) {
+			try {
+				JSONObject filterJSON = new JSONObject();
+				filterJSON.put("col", fd.getCol());
+				filterJSON.put("upperBound", fd.getUpperBound());
+				filterJSON.put("lowerBound", fd.getLowerBound());
+				jsonArray.put(filterJSON);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+
+		editor.putString(getString(R.string.filter_key), jsonArray.toString());
+		editor.apply();
 	}
 
 	void sortNotes(List<DatabaseHelper.SortData> sortByList) {
 		this.sortByList = sortByList;
+		saveSortList();
 		reloadNotes();
 	}
 
@@ -134,12 +204,14 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		filterByList.add(filterData);
 		reloadNotes();
 		reloadFilterChips();
+		saveFilterList();
 	}
 
 	void removeFromFilters(DatabaseHelper.FilterData filterData) {
 		filterByList.remove(filterData);
 		reloadNotes();
 		reloadFilterChips();
+		saveFilterList();
 	}
 
 	private void reloadFilterChips() {

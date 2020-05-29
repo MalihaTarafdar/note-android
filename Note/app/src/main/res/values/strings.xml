@@ -2,6 +2,10 @@
     <string name="app_name">Note</string>
     <string name="id_pref">idPref</string>
     <string name="id_key">idKey</string>
+    <string name="sort_pref">sortPref</string>
+    <string name="sort_key">sortKey</string>
+    <string name="filter_pref">filterPref</string>
+    <string name="filter_key">filterKey</string>
 
     <!-- hints -->
     <string name="note_title_hint">Title</string>
