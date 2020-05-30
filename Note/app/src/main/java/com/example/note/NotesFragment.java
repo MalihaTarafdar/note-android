@@ -40,8 +40,8 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 	private List<Note> noteList;
 	private List<DatabaseHelper.SortData> sortByList;
 	private List<DatabaseHelper.FilterData> filterByList;
-	private boolean showingFilters;
 	private Note noteToExport;
+	private String searchQuery;
 
 	private ImageButton expandFiltersButton;
 	private FlexboxLayout filtersContainer;
@@ -55,6 +55,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		View v = inflater.inflate(R.layout.fragment_notes, container, false);
 
 		context = v.getContext();
+		searchQuery = "";
 
 		RecyclerView recyclerView = v.findViewById(R.id.notes_recyclerView);
 		FloatingActionButton addButton = v.findViewById(R.id.notes_btn_add);
@@ -113,7 +114,6 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		});
 
 		//expand filters button
-		showingFilters = false;
 		expandFiltersButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -128,15 +128,36 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		return sortByList;
 	}
 
+	void filterBySearch(String searchQuery) {
+		this.searchQuery = searchQuery;
+		reloadNotes();
+	}
+
+	private void reloadNotes() {
+		//get notes from database
+		noteList = new DatabaseHelper(getContext()).getAll(sortByList, filterByList);
+		//filter notes by search query in content and title
+		for (int i = 0; i < noteList.size(); i++) {
+			if (!noteList.get(i).getContent().contains(searchQuery) &&
+					!noteList.get(i).getTitle().contains(searchQuery)) {
+				noteList.remove(i);
+				i--;
+			}
+		}
+
+		adapter.setList(noteList);
+		adapter.notifyDataSetChanged();
+		showOrHideNoNotesView();
+	}
+
 	private void expandOrCollapseFilters() {
-		if (showingFilters) {
+		if (filtersContainer.getVisibility() == View.VISIBLE) {
 			expandFiltersButton.setImageResource(R.drawable.ic_expand_more);
 			hideFilters();
 		} else {
 			expandFiltersButton.setImageResource(R.drawable.ic_expand_less);
 			showFilters();
 		}
-		showingFilters = !showingFilters;
 	}
 
 	private void showFilters() {
@@ -257,13 +278,6 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		});
 
 		return chip;
-	}
-
-	private void reloadNotes() {
-		noteList = new DatabaseHelper(getContext()).getAll(sortByList, filterByList);
-		adapter.setList(noteList);
-		adapter.notifyDataSetChanged();
-		showOrHideNoNotesView();
 	}
 
 	@Override

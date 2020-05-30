@@ -101,6 +101,30 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 
 			MenuItem searchItem = menu.findItem(R.id.menu_main_search);
 			SearchView searchView = (SearchView) searchItem.getActionView();
+
+			final NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.fragment_container);
+
+			searchView.setQueryHint("Search");
+			searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+				@Override
+				public boolean onClose() {
+					if (notesFragment != null) notesFragment.filterBySearch("");
+					return false;
+				}
+			});
+			searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+				@Override
+				public boolean onQueryTextSubmit(String query) {
+					if (notesFragment != null) notesFragment.filterBySearch(query);
+					Toast.makeText(MainActivity.this, "Query: " + query, Toast.LENGTH_SHORT).show();
+					return false;
+				}
+				@Override
+				public boolean onQueryTextChange(String newText) {
+					return false;
+				}
+			});
 		}
 
 		return super.onCreateOptionsMenu(menu);
@@ -110,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 	public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 		//toolbar option items
 		switch (item.getItemId()) {
-			case R.id.menu_main_search: //search
+			case R.id.menu_main_search:
 				return true;
 			case R.id.menu_main_sort: //sort
 				NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
