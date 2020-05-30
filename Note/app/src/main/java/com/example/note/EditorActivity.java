@@ -25,7 +25,7 @@ import java.util.Locale;
 
 import static com.example.note.StorageHelper.CREATE_FILE;
 
-public class EditorActivity extends AppCompatActivity implements ExportBottomSheetDialog.ExportSelectedListener {
+public class EditorActivity extends AppCompatActivity {
 
 	private Note note;
 	private EditText etTitle, etContent;
@@ -103,7 +103,7 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 
 		switch (item.getItemId()) {
 			case R.id.menu_editor_export: //export
-				ExportBottomSheetDialog exportDialog = new ExportBottomSheetDialog();
+				ExportBottomSheetDialog exportDialog = new ExportBottomSheetDialog(note);
 				exportDialog.show(getSupportFragmentManager(), "exportBottomSheet");
 				return true;
 			case R.id.menu_editor_delete: //delete
@@ -143,21 +143,11 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 			Uri uri = data.getData();
 			if (uri == null || uri.getPath() == null) return;
 			try (OutputStream output = getContentResolver().openOutputStream(uri)) {
-				if (output == null) {Log.d("TAG", "output stream is null"); return;}
-				output.write(note.getContent().getBytes());
+				if (output == null) return;
+				output.write(note.getContent().getBytes()); //write to file
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	@Override
-	public void onExportItemSelected(String ext) {
-		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-		intent.addCategory(Intent.CATEGORY_OPENABLE);
-		intent.setType("text/plain");
-		intent.putExtra(Intent.EXTRA_TITLE, note.getTitle().replaceAll(" ", "_") + "." + ext);
-
-		this.startActivityForResult(intent, CREATE_FILE);
 	}
 }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,11 @@ import java.util.Map;
 public class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private static final int STORAGE_PERMISSION_REQUEST = 1, CREATE_FILE = 1;
-	private ExportSelectedListener listener;
+	private Note note;
+
+	ExportBottomSheetDialog(Note note) {
+		this.note = note;
+	}
 
 	@Nullable
 	@Override
@@ -55,25 +58,17 @@ public class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 			v.findViewById(entry.getKey()).setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					listener.onExportItemSelected(entry.getValue());
+					Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+					intent.addCategory(Intent.CATEGORY_OPENABLE);
+					intent.setType("text/plain");
+					intent.putExtra(Intent.EXTRA_TITLE, note.getTitle().replaceAll(" ", "_") + "." + entry.getValue());
+
+					getActivity().startActivityForResult(intent, CREATE_FILE);
 					dismiss();
 				}
 			});
 		}
 
 		return v;
-	}
-
-	interface ExportSelectedListener {
-		void onExportItemSelected(String ext);
-	}
-
-	public void onAttach(@NonNull Context context) {
-		super.onAttach(context);
-		try {
-			listener = (ExportSelectedListener) context;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(context.toString() + " must implement SortListener");
-		}
 	}
 }
