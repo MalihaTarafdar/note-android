@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,9 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import static android.app.Activity.RESULT_OK;
-import static android.app.Activity.RESULT_CANCELED;
-
 public class NotesFragment extends Fragment implements NoteAdapter.ItemActionListener {
 
 	static final String NOTE_ID = "note id";
@@ -45,6 +41,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 	private List<DatabaseHelper.SortData> sortByList;
 	private List<DatabaseHelper.FilterData> filterByList;
 	private boolean showingFilters;
+	private Note noteToExport;
 
 	private ImageButton expandFiltersButton;
 	private FlexboxLayout filtersContainer;
@@ -272,7 +269,7 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQUEST_CODE && resultCode == RESULT_OK || resultCode == RESULT_CANCELED) {
+		if (requestCode == REQUEST_CODE) {
 			reloadNotes();
 		}
 	}
@@ -284,7 +281,6 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		Intent loadNoteEditor = new Intent(getActivity(), EditorActivity.class);
 		loadNoteEditor.putExtra(NOTE_ID, noteList.get(position).getId());
 		startActivityForResult(loadNoteEditor, REQUEST_CODE);
-		Toast.makeText(context, "Opening " + noteList.get(position).getId(), Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -318,6 +314,17 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 						reloadNotes();
 					}
 				}).show();
+	}
+
+	@Override
+	public void exportNote(int position) {
+		noteToExport = noteList.get(position);
+		ExportBottomSheetDialog exportDialog = new ExportBottomSheetDialog(noteList.get(position));
+		exportDialog.show(getFragmentManager(), "exportBottomSheet");
+	}
+
+	Note getNoteToExport() {
+		return noteToExport;
 	}
 
 	private void showOrHideNoNotesView() {

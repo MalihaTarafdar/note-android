@@ -1,7 +1,6 @@
 package com.example.note;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -23,8 +22,9 @@ import java.util.Map;
 public class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private static final int STORAGE_PERMISSION_REQUEST = 1, CREATE_FILE = 1;
+
 	private Note note;
-	private ExportSelectedListener listener;
+	static String ext;
 
 	ExportBottomSheetDialog(Note note) {
 		this.note = note;
@@ -59,7 +59,7 @@ public class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 			v.findViewById(entry.getKey()).setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					listener.onExportSelected(entry.getValue());
+					ext = entry.getValue();
 
 					Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
 					intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -73,19 +73,5 @@ public class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 		}
 
 		return v;
-	}
-
-	interface ExportSelectedListener {
-		void onExportSelected(String ext);
-	}
-
-	@Override
-	public void onAttach(@NonNull Context context) {
-		super.onAttach(context);
-		try {
-			listener = (ExportSelectedListener) context;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(context.toString() + " must implement ExportSelectedListener");
-		}
 	}
 }

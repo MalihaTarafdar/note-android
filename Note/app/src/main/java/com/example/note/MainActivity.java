@@ -1,6 +1,7 @@
 package com.example.note;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -8,15 +9,20 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
+
+import static com.example.note.StorageHelper.CREATE_FILE;
 
 public class MainActivity extends AppCompatActivity implements SortBottomSheetDialog.SortListener,
 		FilterBottomSheetDialog.FilterListener {
@@ -121,6 +127,18 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == CREATE_FILE && resultCode == RESULT_OK) {
+			Uri uri = data.getData();
+			if (uri == null || uri.getPath() == null) return;
+			NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.fragment_container);
+			if (notesFragment != null) notesFragment.getNoteToExport().export(uri, ExportBottomSheetDialog.ext);
 		}
 	}
 

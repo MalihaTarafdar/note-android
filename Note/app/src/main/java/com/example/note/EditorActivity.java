@@ -22,10 +22,9 @@ import java.util.Locale;
 
 import static com.example.note.StorageHelper.CREATE_FILE;
 
-public class EditorActivity extends AppCompatActivity implements ExportBottomSheetDialog.ExportSelectedListener {
+public class EditorActivity extends AppCompatActivity {
 
 	private Note note;
-	private String ext;
 	private EditText etTitle, etContent;
 
 	private Handler autoSaveHandler;
@@ -140,12 +139,7 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 		if (requestCode == CREATE_FILE && resultCode == RESULT_OK && data != null) {
 			Uri uri = data.getData();
 			if (uri == null || uri.getPath() == null) return;
-			note.export(uri, ext);
+			note.export(uri, ExportBottomSheetDialog.ext);
 		}
-	}
-
-	@Override
-	public void onExportSelected(String ext) {
-		this.ext = ext;
 	}
 }

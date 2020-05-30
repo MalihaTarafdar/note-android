@@ -82,7 +82,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 		holder.exportButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(context, "Export button pressed", Toast.LENGTH_SHORT).show();
+				listener.exportNote(position);
+				listener.hideActionsOverlay(holder, context);
 			}
 		});
 		//hide overlay
@@ -104,6 +105,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 	public interface ItemActionListener {
 		void deleteNote(NoteViewHolder holder, int position, Context context);
 		void openNote(int position);
+		void exportNote(int position);
 		void showActionsOverlay(NoteViewHolder holder, Context context);
 		void hideActionsOverlay(NoteViewHolder holder, Context context);
 	}
