@@ -138,8 +138,8 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		noteList = new DatabaseHelper(getContext()).getAll(sortByList, filterByList);
 		//filter notes by search query in content and title
 		for (int i = 0; i < noteList.size(); i++) {
-			if (!noteList.get(i).getContent().contains(searchQuery) &&
-					!noteList.get(i).getTitle().contains(searchQuery)) {
+			if (!noteList.get(i).getContent().toLowerCase().contains(searchQuery.toLowerCase()) &&
+					!noteList.get(i).getTitle().toLowerCase().contains(searchQuery.toLowerCase())) {
 				noteList.remove(i);
 				i--;
 			}

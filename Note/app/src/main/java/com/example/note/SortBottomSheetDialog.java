@@ -31,7 +31,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private SortListener listener;
 	private HashMap<String, Boolean> sortData;
-	List<DatabaseHelper.SortData> sortByList;
+	private List<DatabaseHelper.SortData> sortByList;
 
 	SortBottomSheetDialog(List<DatabaseHelper.SortData> sortByList) {
 		this.sortByList = sortByList;
@@ -63,14 +63,12 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 		}};
 
 		//show current sort data
-		if (getFragmentManager() != null) {
-			for (DatabaseHelper.SortData sd : sortByList) {
-				for (SortItem item : items) {
-					if (sd.getCol().equals(item.name.replace(" ", ""))) {
-						item.selected = true;
-						item.asc = sd.isAscending();
-						sortData.put(sd.getCol(), sd.isAscending());
-					}
+		for (DatabaseHelper.SortData sd : sortByList) {
+			for (SortItem item : items) {
+				if (sd.getCol().equals(item.name.replace(" ", ""))) {
+					item.selected = true;
+					item.asc = sd.isAscending();
+					sortData.put(sd.getCol(), sd.isAscending());
 				}
 			}
 		}
