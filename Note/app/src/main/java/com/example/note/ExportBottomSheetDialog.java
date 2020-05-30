@@ -1,7 +1,11 @@
 package com.example.note;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +13,17 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.HashMap;
 import java.util.Map;
 
-class ExportBottomSheetDialog extends BottomSheetDialogFragment {
+public class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 
+	private static final int STORAGE_PERMISSION_REQUEST = 1, CREATE_FILE = 1;
 	private ExportSelectedListener listener;
 
 	@Nullable
@@ -37,6 +44,13 @@ class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 			put(R.id.export_md, "md");
 		}};
 
+		//read and write to storage permission
+		if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(getActivity(),
+					new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+					STORAGE_PERMISSION_REQUEST);
+		}
+
 		for (final Map.Entry<Integer, String> entry : exportOptions.entrySet()) {
 			v.findViewById(entry.getKey()).setOnClickListener(new View.OnClickListener() {
 				@Override
@@ -54,7 +68,6 @@ class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 		void onExportItemSelected(String ext);
 	}
 
-	@Override
 	public void onAttach(@NonNull Context context) {
 		super.onAttach(context);
 		try {

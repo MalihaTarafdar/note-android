@@ -1,6 +1,8 @@
 package com.example.note;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 class StorageHelper {
+	static final int CREATE_FILE = 1;
 	private Context context;
 
 	StorageHelper(Context context) {

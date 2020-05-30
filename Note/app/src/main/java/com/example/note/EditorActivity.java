@@ -1,27 +1,29 @@
 package com.example.note;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Locale;
+
+import static com.example.note.StorageHelper.CREATE_FILE;
 
 public class EditorActivity extends AppCompatActivity implements ExportBottomSheetDialog.ExportSelectedListener {
 
@@ -83,7 +85,6 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 		//save when leaving editor
 		saveNote();
 		setResult(RESULT_OK);
-		finish();
 	}
 
 	private void saveNote() {
@@ -136,17 +137,27 @@ public class EditorActivity extends AppCompatActivity implements ExportBottomShe
 	}
 
 	@Override
-	public void onExportItemSelected(String ext) {
-		saveNote();
-		//export note
-		//FIXME
-		File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString());
-		File dst = new File(dir, note.getTitle().replaceAll(" ", "_") + "." + ext);
-		try (FileOutputStream fos = this.openFileOutput(dst.getName(), Context.MODE_PRIVATE)) {
-			fos.write(etContent.getText().toString().getBytes());
-			Toast.makeText(this, dst.getAbsolutePath(), Toast.LENGTH_LONG).show();
-		} catch (IOException e) {
-			e.printStackTrace();
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == CREATE_FILE && resultCode == RESULT_OK && data != null) {
+			Uri uri = data.getData();
+			if (uri == null || uri.getPath() == null) return;
+			try (OutputStream output = getContentResolver().openOutputStream(uri)) {
+				if (output == null) {Log.d("TAG", "output stream is null"); return;}
+				output.write(note.getContent().getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+	}
+
+	@Override
+	public void onExportItemSelected(String ext) {
+		Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TITLE, note.getTitle().replaceAll(" ", "_") + "." + ext);
+
+		this.startActivityForResult(intent, CREATE_FILE);
 	}
 }
