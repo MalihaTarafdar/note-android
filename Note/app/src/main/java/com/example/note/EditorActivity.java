@@ -1,33 +1,31 @@
 package com.example.note;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.EditText;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.EditText;
-
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Calendar;
 import java.util.Locale;
 
 import static com.example.note.StorageHelper.CREATE_FILE;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements ExportBottomSheetDialog.ExportSelectedListener {
 
 	private Note note;
+	private String ext;
 	private EditText etTitle, etContent;
 
 	private Handler autoSaveHandler;
@@ -142,12 +140,12 @@ public class EditorActivity extends AppCompatActivity {
 		if (requestCode == CREATE_FILE && resultCode == RESULT_OK && data != null) {
 			Uri uri = data.getData();
 			if (uri == null || uri.getPath() == null) return;
-			try (OutputStream output = getContentResolver().openOutputStream(uri)) {
-				if (output == null) return;
-				output.write(note.getContent().getBytes()); //write to file
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			note.export(uri, ext);
 		}
+	}
+
+	@Override
+	public void onExportSelected(String ext) {
+		this.ext = ext;
 	}
 }

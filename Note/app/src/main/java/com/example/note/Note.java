@@ -2,6 +2,7 @@ package com.example.note;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 import androidx.annotation.NonNull;
 
@@ -89,6 +90,10 @@ class Note {
 	void delete() {
 		storageHelper.deleteNote(this);
 		databaseHelper.deleteNote(this);
+	}
+
+	void export(Uri uri, String ext) {
+		storageHelper.exportNote(this, uri, ext);
 	}
 
 	//ID

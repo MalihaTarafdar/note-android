@@ -3,9 +3,11 @@ package com.example.note;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -50,5 +52,38 @@ class StorageHelper {
 	//deletes a note from internal storage
 	boolean deleteNote(Note note) {
 		return context.deleteFile(note.getReference());
+	}
+
+	void exportNote(Note note, Uri uri, String ext) {
+		switch (ext) {
+			case "txt": exportAsTxt(note, uri);
+				break;
+			case "md": exportAsMd(note, uri);
+				break;
+		}
+	}
+
+	private void exportAsTxt(Note note, Uri uri) {
+		try (FileOutputStream output = (FileOutputStream) context.getContentResolver().openOutputStream(uri)) {
+			if (output == null) return;
+
+			output.write((note.getTitle() + "\n\n").getBytes()); //write title to file
+			output.write(note.getContent().getBytes()); //write content to file
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void exportAsMd(Note note, Uri uri) {
+		try (FileOutputStream output = (FileOutputStream) context.getContentResolver().openOutputStream(uri)) {
+			if (output == null) return;
+
+			output.write(("# " + note.getTitle() + "\n\n").getBytes()); //write title to file
+			output.write(note.getContent().getBytes()); //write content to file
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
