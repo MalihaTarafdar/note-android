@@ -43,17 +43,18 @@ public class ExportBottomSheetDialog extends BottomSheetDialogFragment {
 			}
 		});
 
-		HashMap<Integer, String> exportOptions = new HashMap<Integer, String>() {{
-			put(R.id.export_txt, "txt");
-			put(R.id.export_md, "md");
-		}};
-
 		//read and write to storage permission
 		if (ContextCompat.checkSelfPermission(v.getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 			ActivityCompat.requestPermissions(getActivity(),
 					new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
 					STORAGE_PERMISSION_REQUEST);
 		}
+
+		//export options
+		HashMap<Integer, String> exportOptions = new HashMap<Integer, String>() {{
+			put(R.id.export_txt, "txt");
+			put(R.id.export_md, "md");
+		}};
 
 		for (final Map.Entry<Integer, String> entry : exportOptions.entrySet()) {
 			v.findViewById(entry.getKey()).setOnClickListener(new View.OnClickListener() {

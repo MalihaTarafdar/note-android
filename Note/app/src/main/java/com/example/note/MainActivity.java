@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 			final NotesFragment notesFragment = (NotesFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.fragment_container);
 
+			//search
 			searchView.setQueryHint("Search");
 			searchView.setOnCloseListener(new SearchView.OnCloseListener() {
 				@Override
@@ -155,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements SortBottomSheetDi
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		//export
 		if (requestCode == CREATE_FILE && resultCode == RESULT_OK) {
 			Uri uri = data.getData();
 			if (uri == null || uri.getPath() == null) return;

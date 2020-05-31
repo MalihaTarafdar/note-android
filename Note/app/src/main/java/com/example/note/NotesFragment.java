@@ -124,13 +124,25 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		return v;
 	}
 
-	List<DatabaseHelper.SortData> getSortByList() {
-		return sortByList;
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_CODE) {
+			reloadNotes();
+		}
 	}
 
-	void filterBySearch(String searchQuery) {
-		this.searchQuery = searchQuery;
-		reloadNotes();
+	//====================================================================================================
+	//Notes
+	Note getNoteToExport() {
+		return noteToExport;
+	}
+
+	private void addNote() {
+		Note note = new Note(getContext());
+		note.create();
+		noteList.add(note);
+		adapter.notifyItemInserted(noteList.size() - 1);
 	}
 
 	private void reloadNotes() {
@@ -150,29 +162,21 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		showOrHideNoNotesView();
 	}
 
-	private void expandOrCollapseFilters() {
-		if (filtersContainer.getVisibility() == View.VISIBLE) {
-			expandFiltersButton.setImageResource(R.drawable.ic_expand_more);
-			hideFilters();
-		} else {
-			expandFiltersButton.setImageResource(R.drawable.ic_expand_less);
-			showFilters();
-		}
+	private void showOrHideNoNotesView() {
+		if (noteList.size() == 0) noNotesView.setVisibility(View.VISIBLE);
+		else noNotesView.setVisibility(View.INVISIBLE);
 	}
 
-	private void showFilters() {
-		filtersContainer.setVisibility(View.VISIBLE);
+	//====================================================================================================
+	//Sort
+	List<DatabaseHelper.SortData> getSortByList() {
+		return sortByList;
 	}
 
-	private void hideFilters() {
-		filtersContainer.setVisibility(View.GONE);
-	}
-
-	private void addNote() {
-		Note note = new Note(getContext());
-		note.create();
-		noteList.add(note);
-		adapter.notifyItemInserted(noteList.size() - 1);
+	void sortNotes(List<DatabaseHelper.SortData> sortByList) {
+		this.sortByList = sortByList;
+		saveSortList();
+		reloadNotes();
 	}
 
 	private void saveSortList() {
@@ -193,6 +197,27 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 
 		editor.putString(getString(R.string.sort_key), jsonArray.toString());
 		editor.apply();
+	}
+
+	//====================================================================================================
+	//Filter
+	void filterBySearch(String searchQuery) {
+		this.searchQuery = searchQuery;
+		reloadNotes();
+	}
+
+	void addToFilters(DatabaseHelper.FilterData filterData) {
+		filterByList.add(filterData);
+		reloadNotes();
+		reloadFilterChips();
+		saveFilterList();
+	}
+
+	void removeFromFilters(DatabaseHelper.FilterData filterData) {
+		filterByList.remove(filterData);
+		reloadNotes();
+		reloadFilterChips();
+		saveFilterList();
 	}
 
 	private void saveFilterList() {
@@ -216,31 +241,29 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		editor.apply();
 	}
 
-	void sortNotes(List<DatabaseHelper.SortData> sortByList) {
-		this.sortByList = sortByList;
-		saveSortList();
-		reloadNotes();
-	}
-
-	void addToFilters(DatabaseHelper.FilterData filterData) {
-		filterByList.add(filterData);
-		reloadNotes();
-		reloadFilterChips();
-		saveFilterList();
-	}
-
-	void removeFromFilters(DatabaseHelper.FilterData filterData) {
-		filterByList.remove(filterData);
-		reloadNotes();
-		reloadFilterChips();
-		saveFilterList();
-	}
-
 	private void reloadFilterChips() {
 		filtersContainer.removeAllViews();
 		for (DatabaseHelper.FilterData fd : filterByList) {
 			filtersContainer.addView(getFilterChip(fd));
 		}
+	}
+
+	private void expandOrCollapseFilters() {
+		if (filtersContainer.getVisibility() == View.VISIBLE) {
+			expandFiltersButton.setImageResource(R.drawable.ic_expand_more);
+			hideFilters();
+		} else {
+			expandFiltersButton.setImageResource(R.drawable.ic_expand_less);
+			showFilters();
+		}
+	}
+
+	private void showFilters() {
+		filtersContainer.setVisibility(View.VISIBLE);
+	}
+
+	private void hideFilters() {
+		filtersContainer.setVisibility(View.GONE);
 	}
 
 	private Chip getFilterChip(final DatabaseHelper.FilterData filterData) {
@@ -271,21 +294,11 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 			@Override
 			public void onClick(View v) {
 				FilterBottomSheetDialog filterDialog = new FilterBottomSheetDialog(filterData);
-				if (getFragmentManager() != null) {
-					filterDialog.show(getFragmentManager(), "filterBottomSheet");
-				}
+				filterDialog.show(getParentFragmentManager(), "filterBottomSheet");
 			}
 		});
 
 		return chip;
-	}
-
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQUEST_CODE) {
-			reloadNotes();
-		}
 	}
 
 	//====================================================================================================
@@ -335,15 +348,6 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		noteToExport = noteList.get(position);
 		ExportBottomSheetDialog exportDialog = new ExportBottomSheetDialog(noteList.get(position));
 		exportDialog.show(getFragmentManager(), "exportBottomSheet");
-	}
-
-	Note getNoteToExport() {
-		return noteToExport;
-	}
-
-	private void showOrHideNoNotesView() {
-		if (noteList.size() == 0) noNotesView.setVisibility(View.VISIBLE);
-		else noNotesView.setVisibility(View.INVISIBLE);
 	}
 
 	@Override

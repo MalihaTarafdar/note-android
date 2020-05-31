@@ -52,6 +52,7 @@ class StorageHelper {
 		return context.deleteFile(note.getReference());
 	}
 
+	//export note with given file type
 	void exportNote(Note note, Uri uri, String ext) {
 		switch (ext) {
 			case "txt": exportAsTxt(note, uri);
@@ -61,6 +62,7 @@ class StorageHelper {
 		}
 	}
 
+	//txt
 	private void exportAsTxt(Note note, Uri uri) {
 		try (FileOutputStream output = (FileOutputStream) context.getContentResolver().openOutputStream(uri)) {
 			if (output == null) return;
@@ -73,6 +75,7 @@ class StorageHelper {
 		}
 	}
 
+	//md
 	private void exportAsMd(Note note, Uri uri) {
 		try (FileOutputStream output = (FileOutputStream) context.getContentResolver().openOutputStream(uri)) {
 			if (output == null) return;

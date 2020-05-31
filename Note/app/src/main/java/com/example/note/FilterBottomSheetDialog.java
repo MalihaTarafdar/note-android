@@ -62,8 +62,8 @@ public class FilterBottomSheetDialog extends BottomSheetDialogFragment {
 			add(new FilterItem("Character Count", R.drawable.ic_text));
 		}};
 
-		//load filter data to be edited
 		if (filterData != null) {
+			//load filter data to be edited
 			addButton.setText(R.string.save);
 			startInput.setText(filterData.getLowerBound().replaceAll("'", ""));
 			endInput.setText(filterData.getUpperBound().replaceAll("'", ""));

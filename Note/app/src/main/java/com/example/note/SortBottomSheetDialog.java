@@ -23,14 +23,14 @@ import androidx.core.content.ContextCompat;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.Map;
 
 public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 
 	private SortListener listener;
-	private HashMap<String, Boolean> sortData;
+	private TreeMap<String, Boolean> sortData;
 	private List<DatabaseHelper.SortData> sortByList;
 
 	SortBottomSheetDialog(List<DatabaseHelper.SortData> sortByList) {
@@ -50,7 +50,7 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 			}
 		});
 
-		sortData = new HashMap<>();
+		sortData = new TreeMap<>();
 
 		List<SortItem> items = new ArrayList<SortItem>() {{
 			add(new SortItem("Title", R.drawable.ic_title));
@@ -123,20 +123,12 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 				icon.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.colorPrimary));
 				nameView.setTextColor(getResources().getColor(R.color.colorPrimary));
 				ascSwitch.setEnabled(true);
-				try {
-					sortData.put(nameView.getText().toString().replace(" ", ""), ascSwitch.isChecked());
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				}
+				sortData.put(nameView.getText().toString().replace(" ", ""), ascSwitch.isChecked());
 			} else { //not selected
 				icon.setColorFilter(ContextCompat.getColor(parent.getContext(), R.color.colorAccent));
 				nameView.setTextColor(getResources().getColor(R.color.colorText));
 				ascSwitch.setEnabled(false);
-				try {
-					sortData.remove(nameView.getText().toString().replace(" ", ""));
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				}
+				sortData.remove(nameView.getText().toString().replace(" ", ""));
 			}
 
 			layout.setOnClickListener(new View.OnClickListener() {
@@ -150,13 +142,9 @@ public class SortBottomSheetDialog extends BottomSheetDialogFragment {
 			ascSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-					try {
-						sortData.put(nameView.getText().toString().replace(" ", ""), isChecked);
-						list.get(position).asc = isChecked;
-						notifyDataSetChanged();
-					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					}
+					sortData.put(nameView.getText().toString().replace(" ", ""), isChecked);
+					list.get(position).asc = isChecked;
+					notifyDataSetChanged();
 				}
 			});
 
