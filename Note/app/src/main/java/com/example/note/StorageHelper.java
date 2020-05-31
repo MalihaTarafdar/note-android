@@ -1,20 +1,24 @@
 package com.example.note;
 
 import android.content.Context;
+import android.net.Uri;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 class StorageHelper {
+	static final int CREATE_FILE = 1;
 	private Context context;
 
 	StorageHelper(Context context) {
 		this.context = context;
 	}
 
+	//get content of note (not including title)
 	String getNoteContent(Note note) {
 		StringBuilder content = new StringBuilder();
 		File file = new File(note.getReference());
@@ -22,7 +26,7 @@ class StorageHelper {
 				new InputStreamReader(context.openFileInput(file.getName())))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
-				content.append(line + "\n");
+				content.append(line).append("\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -46,5 +50,41 @@ class StorageHelper {
 	//deletes a note from internal storage
 	boolean deleteNote(Note note) {
 		return context.deleteFile(note.getReference());
+	}
+
+	//export note with given file type
+	void exportNote(Note note, Uri uri, String ext) {
+		switch (ext) {
+			case "txt": exportAsTxt(note, uri);
+				break;
+			case "md": exportAsMd(note, uri);
+				break;
+		}
+	}
+
+	//txt
+	private void exportAsTxt(Note note, Uri uri) {
+		try (FileOutputStream output = (FileOutputStream) context.getContentResolver().openOutputStream(uri)) {
+			if (output == null) return;
+
+			output.write((note.getTitle() + "\n\n").getBytes()); //write title to file
+			output.write(note.getContent().getBytes()); //write content to file
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	//md
+	private void exportAsMd(Note note, Uri uri) {
+		try (FileOutputStream output = (FileOutputStream) context.getContentResolver().openOutputStream(uri)) {
+			if (output == null) return;
+
+			output.write(("# " + note.getTitle() + "\n\n").getBytes()); //write title to file
+			output.write(note.getContent().getBytes()); //write content to file
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

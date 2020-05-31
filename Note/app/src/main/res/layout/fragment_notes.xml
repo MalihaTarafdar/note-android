@@ -3,7 +3,56 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:animateLayoutChanges="true">
+
+    <LinearLayout
+        android:id="@+id/notes_filters_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="12dp"
+        android:paddingStart="28dp"
+        android:paddingEnd="28dp"
+        android:paddingBottom="4dp"
+        android:elevation="4dp"
+        android:background="@color/colorBackground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="14sp"
+            android:textColor="@color/colorTitle"
+            android:text="@string/applied_filters"/>
+
+        <ImageButton
+            android:id="@+id/notes_btn_expand_filters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_expand_more"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:tint="@color/colorAccent"
+            android:contentDescription="@string/expand_icon" />
+
+    </LinearLayout>
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/notes_filters_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:visibility="gone"
+        app:flexWrap="wrap"
+        app:flexDirection="row"
+        android:background="@color/colorBackground"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notes_filters_top" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notes_recyclerView"
@@ -12,10 +61,10 @@
         android:padding="4dp"
         android:scrollbars="none"
         android:background="@color/colorBackground"
+        app:layout_constraintTop_toBottomOf="@id/notes_filters_container"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/notes_btn_add"
@@ -23,8 +72,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/colorPrimary"
         android:backgroundTint="@color/colorPrimary"
+        app:borderWidth="0dp"
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,6 +82,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_add" />
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/colorForeground" />
+
+    <TextView
+        android:id="@+id/notes_none"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:visibility="invisible"
+        android:text="@string/no_notes"
+        android:textColor="@color/colorTitle"
+        app:layout_constraintTop_toTopOf="@id/notes_recyclerView"
+        app:layout_constraintBottom_toBottomOf="@id/notes_recyclerView"
+        app:layout_constraintLeft_toLeftOf="@id/notes_recyclerView"
+        app:layout_constraintRight_toRightOf="@id/notes_recyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

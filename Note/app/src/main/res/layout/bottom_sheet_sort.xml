@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:paddingBottom="8dp"
+    android:backgroundTint="@color/colorForeground"
+    android:animateLayoutChanges="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="24dp"
+        android:paddingEnd="32dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="16dp"
+            android:paddingBottom="12dp"
+            android:text="@string/sort_by"
+            android:textColor="@color/colorTitle"
+            android:textSize="20sp"/>
+
+        <Button
+            android:id="@+id/sort_btn_apply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="-4dp"
+            android:layout_gravity="top"
+            android:text="@string/apply"/>
+
+        <ImageButton
+            android:id="@+id/sort_btn_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/close_icon"
+            android:tint="@color/colorAccent"
+            app:srcCompat="@drawable/ic_close" />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/sort_lv_options"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

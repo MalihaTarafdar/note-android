@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -27,6 +26,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 		this.list = noteList;
 	}
 
+	void setList(List<Note> list) {
+		this.list = list;
+	}
+
 	void setItemActionListener(ItemActionListener listener) {
 		this.listener = listener;
 	}
@@ -43,6 +46,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 	public void onBindViewHolder(@NonNull final NoteViewHolder holder, final int position) {
 		Note curItem = list.get(position);
 
+		//set title and content previews on note card
 		String pTitle = (curItem.getTitle().trim().length() > 0) ? curItem.getTitle() : context.getString(R.string.preview_title);
 		String pContent = curItem.getContent();
 		if (pContent.trim().length() == 0) pContent = context.getString(R.string.preview_content);
@@ -77,7 +81,8 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 		holder.exportButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(context, "Export button pressed", Toast.LENGTH_SHORT).show();
+				listener.exportNote(position);
+				listener.hideActionsOverlay(holder, context);
 			}
 		});
 		//hide overlay
@@ -99,6 +104,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 	public interface ItemActionListener {
 		void deleteNote(NoteViewHolder holder, int position, Context context);
 		void openNote(int position);
+		void exportNote(int position);
 		void showActionsOverlay(NoteViewHolder holder, Context context);
 		void hideActionsOverlay(NoteViewHolder holder, Context context);
 	}

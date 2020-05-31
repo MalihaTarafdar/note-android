@@ -1,6 +1,10 @@
 package com.example.note;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.Uri;
+
+import androidx.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -8,20 +12,21 @@ import java.util.Date;
 import java.util.Locale;
 
 class Note {
-	private static int curId = 0;
+	//id count so no ids are repeated
+	static int curId = 0;
 
 	//database fields
 	private int id, characterCount, wordCount, paragraphCount, readTime;
 	private String reference, title;
 	private Date dateCreated, dateModified;
 
+	private Context context;
 	private StorageHelper storageHelper;
 	private DatabaseHelper databaseHelper;
 
 	Note(Context context) {
+		this.context = context;
 		//set note data
-		id = ++curId;
-		reference = id + ".txt";
 		title = "";
 		dateCreated = Calendar.getInstance(Locale.getDefault()).getTime();
 		dateModified = dateCreated;
@@ -40,6 +45,14 @@ class Note {
 	}
 
 	void create() {
+		id = ++curId;
+		//save id
+		SharedPreferences pref = context.getSharedPreferences(context.getString(R.string.id_pref), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putInt(context.getString(R.string.id_key), id);
+		editor.apply();
+
+		reference = id + ".txt";
 		storageHelper.createNote(this, "");
 		databaseHelper.insertNote(this);
 	}
@@ -47,7 +60,29 @@ class Note {
 	void save(String title, String content, Date dateModified) {
 		this.title = title;
 		this.dateModified = dateModified;
-		//TODO: calculate and set note length measurements
+
+		//character count
+		characterCount = content.length();
+
+		//word count
+		int wordCount = 0;
+		String[] words = content.split("\\s+");
+		for (String word : words) {
+			if (!word.matches("[\\p{Punct}]+")) wordCount++;
+		}
+		this.wordCount = wordCount;
+
+		//paragraph count
+		int paragraphCount = 0;
+		String[] paragraphs = content.split("\\n+");
+		for (String paragraph : paragraphs) {
+			if (!paragraph.matches("[\\s\\p{Punct}]+")) paragraphCount++;
+		}
+		this.paragraphCount = paragraphCount;
+
+		//read time based on average reading speed of 200wpm and 5 characters per word
+		readTime = (int)(characterCount / 5.0 / 200.0 * 60);
+
 		storageHelper.createNote(this, content);
 		databaseHelper.updateNote(this);
 	}
@@ -57,12 +92,17 @@ class Note {
 		databaseHelper.deleteNote(this);
 	}
 
+	void export(Uri uri, String ext) {
+		storageHelper.exportNote(this, uri, ext);
+	}
+
 	//ID
 	int getId() {
 		return id;
 	}
 	void setId(int id) {
 		this.id = id;
+		reference = id + ".txt";
 	}
 
 	//reference
@@ -129,5 +169,11 @@ class Note {
 	}
 	void setReadTime(int readTime) {
 		this.readTime = readTime;
+	}
+
+	@NonNull
+	@Override
+	public String toString() {
+		return id + "";
 	}
 }

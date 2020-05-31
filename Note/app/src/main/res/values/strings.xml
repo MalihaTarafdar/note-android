@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">Note</string>
+    <string name="id_pref">idPref</string>
+    <string name="id_key">idKey</string>
+    <string name="sort_pref">sortPref</string>
+    <string name="sort_key">sortKey</string>
+    <string name="filter_pref">filterPref</string>
+    <string name="filter_key">filterKey</string>
 
     <!-- hints -->
     <string name="note_title_hint">Title</string>
@@ -9,8 +15,9 @@
     <string name="preview_title">A new note</string>
     <string name="preview_content">Write something in your beautiful new note</string>
 
+    <!-- labels -->
     <string name="search">Search</string>
-    <string name="sort">Sort</string>
+    <string name="sortOption">Sort</string>
     <string name="filter">Filter</string>
     <string name="notes">Notes</string>
     <string name="settings">Settings</string>
@@ -18,14 +25,45 @@
     <string name="export">Export</string>
     <string name="info">Info</string>
     <string name="delete">Delete</string>
+    <string name="information">Information</string>
+    <string name="date_created">Date Created</string>
+    <string name="date_modified">Date Modified</string>
+    <string name="characters">Characters</string>
+    <string name="words">Words</string>
+    <string name="paragraphs">Paragraphs</string>
+    <string name="read_time">Read Time</string>
+    <string name="character_count">Character Count</string>
+    <string name="word_count">Word Count</string>
+    <string name="paragraph_count">Paragraph Count</string>
+    <string name="title">Title</string>
+    <string name="sort_by">Sort By</string>
+    <string name="apply">Apply</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="ascending">Asc…</string>
+    <string name="save">Save</string>
+    <string name="add">Add</string>
+    <string name="applied_filters">Applied Filters</string>
+    <string name="txt">Text</string>
+    <string name="markdown">Markdown</string>
 
     <!-- icons -->
+    <string name="icon">icon</string>
     <string name="overflow_icon">overflow icon</string>
     <string name="delete_icon">delete icon</string>
     <string name="export_icon">export icon</string>
     <string name="cancel_icon">cancel icon</string>
+    <string name="close_icon">close icon</string>
+    <string name="title_icon">title icon</string>
+    <string name="date_icon">date icon</string>
+    <string name="text_icon">text icon</string>
+    <string name="time_icon">time icon</string>
+    <string name="expand_icon">expand icon</string>
+    <string name="txt_icon">TXT icon</string>
+    <string name="md_icon">md icon</string>
 
     <!-- navigation drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="no_notes">There are no notes to display</string>
 </resources>

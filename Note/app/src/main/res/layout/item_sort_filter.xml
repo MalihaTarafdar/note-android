@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground"
+    android:id="@+id/sort_filter_item_layout">
+
+    <ImageView
+        android:id="@+id/sort_filter_item_iv_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        tools:srcCompat="@drawable/ic_title"
+        android:tint="@color/colorAccent"
+        android:background="#00000000"
+        android:contentDescription="@string/icon" />
+
+    <TextView
+        android:id="@+id/sort_filter_item_name"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginStart="48dp"
+        android:gravity="start|center_vertical"
+        android:textSize="16sp"
+        android:textColor="@color/colorText"
+        tools:text="@string/title"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <Switch
+            android:id="@+id/sort_filter_item_sw_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:theme="@style/SwitchTheme" />
+
+        <TextView
+            android:id="@+id/sort_filter_item_tv_asc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ascending"
+            android:textColor="@color/colorText" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

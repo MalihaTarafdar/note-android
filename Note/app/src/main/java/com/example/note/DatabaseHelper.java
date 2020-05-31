@@ -14,12 +14,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
+class DatabaseHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "Note.db";
 
 	private static final String TABLE_NOTE = "Note";
 
+	//database columns
 	private static final String COL_ID = "Id";
 	private static final String COL_REFERENCE = "Reference"; //reference to file in storage
 	private static final String COL_TITLE = "Title";
@@ -58,8 +59,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 
 	//retrieves a single note from the database from the id
-	@Override
-	public Note getNoteById(int id) {
+	Note getNoteById(int id) {
 		Note note = new Note(context);
 		note.setId(id);
 
@@ -92,15 +92,42 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 		return note;
 	}
 
-	//retrieves all the notes in the database
-	@Override
-	public List<Note> getAll() {
+	//retrieves all the notes in the database with provided sort and filter options
+	List<Note> getAll(List<SortData> sortByList, List<FilterData> filterByList) {
 		List<Note> notes = new ArrayList<>();
 
 		SQLiteDatabase db = this.getReadableDatabase();
-		String getAllQuery = "SELECT * FROM " + TABLE_NOTE;
+		StringBuilder getQuery = new StringBuilder("SELECT * FROM " + TABLE_NOTE);
 
-		Cursor cursor = db.rawQuery(getAllQuery, null);
+		//add filtering to query
+		if (filterByList.size() > 0) {
+			getQuery.append(" WHERE ");
+			for (FilterData fd : filterByList) {
+				getQuery.append(fd.getCol());
+				if (fd.hasLowerBound() && fd.hasUpperBound()) {
+					getQuery.append(" BETWEEN ").append(fd.getLowerBound()).append(" AND ").append(fd.getUpperBound());
+				} else if (fd.hasLowerBound()) {
+					getQuery.append(" >= ").append(fd.getLowerBound());
+				} else if (fd.hasUpperBound()) {
+					getQuery.append(" <= ").append(fd.getUpperBound());
+				}
+				getQuery.append(" AND ");
+			}
+			getQuery.setLength(getQuery.length() - 5);
+		}
+
+		//add sorting to query
+		if (sortByList.size() > 0) {
+			getQuery.append(" ORDER BY ");
+			for (SortData sd : sortByList) {
+				getQuery.append(sd.getCol()).append((sd.isAscending()) ? " ASC, " : " DESC, ");
+			}
+			getQuery.setLength(getQuery.length() - 2);
+		}
+
+//		Toast.makeText(context, getQuery.toString(), Toast.LENGTH_SHORT).show();
+
+		Cursor cursor = db.rawQuery(getQuery.toString(), null);
 		if (cursor.moveToFirst()) {
 			do {
 				int id = cursor.getInt(0);
@@ -115,8 +142,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	}
 
 	//inserts a note into the database
-	@Override
-	public boolean insertNote(Note note) {
+	boolean insertNote(Note note) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues cv = getNoteCV(note);
 		long inserted = db.insert(TABLE_NOTE, null, cv);
@@ -125,8 +151,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	}
 
 	//updates the fields of a note
-	@Override
-	public boolean updateNote(Note note) {
+	boolean updateNote(Note note) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues cv = getNoteCV(note);
 		long updated = db.update(TABLE_NOTE, cv, COL_ID + " = " + note.getId(), null);
@@ -134,6 +159,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 		return updated == 1;
 	}
 
+	//get the ContentValues of a note
 	private ContentValues getNoteCV(Note note) {
 		ContentValues cv = new ContentValues();
 
@@ -151,8 +177,7 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 	}
 
 	//removes a note from the database
-	@Override
-	public boolean deleteNote(Note note) {
+	boolean deleteNote(Note note) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		String deleteQuery = "DELETE FROM " + TABLE_NOTE + " WHERE " + COL_ID + " = " + note.getId();
 
@@ -162,5 +187,59 @@ class DatabaseHelper extends SQLiteOpenHelper implements NoteDAO {
 		cursor.close();
 
 		return deleted;
+	}
+
+	static class SortData {
+		private String col;
+		private boolean ascending;
+		SortData(String col, boolean ascending) {
+			this.col = col;
+			this.ascending = ascending;
+		}
+		String getCol() {
+			return col;
+		}
+		void setCol(String col) {
+			this.col = col;
+		}
+		boolean isAscending() {
+			return ascending;
+		}
+		void setAscending(boolean ascending) {
+			this.ascending = ascending;
+		}
+	}
+
+	static class FilterData {
+		private String col, lowerBound, upperBound;
+		FilterData(String col, String lowerBound, String upperBound) {
+			this.col = col;
+			this.lowerBound = lowerBound;
+			this.upperBound = upperBound;
+		}
+		boolean hasLowerBound() {
+			return lowerBound != null && lowerBound.replaceAll("'", "").length() != 0;
+		}
+		boolean hasUpperBound() {
+			return upperBound != null && upperBound.replaceAll("'", "").length() != 0;
+		}
+		String getCol() {
+			return col;
+		}
+		void setCol(String col) {
+			this.col = col;
+		}
+		String getLowerBound() {
+			return lowerBound;
+		}
+		void setLowerBound(String lowerBound) {
+			this.lowerBound = lowerBound;
+		}
+		String getUpperBound() {
+			return upperBound;
+		}
+		void setUpperBound(String upperBound) {
+			this.upperBound = upperBound;
+		}
 	}
 }
