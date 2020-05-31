@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,6 +104,9 @@ public class NotesFragment extends Fragment implements NoteAdapter.ItemActionLis
 		recyclerView.setHasFixedSize(true);
 		recyclerView.setLayoutManager(layoutManager);
 		recyclerView.setAdapter(adapter);
+
+		//add a note if there are none
+		if (noteList.size() == 0) addNote();
 
 		//add button
 		addButton.setOnClickListener(new View.OnClickListener() {
